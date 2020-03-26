@@ -1,3 +1,7 @@
+vk.json
+.vksession
+cookies.json
+
 # Logs
 logs
 *.log

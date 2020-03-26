@@ -1,0 +1,26 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true,
+        "jest/globals": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "plugins": ["jest"],
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        "semi": ["error", "always"],
+        "quotes": ["error", "double"],
+        "indent": ["error", 4],
+        "no-constant-condition": 0,
+        "no-async-promise-executor": 0,
+        "no-useless-catch": 0,
+        "no-useless-escape": 0
+    }
+}
