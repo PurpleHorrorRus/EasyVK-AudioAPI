@@ -1,6 +1,7 @@
 vk.json
 .vksession
 cookies.json
+.npmignore
 
 # Logs
 logs
