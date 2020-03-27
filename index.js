@@ -541,8 +541,9 @@ class AudioAPI {
 
     getPlaylists (params = {}) {
         return new Promise(async (resolve, reject) => {
+            console.log(params.access_hash);
             const res = await this.request({
-                access_hash: params.access_hash ? params.access_hash : "",
+                access_hash: params.access_hash || "",
                 act: "owner_playlists",
                 al: 1,
                 is_attach: 0,
@@ -550,8 +551,9 @@ class AudioAPI {
                 owner_id: params.owner_id || this.user_id,
                 isPlaylist: true
             });
-            if(res === "\"Access denied\"") return reject(new Error("Access Denied"));
+
             const payload = res.payload[1][0];
+            if(payload === "\"Access denied\"") return reject(new Error("Access Denied"));
             
             let playlists = [];
     
