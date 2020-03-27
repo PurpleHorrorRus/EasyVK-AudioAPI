@@ -115,7 +115,14 @@ describe("Playlists", () => {
     // });
 
     // test("Edit", async () => {
-    //     const result = await audio.editPlaylist({ playlist_id: 35, title: "test", description: "test123" });
+    //     const cover_path = "PUT PATH HERE";
+
+    //     const result = await audio.editPlaylist({ 
+    //         playlist_id: 35,
+    //         title: "test", 
+    //         description: "test123",
+    //         cover: cover_path
+    //     });
     //     expect(result).toBe(true);
     // });
 

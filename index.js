@@ -769,7 +769,7 @@ class AudioAPI {
                 isPlaylist: true
             }).catch(reject);
 
-            const playlist = this.getPlaylistAsObject(res);
+            const playlist = this.getPlaylistInfo(res.payload[1][0]);
             return resolve(playlist);
         });
     }
