@@ -778,7 +778,7 @@ class AudioAPI {
 
             const title = params.title !== null ? params.title : playlist.title;
             const description = params.description !== null ? params.description : playlist.description;
-            const cover = params.cover !== null ? params.cover : 0;
+            const cover = params.cover !== null ? await this.uploadCover(params.cover).catch(reject) : 0;
 
             const Audios = list.length ? list.map(l => l.full_id).join(",") : "";
 
