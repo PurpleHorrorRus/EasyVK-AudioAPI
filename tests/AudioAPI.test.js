@@ -102,6 +102,13 @@ describe("Playlists", () => {
     //     expect(result).toBeTruthy();
     // });
 
+    // test("Get Playlists By Type", async () => {
+    //     const type = "";
+
+    //     const result = await audio.getPlaylistsByType({ type });
+    //     expect(result).toBeTruthy();
+    // });
+
     // test("Create playlist", async () => {
     //     const cover_path = "PUT PATH HERE";
 

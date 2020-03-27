@@ -595,7 +595,7 @@ class AudioAPI {
 
             let playlists = [];
 
-            const root = HTMLParser.parse(res.body);
+            const root = HTMLParser.parse(res);
             const pl_objects = root.querySelectorAll(".audio_pl_item2");
 
             for(const playlist of pl_objects) {   
