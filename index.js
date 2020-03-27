@@ -548,7 +548,6 @@ class AudioAPI {
 
     getPlaylists (params = {}) {
         return new Promise(async (resolve, reject) => {
-            console.log(params.access_hash);
             const res = await this.request({
                 access_hash: params.access_hash || "",
                 act: "owner_playlists",
