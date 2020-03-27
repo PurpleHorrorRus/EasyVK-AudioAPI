@@ -288,6 +288,7 @@ class AudioAPI {
     }
 
     getPlaylistInfo (playlist) {
+        const covers = this.matchAll(playlist.gridCovers, /background-image:url\(\'(.*?)\'\)/, false);
         return {
             id: playlist.id,
             owner_id: playlist.ownerId,
@@ -302,7 +303,7 @@ class AudioAPI {
             size: playlist.totalCount,
             follow_hash: playlist.followHash,
             edit_hash: playlist.editHash,
-            covers: playlist.grid_covers,
+            covers,
             description: playlist.description,
             raw_description: playlist.rawDescription,
             context: playlist.context,
@@ -504,6 +505,41 @@ class AudioAPI {
             if (params.list)
                 playlist.list = await this.getNormalAudios(_p.list);
 
+            return resolve(playlist);
+        });
+    }
+
+    getPlaylistById (params = {}) {
+
+        /*
+            access_hash?: string
+            owner_id?: number
+            playlist_id: number
+            list: boolean
+        */
+
+        const uid = this.user_id;
+
+        return new Promise(async (resolve, reject) => {
+            if (!params.playlist_id) return reject(new Error("You must to specify playlist_id"));
+
+            const res = await this.request({
+                access_hash: params.access_hash || "",
+                act: "load_section",
+                al: 1,
+                claim: 0,
+                from_id: uid,
+                is_loading_all: 1,
+                offset: 0,
+                owner_id: params.owner_id || uid,
+                playlist_id: params.playlist_id,
+                type: "playlist"
+            });
+
+            const payload = res.payload[1][0];
+            if (!payload) return reject(new Error("getPlaylistById error"));
+            const playlist = this.getPlaylistInfo(payload);
+            if (params.list) playlist.list = await this.getNormalAudios(payload.list);
             return resolve(playlist);
         });
     }
