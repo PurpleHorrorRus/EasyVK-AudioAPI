@@ -352,9 +352,7 @@ class AudioAPI {
                 return await this.request({
                     act: "reload_audio",
                     al: 1,
-                    ids: params.ids,
-                    utf8: true,
-                    autoParse: true
+                    ids: params.ids
                 });
             };
     
@@ -425,8 +423,7 @@ class AudioAPI {
                 oid: audio.owner_id,
                 performer: params.performer || audio.performer || "",
                 privacy: params.privacy || 0,
-                title: params.title || audio.title || "",
-                autoParse: true
+                title: params.title || audio.title || ""
             });
 
             const res = await this.request(params).catch(reject);
@@ -494,9 +491,7 @@ class AudioAPI {
                 offset: 0,
                 owner_id: Number(params.owner_id),
                 playlist_id: Number(params.playlist_id),
-                type: "playlist",
-                utf8: true,
-                autoParse: true
+                type: "playlist"
             }, true, false, "al_audio.php?act=load_section").catch(reject);
 
             const _p = res.payload[1][0];
@@ -966,8 +961,7 @@ class AudioAPI {
             const res = await this.request({
                 section: "recoms_block",
                 type: code,
-                retOnlyBody: true,
-                utf8: true
+                retOnlyBody: true
             }, true, false, `/audios${uid}`).catch(reject);
             
             const matches = this.getAudiosFromHTML(res, /data-audio=\"(.*?)\"/, true);
@@ -1422,8 +1416,6 @@ class AudioAPI {
                 owner_id,
                 q: params.q,
                 section: "search",
-                utf8: true,
-                autoParse: true,
                 retOnlyBody: true
             }).catch(reject);
             res = res.replace("<!--", "");
