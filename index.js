@@ -75,7 +75,7 @@ class AudioAPI {
 
         const s = (e, t) => {
             const { length: n } = e;
-            let i = [];
+            const i = [];
             if(n) {
                 let o = n;
                 for (t = Math.abs(t); true;) {
@@ -131,9 +131,9 @@ class AudioAPI {
 
         const r = e => {
             if(!o() && ~e.indexOf("audio_api_unavailable")) {
-                let splitted = e.split("?extra=")[1];
-                let t = splitted ? splitted.split("#") : e.split("?extra")[0],
-                    alter = splitted ? t[1] : t[0];
+                const splitted = e.split("?extra=")[1];
+                let t = splitted ? splitted.split("#") : e.split("?extra")[0];
+                const alter = splitted ? t[1] : t[0];
 
                 let n = !alter.length ? "" : a(alter);
                 t = a(t[0]);
@@ -163,14 +163,14 @@ class AudioAPI {
                 let withoutURL = [];
     
                 for (let i = 0; i < audios.length; i++) {
-                    let audio = audios[i];
+                    const audio = audios[i];
                     if (!audio[this.AudioObject.AUDIO_ITEM_INDEX_URL] && !audio[this.AudioObject.AUDIO_ITEM_INDEX_RESTRICTION]) withoutURL = [...withoutURL, i];
                     else audios_[i] = this.getAudioAsObject(audio);
                 }
     
                 const nextAudios = async () => {
-                    let _audioWithoutURL = withoutURL.splice(0, 10);
-                    let __audioWithoutURL = _audioWithoutURL.slice(0, _audioWithoutURL.length);
+                    const _audioWithoutURL = withoutURL.splice(0, 10);
+                    const __audioWithoutURL = _audioWithoutURL.slice(0, _audioWithoutURL.length);
                     for (let i = 0; i < _audioWithoutURL.length; i++)
                         __audioWithoutURL[i] = this.getAdi(audios[_audioWithoutURL[i]]).join("_");
       
@@ -931,7 +931,7 @@ class AudioAPI {
     }
 
     getGenreByHTML (html) {
-        let root = HTMLParser.parse(html);
+        const root = HTMLParser.parse(html);
         const inner = root.querySelectorAll(".CatalogBlock");
         let pl_objects = [];
         let code = "";
@@ -1174,6 +1174,32 @@ class AudioAPI {
         return matches;
     }
 
+    // --------------------- ARTISTS ----------------------------------------
+
+    getArtist (artist) {
+        String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
+        return new Promise(async (resolve, reject) => {
+            if (!artist) return reject(new Error("Null artist is not acceptable"));
+            artist = artist.toLowerCase();
+            let { html } = await this.request({}, true, true, `/artist/${artist}`);
+            html = html.replaceAll("\\", "").replaceAll("& quot;", "\"").replaceAll("&quot;", "\"").replaceAll("&#39;", "\"");
+
+            try {
+                let artist_name = null;
+                try { artist_name = html.match(/title\":\"(.*?)\",\"/)[1]; }
+                catch(e) { artist_name = html.match(/header__text\">(.*?)</)[1]; } 
+    
+                const matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\">/);
+                const audios = await this.getNormalAudios(matches);
+                const playlists = this.buildPlaylists(html);
+      
+                let cover_url = "";
+                try { cover_url = html.match(/background-image: url\(\"(.*?)\"\)/)[1]; } catch(e) { console.log(e); }
+                return resolve({ artist_name, link: artist, cover_url, audios, playlists });
+            } catch(e) { return reject(new Error("Can't open the artist")); }
+        });
+    }
+
     // --------------------- BUILD OBJECTS FROM SEARCH ----------------------
     
     buildPlaylists (res) {
@@ -1245,7 +1271,7 @@ class AudioAPI {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
         return new Promise(async resolve => {
             let matches = null;
-            let cursors = {};
+            const cursors = {};
             try {
                 let href = null;
                 try { href = res.match(/All music(.*)\\\/audio\?act=block(.*?)"/)[2];
@@ -1340,7 +1366,7 @@ class AudioAPI {
     
             try {
                 const HTMLParser = require("../../../node-html-parser");
-                let matches = this.getAudiosFromHTML(more.body, /\"<div (.*?)\"]/, false);
+                const matches = this.getAudiosFromHTML(more.body, /\"<div (.*?)\"]/, false);
     
                 const buildPlaylist = element => {
                     const html = element.innerHTML;
