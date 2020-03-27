@@ -158,6 +158,11 @@ describe("Search Engine", () => {
     //      expect(result).toBeTruthy();
     // });
 
+    // test("Get Artist Top Songs", async () => {
+    //     const result = await audio.searchMore("/artist/queen/top_audios", { offset: 0, cursor: "" });
+    //     expect(result).toBeTruthy();
+    // });
+
     // test("Get Artist Playlists", async () => {
     //     const result = await audio.searchMorePlaylists("/artist/queen/albums", { offset: 0, cursor: "" });
     //     expect(result).toBeTruthy();

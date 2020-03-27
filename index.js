@@ -1321,32 +1321,24 @@ class AudioAPI {
     searchMore (url, params = {}) {
         const { url: form_url, offset, cursor } = params;
         if(!url || !url.length) url = form_url;
-        return new Promise(async resolve => {
-            const more = await this.request({
+        return new Promise(async (resolve, reject) => {
+            url = url.toLowerCase();
+            const { data } = await this.request({
                 url: form_url,
                 _ajax: 1,
                 offset, 
                 next_from: cursor
             }, true, true, url);
-          
-            try {
-                const json = JSON.parse(more.body);
-    
-                const _temp = Object.values(json.data[0]).map(d => d[1]);
-                let audios = await this.getNormalAudios(_temp);
-                audios = JSON.parse(JSON.stringify(audios));
-                audios.forEach(a => {
-                    a.can_edit = false;
-                    return a;
-                });
-      
-                return resolve({
-                    list: audios,
-                    next: json.data[2] || null
-                });
-            } catch(e) {
-                return resolve({ list: [], next: null });
-            }
+
+            if (!data[0]) return reject(new Error("searchMore error"));
+            const objects = data[0];
+            const values = Object.values(objects);
+            const map = values.map(v => v[1]);
+            const audios = await this.getNormalAudios(map);
+            return resolve({
+                list: audios,
+                next: data[2] || null
+            });
         });
     }
 
@@ -1354,6 +1346,7 @@ class AudioAPI {
         const { url: form_url, offset, cursor } = params;
         if(!url || !url.length) url = form_url;
         return new Promise(async resolve => {
+            url = url.toLowerCase();
             const { data, next }  = await this.request({
                 url: form_url,
                 _ajax: 1,
