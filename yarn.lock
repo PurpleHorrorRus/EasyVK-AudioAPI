@@ -610,9 +610,9 @@ assign-symbols@^1.0.0:
   integrity sha1-WWZ/QfrdTyDMvCu5a41Pf3jsA2c=
 
 ast-types@0.x.x:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.13.2.tgz#df39b677a911a83f3a049644fb74fdded23cea48"
-  integrity sha512-uWMHxJxtfj/1oZClOxDEV1sQ1HCDkA4MG8Gr69KKeBjEVH0R84WlejZ0y2DcwyBlpAEMltmVYkVgqfLFb2oyiA==
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.13.3.tgz#50da3f28d17bdbc7969a3a2d83a0e4a72ae755a7"
+  integrity sha512-XTZ7xGML849LkQP86sWdQzfhwbt3YwIO6MqbX9mUNYY98VKaaVZP7YNNm70IpwecbkkxmfC5IYAzOQ/2p29zRA==
 
 astral-regex@^1.0.0:
   version "1.0.0"
@@ -1157,9 +1157,9 @@ domexception@^1.0.1:
     webidl-conversions "^4.0.2"
 
 easyvk@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/easyvk/-/easyvk-2.6.0.tgz#9876cf0825f92a96a443408dcb76338585830cb2"
-  integrity sha512-tLDqVke8HturVzgJJPN18nYyEi4KdFeDKqpbph4tUrM5RIyUDwTuIap+ybsAQZGprctUVXz4mOvrQmPwQNFzuw==
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/easyvk/-/easyvk-2.6.1.tgz#f08947cd1b53a5f56a4a9b19f19246d6ff132782"
+  integrity sha512-M7Lg91+LYtXbKuttmjermxWqh4yC9UDeDQiNXZsLb7kyTjgF7JyK2xVUXD8ZO8j0EdcTG/3URQEODt4lp7fm6g==
   dependencies:
     body-parser "^1.18.3"
     encoding "^0.1.12"
@@ -3360,9 +3360,9 @@ proxy-from-env@^1.0.0:
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
 psl@^1.1.28:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/psl/-/psl-1.7.0.tgz#f1c4c47a8ef97167dea5d6bbf4816d736e884a3c"
-  integrity sha512-5NsSEDv8zY70ScRnOTn7bK7eanl2MvFrOrS/R6x+dBt5g1ghnj9Zv90kO8GwT8gxcu2ANyFprnFYB85IogIJOQ==
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
+  integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
 
 pump@^3.0.0:
   version "3.0.0"
