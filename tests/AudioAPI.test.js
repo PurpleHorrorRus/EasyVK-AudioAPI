@@ -157,6 +157,11 @@ describe("Search Engine", () => {
     //      const result = await audio.getArtist("Queen");
     //      expect(result).toBeTruthy();
     // });
+
+    // test("Get Artist Playlists", async () => {
+    //     const result = await audio.searchMorePlaylists("/artist/queen/albums", { offset: 0, cursor: "" });
+    //     expect(result).toBeTruthy();
+    // });
 });
 
 describe("Recoms", () => {
