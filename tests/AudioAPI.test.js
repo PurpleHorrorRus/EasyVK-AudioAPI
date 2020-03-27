@@ -9,6 +9,7 @@ jest.setTimeout(timeout * 60 * 1000);
 
 let vk = null;
 let client = null;
+// eslint-disable-next-line no-unused-vars
 let audio = null;
 
 beforeAll(async () => {
@@ -151,6 +152,11 @@ describe("Search Engine", () => {
     //     });
     //     expect(list).not.toBeFalsy();
     // });
+
+    // test("Get Artist", async () => {
+    //      const result = await audio.getArtist("Queen");
+    //      expect(result).toBeTruthy();
+    // });
 });
 
 describe("Recoms", () => {
@@ -165,8 +171,8 @@ describe("Recoms", () => {
     //     expect(results).not.toBeFalsy();
     // });
 
-    test("Friend Updates", async () => {
-        // const results = await audio.getFriendsNew();
-        // expect(results).toBeTruthy();
-    });
+    // test("Friend Updates", async () => {
+    // const results = await audio.getFriendsNew();
+    // expect(results).toBeTruthy();
+    // });
 });
