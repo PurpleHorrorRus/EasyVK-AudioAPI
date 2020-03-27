@@ -40,6 +40,16 @@ describe("AudioAPI", () => {
     //     expect(audios).not.toBeFalsy();
     // });
 
+    // test("Get More Audios", async () => {
+    //     const { audios } = await audio.get({
+    //         owner_id: -41670861,
+    //         playlist_id: -1,
+    //         offset: 100,
+    //         count: 50
+    //     });
+    //     expect(audios).toBeTruthy();
+    // });
+
     // test("Get Playlist", async () => {
     //     const playlist = await audio.getPlaylist({ playlist_id: 5, list: true });
     //     expect(playlist).not.toBeFalsy();
@@ -146,11 +156,11 @@ describe("Search Engine", () => {
     // });
 
     // test("Search in audios", async () => {
-    //     const { list } = await audio.searchInAudios({
+    //     const result = await audio.searchInAudios({
     //         owner_id: -41670861,
     //         q: "Twil"
     //     });
-    //     expect(list).not.toBeFalsy();
+    //     expect(result).not.toBeFalsy();
     // });
 
     // test("Get Artist", async () => {

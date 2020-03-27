@@ -320,6 +320,7 @@ class AudioAPI {
             access_hash?: string
             owner_id: number
             playlist_id: number
+            count?: number = 50 (If you want to get all the audio at once, I wish you strong nerves)
         */
 
         return new Promise(async (resolve, reject) => {
@@ -334,12 +335,18 @@ class AudioAPI {
                 claim: 0,
                 owner_id,
                 playlist_id,
-                offset, 
+                offset,
                 type: "playlist",
                 track_type: "default"
             }).catch(reject);
 
-            const { list, totalCount: count } = res.payload[1][0];
+            const payload = res.payload[1][0];
+            const { totalCount: count } = payload;
+            
+            let { list } = payload;
+            if (!params.count) params.count = 50;
+            list = list.splice(0, params.count);
+
             const audios = await this.getNormalAudios(list);
             return resolve({ audios, count });
         });
@@ -1439,41 +1446,23 @@ class AudioAPI {
         if(!params.q) return;
         
         return new Promise(async (resolve, reject) => {
-            const owner_id = params.owner_id || this.user_id;
-            let res = await this.request({
+            const owner_id = Number(params.owner_id) || this.user_id;
+            const res = await this.request({
                 act: "section",
                 al: 1,
                 claim: 0,
                 is_layer: 0,
                 owner_id,
                 q: params.q,
-                section: "search",
-                retOnlyBody: true
+                section: "search"
             }).catch(reject);
-            res = res.replace("<!--", "");
-            try {
-                const { payload } = JSON.parse(res);
-                let html = payload[1][2];
-                let audios = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
-                audios = audios.filter(a => a[1] === owner_id);
+            
+            const html = res.payload[1][0];
+            let matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
+            matches = matches.filter(a => Number(a[1]) === owner_id);
 
-                if(!audios.length) {
-                    html = payload[1][0];
-                    audios = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
-                    audios = audios.filter(a => a[1] === owner_id);
-                } 
-
-                return resolve({ 
-                    _q: params.q, 
-                    list: await this.getNormalAudios(audios) 
-                });
-
-            } catch(e) { 
-                return resolve({
-                    _q: params.q, 
-                    list: [] 
-                }); 
-            }
+            const list = await this.getNormalAudios(matches);
+            return resolve({ list, _q: params.q });
         });
     }
 }
