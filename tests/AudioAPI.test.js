@@ -86,8 +86,13 @@ describe("Playlists", () => {
     //     expect(playlists.length).toBeGreaterThan(0);
     // });
 
+    // test("Get Playlist By Id", async () => {
+    //     const result = await audio.getPlaylistById({ playlist_id: 35, list: true });
+    //     expect(result).toBeTruthy();
+    // });
+
     // test("Create playlist", async () => {
-    //     const cover_path = "G:\\Users\\zenit\\Downloads\\avatars-000734865217-8woyan-t500x500.jpg";
+    //     const cover_path = "PUT PATH HERE";
 
     //     const result = await audio.createPlaylist({
     //         title: "Meridius playlist",
