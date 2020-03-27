@@ -21,6 +21,7 @@
         "no-constant-condition": 0,
         "no-async-promise-executor": 0,
         "no-useless-catch": 0,
-        "no-useless-escape": 0
+        "no-useless-escape": 0,
+        "prefer-const": 1
     }
 }
