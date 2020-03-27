@@ -315,13 +315,20 @@ class AudioAPI {
     // --------------------- AUDIOS ----------------------
 
     get (params = {}) {
+
+        /*
+            access_hash?: string
+            owner_id: number
+            playlist_id: number
+        */
+
         return new Promise(async (resolve, reject) => {
             const owner_id = params.owner_id ? Number(params.owner_id) : this.user_id;
             const playlist_id = params.playlist_id ? Number(params.playlist_id) : -1;
             const offset = params.offset ? Number(params.offset) : 0;
             
             const res = await this.request({
-                access_hash: "",
+                access_hash: params.access_hash || "",
                 act: "load_section",
                 al: 1,
                 claim: 0,
