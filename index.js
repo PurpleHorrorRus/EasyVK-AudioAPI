@@ -156,57 +156,39 @@ class AudioAPI {
 
     // --------------------- OBJECTS ----------------------
 
-    getNormalAudios (audios) {
-        return new Promise(resolve => {
-            if(audios) {
-                const audios_ = new Array(audios.length);
-                let withoutURL = [];
-    
-                for (let i = 0; i < audios.length; i++) {
-                    const audio = audios[i];
-                    if (!audio[this.AudioObject.AUDIO_ITEM_INDEX_URL] && !audio[this.AudioObject.AUDIO_ITEM_INDEX_RESTRICTION]) withoutURL = [...withoutURL, i];
-                    else audios_[i] = this.getAudioAsObject(audio);
-                }
-    
-                const nextAudios = async () => {
-                    const _audioWithoutURL = withoutURL.splice(0, 10);
-                    const __audioWithoutURL = _audioWithoutURL.slice(0, _audioWithoutURL.length);
-                    for (let i = 0; i < _audioWithoutURL.length; i++)
-                        __audioWithoutURL[i] = this.getAdi(audios[_audioWithoutURL[i]]).join("_");
-      
-                    const _audios = await this.getById({ ids: __audioWithoutURL.join(",") });
-    
-                    for (let i = 0; i < _audios.length; i++)
-                        audios_[_audioWithoutURL[i]] = this.getAudioAsObject(_audios[i]);
-    
-                    if (withoutURL.length) setTimeout(nextAudios, 300);
-                    else {
-                        let endAudios = [];
-    
-                        for (let i = 0; i < audios_.length; i++)
-                            if(audios_[i])
-                                endAudios = [...endAudios, audios_[i]];
-                  
-                        resolve(endAudios);
-                    }
-                };
-      
-                if (withoutURL.length) nextAudios();
-                else resolve(audios_);
+    chunkify (array, chunkSize = 10) {
+        const len = array.length;
+        let r = [];
+        for (let i = 0; i < Math.ceil(len / 10); i++) {
+            r = [...r, []];
+            for (let j = 0; j < chunkSize; j++) {
+                if (array[j]) r[i] = [...r[i], array[j]];
+                else break;    
             }
+            array.splice(0, chunkSize);
+            if (!array.length) break;
+        }
+        return r;
+    }
+
+    getNormalAudios (audios) {
+        return new Promise(async resolve => {
+            let ready = [];
+
+            for (const array of this.chunkify(audios, 10)) {
+                const adi = array.map(a => this.getAdi(a).join("_"));
+                const _audios = await this.getById({ ids: adi.join(",") });
+                const audios = _audios.map(a => this.getAudioAsObject(a));
+                ready = [...ready, audios];
+            }
+
+            return resolve(ready);
         });
     }
 
 
     getAudioAsObject (audio = []) {
         const source = this.UnmuskTokenAudio(audio[this.AudioObject.AUDIO_ITEM_INDEX_URL], this.user_id);
-    
-        const getAudioWithURL = async () => {
-            const { json } = await this.getById({ ids: this._getAdi(audio).join("_") }).catch(() => null);
-            return this._getAudioAsObject(json[0]);
-        };
-    
-        if ((!source || !source.length) && !audio[this.AudioObject.AUDIO_ITEM_INDEX_RESTRICTION]) return getAudioWithURL();
     
         const e = (audio[this.AudioObject.AUDIO_ITEM_INDEX_HASHES] || "").split("/"),
             c = (audio[this.AudioObject.AUDIO_ITEM_INDEX_COVER_URL] || ""),
@@ -351,7 +333,7 @@ class AudioAPI {
             return resolve({ audios, count });
         });
     }
-
+    
     getCount (params = {}) {
         return new Promise(async (resolve, reject) => {
             const { count } = await this.get(params).catch(reject);
