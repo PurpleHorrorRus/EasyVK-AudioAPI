@@ -2,6 +2,7 @@ vk.json
 .vksession
 cookies.json
 .npmignore
+yarn.lock
 
 # Logs
 logs
