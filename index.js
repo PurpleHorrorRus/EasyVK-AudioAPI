@@ -177,9 +177,9 @@ class AudioAPI {
 
             for (const array of this.chunkify(audios, 10)) {
                 const adi = array.map(a => this.getAdi(a).join("_"));
-                const _audios = await this.getById({ ids: adi.join(",") });
+                const _audios = await this.getById({ ids: adi.join(",") }).catch(console.log);
                 const audios = _audios.map(a => this.getAudioAsObject(a));
-                ready = [...ready, audios];
+                ready = ready.concat(audios);
             }
 
             return resolve(ready);
@@ -345,27 +345,26 @@ class AudioAPI {
         return new Promise(async resolve => {
     
             const doRequest = async () => {
-                return await this.request({
+                const res = await this.request({
                     act: "reload_audio",
                     al: 1,
                     ids: params.ids
                 });
+                return res.payload[1][0];
             };
-    
-            let res = await doRequest();
-            if(!res.payload[1][0]) {
-                await new Promise(resolve => {
-                    const attempt = async () => {
-                        const _res = await doRequest();
-                        if(_res.payload[1][0]) {
-                            res = _res;
-                            return resolve(_res);
-                        } else return setTimeout(attempt, 5000);
-                    }; return attempt(); 
+
+            const validRes = res => res !== null && res.indexOf("no_audios") === -1;
+
+            const attempt = () => {
+                return new Promise(async resolve => {
+                    const response = await doRequest();
+                    if (validRes(response)) return resolve(response);
+                    else setTimeout(async () => resolve(await attempt()), 10 * 1000);
                 });
-            }
-    
-            return resolve(res.payload[1][0]);
+            };
+
+            const res = await attempt();
+            return resolve(res);
         });
     }
 
