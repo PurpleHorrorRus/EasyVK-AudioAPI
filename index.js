@@ -176,12 +176,9 @@ class AudioAPI {
             let ready = [];
 
             for (const array of this.chunkify(audios, 10)) {
-                const adi = array.map(a => {
-                    const _a = this.getAdi(a);
-                    if (_a !== null) return _a.join("_");
-                });
-                const _audios = await this.getById({ ids: adi.join(",") });
-                const audios = _audios.map(a => this.getAudioAsObject(a));
+                const adi = array.map(a => this.getAdi(a)).filter(v => v !== null).map(a => a.join("_"));
+                let audios = await this.getById({ ids: adi.join(",") }).catch(console.log);
+                audios = audios.map(a => this.getAudioAsObject(a));
                 ready = ready.concat(audios);
             }
 
@@ -243,11 +240,10 @@ class AudioAPI {
         const actionHash = e[2] || "",
             otherHash  = e[5] || "";
 
-        if (!actionHash || !otherHash)
-            return null;
+        if (!actionHash || !otherHash) return null;
     
-        if(actionHash) adi[2] = actionHash;
-        if(otherHash)  adi[3] = otherHash;
+        adi[2] = actionHash;
+        adi[3] = otherHash;
     
         return adi;
     }
