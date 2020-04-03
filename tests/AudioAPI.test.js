@@ -199,12 +199,10 @@ describe("Recoms", () => {
     //     expect(results).not.toBeFalsy();
     // });
     // test("Load Page", async () => {
-    //     const results = await audio.loadAudioPage({
-    //         type: "PUlQVA8GR0R3W0tMF2tTRGpJUVQPGVpVcVhfRgIAWkpkXktMF2tYUWRHS0IXDlpKZFpcVA8FFg"
-    //     });
+    //     const { recoms } = await audio.loadNewReleases({ max: 1, r_max: 1 });
+    //     const results = await audio.loadAudioPage({ type: recoms.id });
     //     expect(results).not.toBeFalsy();
     // });
-
     // test("Friend Updates", async () => {
     // const results = await audio.getFriendsNew();
     // expect(results).toBeTruthy();

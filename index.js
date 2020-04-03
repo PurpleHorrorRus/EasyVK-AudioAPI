@@ -1032,7 +1032,7 @@ class AudioAPI {
         
             const recoms = {
                 id: types[0],
-                audios: _r_audios
+                audios: await this.getNormalAudios(_r_audios).catch(reject)
             };
         
             const _n = this.matchAll(dom, /data-audio=\"(.*?)\"/, true);
