@@ -327,6 +327,7 @@ class AudioAPI {
             const { totalCount: count } = payload;
             
             let { list } = payload;
+            if (!list) return reject(new Error("Access denied"));
             if (!params.count) params.count = 50;
             list = list.splice(0, params.count);
 
@@ -338,7 +339,9 @@ class AudioAPI {
     getCount (params = {}) {
         return new Promise(async (resolve, reject) => {
             params.count = 1; // for unload query
-            const { count } = await this.get(params).catch(reject);
+            const response = await this.get(params).catch(reject);
+            if (!response) return reject(new Error("Get count error: access denied"));
+            const count = response.count;
             return resolve(count);
         });
     }
