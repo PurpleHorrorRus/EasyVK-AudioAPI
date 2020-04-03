@@ -337,6 +337,7 @@ class AudioAPI {
     
     getCount (params = {}) {
         return new Promise(async (resolve, reject) => {
+            params.count = 1; // for unload query
             const { count } = await this.get(params).catch(reject);
             return resolve(count);
         });
