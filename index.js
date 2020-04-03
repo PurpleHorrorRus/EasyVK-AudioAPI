@@ -1306,11 +1306,9 @@ class AudioAPI {
 
         /*
             q: string
-            count?: number = 50
         */
 
         const uid = this.user_id;
-        const count = params.count || 50;
 
         return new Promise(async (resolve, reject) => {
             if (!params.q) return reject(new Error("You must to specify search value"));
@@ -1335,8 +1333,7 @@ class AudioAPI {
                 .map(p => this.getPlaylistInfo(p));
 
             const list = payload.playlist.list || payload.playlistData.list;
-            const spliced = list.length > count ? list.splice(0, count) : list;
-            const audios = await this.getNormalAudios(spliced);
+            const audios = await this.getNormalAudios(list);
 
             const artists = this.buildArtists(html);
 
@@ -1350,10 +1347,7 @@ class AudioAPI {
         
         /*
             search: object (from search())
-            count?: number = 20
         */
-
-        const count = params.count || 20;
 
         return new Promise(async (resolve, reject) => {
             if (!params.search) return reject(new Error("Pass a valid \"search\" object"));
@@ -1374,8 +1368,7 @@ class AudioAPI {
             const start_from = payload.next_from || payload.nextFrom;
 
             const list = payload.playlist.list || payload.playlists[0].list;
-            const spliced = list.length > count ? list.splice(0, count) : list;
-            const audios = await this.getNormalAudios(spliced);
+            const audios = await this.getNormalAudios(list);
             
             const _more = { section_id, start_from };
 

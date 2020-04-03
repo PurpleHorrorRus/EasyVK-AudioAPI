@@ -165,8 +165,8 @@ describe("Search Engine", () => {
     // });
 
     // test("Audio search by offset", async () => {
-    //     const search = await audio.search({ q: "", count: 50 });
-    //     const results = await audio.searchWithMore({ search, count: 50 });
+    //     const search = await audio.search({ q: "Queen" });
+    //     const results = await audio.searchWithMore({ search });
     //     expect(results).toBeTruthy();
     // });
 
