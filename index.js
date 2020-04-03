@@ -1,6 +1,4 @@
 const HTMLParser = require("node-html-parser");
-const querystring = require("querystring");
-
 class AudioAPI {
     constructor (client) {
         this.client = client;
