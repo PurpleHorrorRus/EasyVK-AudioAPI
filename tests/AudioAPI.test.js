@@ -164,6 +164,12 @@ describe("Search Engine", () => {
     //     expect(results).not.toBeFalsy();
     // });
 
+    // test("Audio search by offset", async () => {
+    //     const search = await audio.search({ q: "", count: 50 });
+    //     const results = await audio.searchWithMore({ search, count: 50 });
+    //     expect(results).toBeTruthy();
+    // });
+
     // test("Search Hints", async () => {
     //     const results = await audio.searchHints("Que");
     //     expect(results[0][1]).toBe("queen");

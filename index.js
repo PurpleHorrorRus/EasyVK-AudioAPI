@@ -1,4 +1,5 @@
 const HTMLParser = require("node-html-parser");
+const querystring = require("querystring");
 
 class AudioAPI {
     constructor (client) {
@@ -280,7 +281,7 @@ class AudioAPI {
             title: playlist.title,
             cover_url: playlist.coverUrl,
             last_updated: playlist.lastUpdated,
-            explicit: playlist.isExplicit,
+            explicit: playlist.isExplicit || false,
             followed: playlist.isFollowed,
             official: playlist.isOfficial,
             listens: playlist.listens,
@@ -290,7 +291,7 @@ class AudioAPI {
             covers,
             description: playlist.description,
             raw_description: playlist.rawDescription,
-            context: playlist.context,
+            context: playlist.context || playlist.type || "",
             access_hash: playlist.accessHash,
             playlist_id: playlist.id
         };
@@ -1247,27 +1248,26 @@ class AudioAPI {
         return playlists;
     }
 
-    buildArtists (res) {
+    buildArtists (html) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
-        const html = res.replaceAll("\\", "");
-        const root = HTMLParser.parse(html);
-        const a_objects = root.querySelectorAll(".OwnerRow_artist");
-        
-        const getArtist = element => {
-            const html = element.innerHTML.replaceAll("&#39;", "\"");
-            try {
-                let link = null;
-                try { link = html.match(/href=\"https:\/\/m.vk.com\/artist\/(.*?)\"/)[1]; } 
-                catch(e) { link = html.match(/\"\/artist\/(.*?)\"/)[1]; }
-                let image = "";
-                try { image = html.match(/background-image: url\(\"(.*?)\"\)/)[1]; }
-                catch(e) { image = ""; }
-                return { link, label: element.text, image };
-            } catch(e) { console.log(e); }
-        };
 
         let artists = [];
-        for(const artist of a_objects) artists = [...artists, getArtist(artist)];
+
+        const cover_template = /background-image: url\((.*?)\)/;
+        const link_template = /href=\"\/artist\/(.*?)\?/;
+
+        const root = HTMLParser.parse(html);
+        const blocks = root.querySelectorAll(".audio_block_small_item");
+
+        for (const block of blocks) {
+            try {
+                const title = block.structuredText;
+                const inner = block.innerHTML;
+                const cover = cover_template.test(inner) ? inner.match(cover_template)[1] : "";
+                const link = inner.match(link_template)[1];
+                artists = [...artists, { title, cover, link }];
+            } catch (e) { continue; }
+        }
 
         return artists;
     }
@@ -1303,24 +1303,85 @@ class AudioAPI {
     // --------------------- SEARCH ----------------------
 
     search (params = {}) {
+
+        /*
+            q: string
+            count?: number = 50
+        */
+
+        const uid = this.user_id;
+        const count = params.count || 50;
+
         return new Promise(async (resolve, reject) => {
             if (!params.q) return reject(new Error("You must to specify search value"));
 
             const res = await this.request({
+                act: "section",
+                al: 1,
+                claim: 0,
+                is_layer: 0,
+                owner_id: uid,
                 q: params.q,
-                _ajax: 1
-            }, true, true, "audio");
+                section: "search"
+            });
 
-            if (!res.data || !res.data[0]) return reject(new Error("Search error"));
+            const html = res.payload[1][0];
+            const payload = res.payload[1][1];
+            const section_id = payload.sectionId;
+            const start_from = payload.next_from || payload.nextFrom;
 
-            const body = res.data[0];
+            const playlists = payload.playlists
+                .filter(p => p.ownerId !== uid)
+                .map(p => this.getPlaylistInfo(p));
 
-            const artists = this.buildArtists(body);
-            const playlists = this.buildPlaylists(body);
-            const { audios, cursors } = await this.buildAudios(body);
+            const list = payload.playlist.list || payload.playlistData.list;
+            const spliced = list.length > count ? list.splice(0, count) : list;
+            const audios = await this.getNormalAudios(spliced);
 
-            return resolve({ audios, playlists, artists, cursors });
+            const artists = this.buildArtists(html);
+
+            const more = { section_id, start_from };
+
+            return resolve({ audios, playlists, artists, more });
         });
+    }
+
+    searchWithMore (params = {}) {
+        
+        /*
+            search: object (from search())
+            count?: number = 20
+        */
+
+        const count = params.count || 20;
+
+        return new Promise(async (resolve, reject) => {
+            if (!params.search) return reject(new Error("Pass a valid \"search\" object"));
+            
+            const more = params.search.more;
+            if (!more.section_id || !more.start_from) return reject(new Error("Pass a valid \"search\" object"));
+
+            const res = await this.request({
+                act: "load_catalog_section",
+                al: 1,
+                section_id: more.section_id,
+                start_from: more.start_from
+            });
+
+            const payload = res.payload[1][1];
+
+            const section_id = payload.sectionId;
+            const start_from = payload.next_from || payload.nextFrom;
+
+            const list = payload.playlist.list || payload.playlists[0].list;
+            const spliced = list.length > count ? list.splice(0, count) : list;
+            const audios = await this.getNormalAudios(spliced);
+            
+            const _more = { section_id, start_from };
+
+            return resolve({ audios, more: _more });
+        });
+
     }
 
     searchMore (url, params = {}) {
