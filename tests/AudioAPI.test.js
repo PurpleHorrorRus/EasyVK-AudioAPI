@@ -50,6 +50,11 @@ describe("AudioAPI", () => {
     //     expect(audios).toBeTruthy();
     // });
 
+    // test("Get Count", async () => {
+    //     const results = await audio.getCount();
+    //     expect(results).toBeTruthy();
+    // });
+
     // test("Get Playlist", async () => {
     //     const playlist = await audio.getPlaylist({ playlist_id: 5, list: true });
     //     expect(playlist).not.toBeFalsy();
