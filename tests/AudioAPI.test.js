@@ -195,7 +195,7 @@ describe("Search Engine", () => {
 
 describe("Recoms", () => {
     // test("Load", async () => {
-    //     const results = await audio.loadNewReleases();
+    //     const results = await audio.loadNewReleases({ max: 6, r_max: 10 });
     //     expect(results).not.toBeFalsy();
     // });
     // test("Load Page", async () => {

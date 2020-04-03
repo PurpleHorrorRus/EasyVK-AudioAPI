@@ -905,54 +905,59 @@ class AudioAPI {
 
     getPlaylistByHTML (playlist) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
-        const info = playlist.childNodes[0];
-        const raw = info.rawAttrs;
-    
-        const bod = HTMLParser.parse(playlist.innerHTML);
-        const title_object = bod.querySelector(".audio_pl__title");
-        const title = title_object.text.replaceAll("\n", "").trim();
-    
-        const cover = raw.match(/background-image: url\(\'(.*)\'\)/)[1];
-        const match = raw.match(/showAudioPlaylist\((.*),/)[1];
-        const split = match.split(", ");
-        const owner_id = split[0], 
-            playlist_id = split[1], 
-            access_hash = split[2] == "''" ? "" : split[2].replaceAll("'", "");
-    
-        const _r = split[3].match(/(.*?):/)[1];
-        let _g = "";
-        try { _g = split[3].match(/:(.*?)_/)[1]; } catch(e) { _g = split[3]; }
-        let genre = split[3].replace(_r + ":", "").replace(_g + "_", "");
-        genre = genre.replaceAll("'", "");
-        genre = genre.charAt(0).toUpperCase() + genre.substring(1, genre.length);
-        return { access_hash, owner_id, playlist_id, cover, title, genre, raw_id: `${owner_id}_${playlist_id}` };
+        try {
+            const info = playlist.childNodes[0];
+            const raw = info.rawAttrs;
+        
+            const bod = HTMLParser.parse(playlist.innerHTML);
+            const title_object = bod.querySelector(".audio_pl__title");
+            const title = title_object.text.replaceAll("\n", "").trim();
+        
+            const cover = raw.match(/background-image: url\(\'(.*?)\'\)/)[1];
+            const match = raw.match(/showAudioPlaylist\((.*?)\)/)[1];
+            const split = match.split(", ");
+            const owner_id = split[0], 
+                playlist_id = split[1], 
+                access_hash = split[2] == "''" ? "" : split[2].replaceAll("'", "");
+        
+            return { access_hash, owner_id, playlist_id, cover, title, raw_id: `${owner_id}_${playlist_id}` };
+        } catch (e) { return null; }
     }
 
     getGenreByHTML (html) {
         const root = HTMLParser.parse(html);
         const inner = root.querySelectorAll(".CatalogBlock");
         let pl_objects = [];
+        let genre = "";
         let code = "";
+        const genres = {};
         for (const inner_object of inner) {
             try { 
                 const inner_parsed = HTMLParser.parse(inner_object.innerHTML);
-                code = inner_parsed.innerHTML.match(/type=(.*?)\"/)[1];
+                try {
+                    genre = inner_parsed.querySelectorAll(".CatalogBlock__title")[0].text;
+                    code = inner_parsed.innerHTML.match(/&type=(.*?)\"/)[1];
+                } catch (e) { continue; }
                 pl_objects = inner_parsed.querySelectorAll(".audio_pl_item2");
+                for (const object of pl_objects) {
+                    const dom = HTMLParser.parse(object.innerHTML);
+                    if (dom.childNodes[0] === null) continue;
+                    const playlist = this.getPlaylistByHTML(dom);
+                    if (playlist === null) continue;
+                    if (!genres[genre]) genres[genre] = { code, playlists: [] };
+                    genres[genre].playlists = [...genres[genre].playlists, playlist];
+                }
             } catch(e) { return []; }
-        }
-        const genres = {};
-        for (const object of pl_objects) {
-            const dom = HTMLParser.parse(object.innerHTML);
-            if (!dom.childNodes[0]) continue;
-            const playlist = this.getPlaylistByHTML(dom);
-            const { genre } = playlist;
-            if (!genres[genre]) genres[genre] = { code, playlists: [] };
-            genres[genre].playlists = [...genres[genre].playlists, playlist];
         }
         return genres;
     }
 
     loadRecoms (code = "") {
+
+        /*
+            code: string
+        */
+
         const uid = this.user_id;
     
         return new Promise(async (resolve, reject) => {
@@ -963,14 +968,15 @@ class AudioAPI {
             }, true, false, `/audios${uid}`).catch(reject);
             
             const matches = this.getAudiosFromHTML(res, /data-audio=\"(.*?)\"/, true);
-            return resolve(await this.getNormalAudios(matches));
+            return resolve(matches);
         });
     }
 
     loadNewReleases (params = {}) {
 
         /*
-            max?: number = 6
+            max?: number = 50
+            r_max?: number = 50
         */
 
         const uid = this.user_id;
@@ -997,7 +1003,7 @@ class AudioAPI {
                 al: 1,
                 section_id: sectionId,
                 start_from: next_from
-            }, true).catch(reject);
+            }).catch(reject);
 
             const catalogs = _add.payload[1][0];
             for (const _c of catalogs) {
@@ -1007,7 +1013,8 @@ class AudioAPI {
 
             const { playlist: charts_playlist } = payload;
 
-            const max = params.max || 6;
+            const max = params.max || 50;
+            const r_max = params.r_max || 50;
 
             const _c_audios = charts_playlist.list.length > max ? charts_playlist.list.splice(0, max) : charts_playlist.list;
 
@@ -1017,11 +1024,11 @@ class AudioAPI {
             };
 
             const dom = res.payload[1][0];
-            const types = this.matchAll(dom, /type=(.*?)\"/);
+            const types = this.matchAll(dom, /&type=(.*?)\"/);
             const recoms_code = types[0];
 
-            const _r = await this.loadRecoms(recoms_code).catch(reject);
-            const _r_audios = _r.length > 10 ? _r.splice(0, 10) : _r;
+            const _r = await this.loadRecoms(recoms_code, { count: r_max }).catch(reject);
+            const _r_audios = _r.length > r_max ? _r.splice(0, r_max) : _r;
         
             const recoms = {
                 id: types[0],
