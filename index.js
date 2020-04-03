@@ -1195,7 +1195,7 @@ class AudioAPI {
     
                 const matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\">/);
                 const audios = await this.getNormalAudios(matches);
-                const playlists = this.buildPlaylists(html);
+                const playlists = this.buildPlaylistsMobile(html);
       
                 let cover_url = "";
                 try { cover_url = html.match(/background-image: url\(\"(.*?)\"\)/)[1]; } catch(e) { console.log(e); }
@@ -1206,8 +1206,68 @@ class AudioAPI {
 
     // --------------------- BUILD OBJECTS FROM SEARCH ----------------------
     
-    buildPlaylists (res) {
+    buildPlaylists (html) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
+        
+        let playlists = [];
+
+        const title_template = /\(this\)\)">(.*?)</;
+        const cover_template = /background-image: url\(\'(.*?)\'/;
+        const info_template = /showAudioPlaylist\((.*?)\)/;
+        const subtitle_template = /(.*?)<(.*)>(.*)/; // ... ?
+
+        const root = HTMLParser.parse(html);
+        const blocks = root.querySelectorAll("._audio_pl_item");
+
+        for (const block of blocks) {
+            try {
+                const inner = block.innerHTML;
+
+                const title = title_template.test(inner) ? inner.match(title_template)[1] : "";
+                if (!title) continue;
+
+                const cover = cover_template.test(inner) ? inner.match(cover_template)[1] : "";
+                const info  = info_template.test(inner) ? inner.match(info_template)[1].split(", ") : [];
+                if (!info.length) continue;
+    
+                const owner_id = info[0],
+                    playlist_id = info[1],
+                    access_hash = info[2].replaceAll("'", "");
+
+                const raw_id = `${owner_id}_${playlist_id}`;
+
+                const root_block = HTMLParser.parse(inner);
+                const subtitle_block = root_block.querySelector(".audio_pl__year_subtitle");
+                const subtitle_inner = subtitle_block.innerHTML;
+                const subtitle_test  = subtitle_template.test(subtitle_inner);
+                
+                let year = "";
+                let subtitle = "";
+                
+                if (subtitle_test) {
+                    const match = subtitle_inner.match(subtitle_template);
+                    year = match[1];
+                    subtitle = match[3];
+                }
+
+                playlists = [...playlists, { 
+                    access_hash, 
+                    owner_id, 
+                    playlist_id, 
+                    raw_id, 
+                    title, 
+                    cover_url: cover, 
+                    year, 
+                    subtitle 
+                }];
+
+            } catch (e) { continue; }
+        }
+
+        return playlists;
+    }
+
+    buildPlaylistsMobile (res) {
         const html = res.replaceAll("\\", "");
         const root = HTMLParser.parse(html);
         let pl_objects = root.querySelectorAll(".audioPlaylists__item");
@@ -1216,7 +1276,6 @@ class AudioAPI {
         
         const getPlaylist = element => {
             let html = element.outerHTML;
-          
             try {
                 const raw_id = html.match(/audio_playlist-(.*?)&/)[1];
                 const split = raw_id.split("_");
@@ -1233,16 +1292,25 @@ class AudioAPI {
                     year = subtitle_match[1];
                 } catch(e) { console.log(e); }
     
-                return { access_hash, owner_id, playlist_id, raw_id, cover_url, title, subtitle, year };
+                return { 
+                    access_hash, 
+                    owner_id, 
+                    playlist_id, 
+                    raw_id, 
+                    cover_url, 
+                    title, 
+                    subtitle, 
+                    year 
+                };
             } catch(e) { return { error: true }; }
         };
-    
+
         let playlists = [];
         for(const playlist of pl_objects) {
             const builded = getPlaylist(playlist);
             if(!builded.error) playlists = [...playlists, builded];
         }
-        
+
         return playlists;
     }
 
@@ -1326,14 +1394,11 @@ class AudioAPI {
             const section_id = payload.sectionId;
             const start_from = payload.next_from || payload.nextFrom;
 
-            const playlists = payload.playlists
-                .filter(p => p.ownerId !== uid)
-                .map(p => this.getPlaylistInfo(p));
-
             const list = payload.playlist.list || payload.playlistData.list;
             const audios = await this.getNormalAudios(list);
 
             const artists = this.buildArtists(html);
+            const playlists = this.buildPlaylists(html);
 
             const more = { section_id, start_from };
 
