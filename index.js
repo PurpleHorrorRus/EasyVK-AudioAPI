@@ -325,6 +325,7 @@ class AudioAPI {
 
             const payload = res.payload[1][0];
             let { totalCount: count } = payload;
+            if (params.getCount) return resolve(count);
             
             const max = params.count || 50;
             let { list } = payload;
@@ -334,7 +335,7 @@ class AudioAPI {
             const audios = await this.getNormalAudios(list);
 
             // Protect from restriction audios
-            if (audios.length !== count) 
+            if (audios.length < count)
                 count = audios.length;
 
             return resolve({ audios, count });
@@ -343,11 +344,10 @@ class AudioAPI {
     
     getCount (params = {}) {
         return new Promise(async (resolve, reject) => {
-            params.count = 1; // for unload query
+            params.getCount = true;
             const response = await this.get(params).catch(reject);
             if (!response) return reject(new Error("Get count error: access denied"));
-            const count = response.count;
-            return resolve(count);
+            return resolve(response);
         });
     }
 
@@ -551,7 +551,7 @@ class AudioAPI {
                 // Protect from restriction audios
                 const len = playlist.list.length;
                 const size = playlist.size;
-                if (len !== size) playlist.size = len;
+                if (len < size) playlist.size = len;
             } return resolve(playlist);
         });
     }
