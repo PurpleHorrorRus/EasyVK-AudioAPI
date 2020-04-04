@@ -326,11 +326,11 @@ class AudioAPI {
             const payload = res.payload[1][0];
             const { totalCount: count } = payload;
             
+            const max = params.count || 50;
             let { list } = payload;
             if (!list) return reject(new Error("Access denied"));
-            if (!params.count) params.count = 50;
-            list = list.splice(0, params.count);
 
+            list = list.length > max ? list.splice(0, max) : list;
             const audios = await this.getNormalAudios(list);
             return resolve({ audios, count });
         });
@@ -510,6 +510,7 @@ class AudioAPI {
             access_hash?: string
             owner_id?: number
             playlist_id: number
+            count?: number = 50
             list: boolean
         */
 
@@ -534,8 +535,11 @@ class AudioAPI {
             const payload = res.payload[1][0];
             if (!payload) return reject(new Error("getPlaylistById error"));
             const playlist = this.getPlaylistInfo(payload);
-            if (params.list) playlist.list = await this.getNormalAudios(payload.list);
-            return resolve(playlist);
+            if (params.list) {
+                const count = params.count || 50;
+                const list = payload.list.length > count ? payload.list.splice(0, count) : payload.list;
+                playlist.list = await this.getNormalAudios(list);
+            } return resolve(playlist);
         });
     }
 
