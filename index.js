@@ -324,7 +324,7 @@ class AudioAPI {
             }).catch(reject);
 
             const payload = res.payload[1][0];
-            const { totalCount: count } = payload;
+            let { totalCount: count } = payload;
             
             const max = params.count || 50;
             let { list } = payload;
@@ -332,6 +332,11 @@ class AudioAPI {
 
             list = list.length > max ? list.splice(0, max) : list;
             const audios = await this.getNormalAudios(list);
+
+            // Protect from restriction audios
+            if (audios.length !== count) 
+                count = audios.length;
+
             return resolve({ audios, count });
         });
     }
@@ -524,8 +529,10 @@ class AudioAPI {
                 act: "load_section",
                 al: 1,
                 claim: 0,
+                context: "",
                 from_id: uid,
                 is_loading_all: 1,
+                is_preload: 0,
                 offset: 0,
                 owner_id: params.owner_id || uid,
                 playlist_id: params.playlist_id,
@@ -536,9 +543,15 @@ class AudioAPI {
             if (!payload) return reject(new Error("getPlaylistById error"));
             const playlist = this.getPlaylistInfo(payload);
             if (params.list) {
+                if (playlist.official) params.count = params.list.length;
                 const count = params.count || 50;
                 const list = payload.list.length > count ? payload.list.splice(0, count) : payload.list;
                 playlist.list = await this.getNormalAudios(list);
+
+                // Protect from restriction audios
+                const len = playlist.list.length;
+                const size = playlist.size;
+                if (len !== size) playlist.size = len;
             } return resolve(playlist);
         });
     }
