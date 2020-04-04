@@ -173,15 +173,19 @@ class AudioAPI {
     getNormalAudios (audios) {
         return new Promise(async resolve => {
             let ready = [];
+            let restricted = 0;
 
             for (const array of this.chunkify(audios, 10)) {
-                const adi = array.map(a => this.getAdi(a)).filter(v => v !== null).map(a => a.join("_"));
-                let audios = await this.getById({ ids: adi.join(",") }).catch(console.log);
+                const adi = array.map(a => this.getAdi(a));
+                const filtered = adi.filter(v => v !== null);
+                const mapped = filtered.map(a => a.join("_"));
+                restricted += adi.filter(v => v === null).length;
+                let audios = await this.getById({ ids: mapped.join(",") }).catch(console.log);
                 audios = audios.map(a => this.getAudioAsObject(a));
                 ready = ready.concat(audios);
             }
 
-            return resolve(ready);
+            return resolve({ audios: ready, restricted });
         });
     }
 
@@ -332,11 +336,10 @@ class AudioAPI {
             if (!list) return reject(new Error("Access denied"));
 
             list = list.length > max ? list.splice(0, max) : list;
-            const audios = await this.getNormalAudios(list);
+            const { audios, restricted } = await this.getNormalAudios(list);
 
             // Protect from restriction audios
-            if (audios.length < count && offset + max >= count)
-                count = audios.length;
+            count -= restricted;
 
             return resolve({ audios, count });
         });
@@ -397,8 +400,8 @@ class AudioAPI {
                 track_code: audio.track_code
             }).catch(reject);
 
-            const _audio = await this.getNormalAudios([res.payload[1][0]]);
-            return resolve(_audio[0]);
+            const { audios } = await this.getNormalAudios([res.payload[1][0]]);
+            return resolve(audios[0]);
         });
 
     }
@@ -432,8 +435,8 @@ class AudioAPI {
             });
 
             const res = await this.request(params).catch(reject);
-            const _audio = await this.getNormalAudios([res]);
-            return resolve(_audio);
+            const { audios } = await this.getNormalAudios([res]);
+            return resolve(audios);
         });
     }
 
@@ -502,8 +505,11 @@ class AudioAPI {
             const _p = res.payload[1][0];
             const playlist = this.getPlaylistInfo(_p);
 
-            if (params.list)
-                playlist.list = await this.getNormalAudios(_p.list);
+            if (params.list) {
+                const { audios, restricted } = await this.getNormalAudios(_p.list);
+                playlist.list = audios;
+                playlist.size -= restricted;
+            }
 
             return resolve(playlist);
         });
@@ -546,12 +552,9 @@ class AudioAPI {
                 if (playlist.official) params.count = params.list.length;
                 const count = params.count || 50;
                 const list = payload.list.length > count ? payload.list.splice(0, count) : payload.list;
-                playlist.list = await this.getNormalAudios(list);
-
-                // Protect from restriction audios
-                const len = playlist.list.length;
-                const size = playlist.size;
-                if (len < size) playlist.size = len;
+                const { audios, restricted } = await this.getNormalAudios(list); 
+                playlist.list = audios;
+                playlist.size -= restricted; // Protect from restriction audios
             } return resolve(playlist);
         });
     }
@@ -645,7 +648,7 @@ class AudioAPI {
                 section: "updates"
             }).catch(reject);
             const list = res.payload[1][1].feedPlaylist.list;
-            const audios = await this.getNormalAudios(list);
+            const  { audios } = await this.getNormalAudios(list);
             return resolve(audios);
         });
     }
@@ -1043,10 +1046,11 @@ class AudioAPI {
             const r_max = params.r_max || 50;
 
             const _c_audios = charts_playlist.list.length > max ? charts_playlist.list.splice(0, max) : charts_playlist.list;
+            const { audios: resolved_c_audios } = await this.getNormalAudios(_c_audios).catch(reject); 
 
             const charts = {
                 id: charts_playlist.id,
-                audios: await this.getNormalAudios(_c_audios).catch(reject)
+                audios: resolved_c_audios
             };
 
             const dom = res.payload[1][0];
@@ -1055,18 +1059,20 @@ class AudioAPI {
 
             const _r = await this.loadRecoms(recoms_code, { count: r_max }).catch(reject);
             const _r_audios = _r.length > r_max ? _r.splice(0, r_max) : _r;
+            const { audios: resolved_r_audios } = await this.getNormalAudios(_r_audios).catch(reject);
         
             const recoms = {
                 id: types[0],
-                audios: await this.getNormalAudios(_r_audios).catch(reject)
+                audios: resolved_r_audios
             };
         
             const _n = this.matchAll(dom, /data-audio=\"(.*?)\"/, true);
             const _n_audios = _n.length > max ? _n.splice(0, max) : _n;
+            const { audios: resolved_n_audios } = await this.getNormalAudios(_n_audios).catch(reject);
 
             const _new = {
                 id: types[1],
-                audios: await this.getNormalAudios(_n_audios).catch(reject)
+                audios: resolved_n_audios
             };
 
             return resolve({ recoms, new: _new, charts, many_playlists });
@@ -1095,8 +1101,7 @@ class AudioAPI {
                 XML: true
             });
 
-            const audios = await this.getNormalAudios(res.payload[1][0].list);
-    
+            const  { audios } = await this.getNormalAudios(res.payload[1][0].list);
             return resolve(audios);
         });
     }
@@ -1221,7 +1226,7 @@ class AudioAPI {
                 catch(e) { artist_name = html.match(/header__text\">(.*?)</)[1]; } 
     
                 const matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\">/);
-                const audios = await this.getNormalAudios(matches);
+                const { audios } = await this.getNormalAudios(matches);
                 const playlists = this.buildPlaylistsMobile(html);
       
                 let cover_url = "";
@@ -1381,7 +1386,7 @@ class AudioAPI {
                 matches = this.getAudiosFromHTML(html);
             } catch(e) { matches = this.getAudiosFromHTML(res); }
     
-            const audios = await this.getNormalAudios(matches);
+            const { audios } = await this.getNormalAudios(matches);
             audios.forEach(a => {
                 a.can_edit = false;
                 a.action_hash = a.action_hash.replaceAll("\\", "");
@@ -1422,7 +1427,7 @@ class AudioAPI {
             const start_from = payload.next_from || payload.nextFrom;
 
             const list = payload.playlist.list || payload.playlistData.list;
-            const audios = await this.getNormalAudios(list);
+            const { audios } = await this.getNormalAudios(list);
 
             const artists = this.buildArtists(html);
             const playlists = this.buildPlaylists(html);
@@ -1458,7 +1463,7 @@ class AudioAPI {
             const start_from = payload.next_from || payload.nextFrom;
 
             const list = payload.playlist.list || payload.playlists[0].list;
-            const audios = await this.getNormalAudios(list);
+            const { audios } = await this.getNormalAudios(list);
             
             const _more = { section_id, start_from };
 
@@ -1483,7 +1488,7 @@ class AudioAPI {
             const objects = data[0];
             const values = Object.values(objects);
             const map = values.map(v => v[1]);
-            const audios = await this.getNormalAudios(map);
+            const { audios } = await this.getNormalAudios(map);
             return resolve({
                 list: audios,
                 next: data[2] || null
@@ -1595,8 +1600,8 @@ class AudioAPI {
             let matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
             matches = matches.filter(a => Number(a[1]) === owner_id);
 
-            const list = await this.getNormalAudios(matches);
-            return resolve({ list, _q: params.q });
+            const { audios } = await this.getNormalAudios(matches);
+            return resolve({ list: audios, _q: params.q });
         });
     }
 }
