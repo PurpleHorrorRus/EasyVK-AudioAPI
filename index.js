@@ -335,7 +335,7 @@ class AudioAPI {
             const audios = await this.getNormalAudios(list);
 
             // Protect from restriction audios
-            if (audios.length < count)
+            if (audios.length < count && offset + max >= count)
                 count = audios.length;
 
             return resolve({ audios, count });
