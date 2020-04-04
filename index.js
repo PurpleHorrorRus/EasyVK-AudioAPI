@@ -422,6 +422,13 @@ class AudioAPI {
     }
 
     edit (audio = {}, params = {}) {
+
+        /*
+            performer?: string
+            title?: string
+            privacy?: number
+        */
+
         return new Promise(async (resolve, reject) => {
             params = Object.assign(params, {
                 act: "edit_audio",
@@ -435,8 +442,8 @@ class AudioAPI {
             });
 
             const res = await this.request(params).catch(reject);
-            const { audios } = await this.getNormalAudios([res]);
-            return resolve(audios);
+            const { audios } = await this.getNormalAudios(res.payload[1]);
+            return resolve(audios[0]);
         });
     }
 
@@ -453,15 +460,24 @@ class AudioAPI {
     }
 
     reorder (params = {}) {
-        return new Promise(async (resolve, reject) => {
+
+        /*
+            audio_id: number
+            next_audio_id: number,
+            owner_id?: number
+        */
+
+        const uid = this.user_id;
+
+        return new Promise(async resolve => {
             await this.request({
                 act: "reorder_audios",
                 al: 1,
                 audio_id: params.audio_id || -1,
                 hash: this.reorderHash || await this.getReorderHash() || "",
                 next_audio_id: params.next_audio_id || 0,
-                owner_id: params.owner_id || this.user_id || 0
-            }).catch(reject);
+                owner_id: params.owner_id || uid
+            }).catch(() => resolve(false));
             return resolve(true);
         });
     }

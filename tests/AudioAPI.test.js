@@ -84,6 +84,14 @@ describe("AudioAPI", () => {
 
     //     expect(reorder).toBe(true);
     // });
+    
+    // test("Edit song", async () => {
+    //     const { audios } = await audio.get();
+    //     const can_edit = audios.filter(a => a.can_edit);
+    //     const song = can_edit[0];
+    //     const results = await audio.edit(song, { performer: "Meridius", title: "Test" });
+    //     expect(results).toBeTruthy();
+    // });
 
     // test("Audio status", async () => {
     //     const { audios } = await audio.get();
