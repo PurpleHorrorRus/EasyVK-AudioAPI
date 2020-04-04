@@ -544,6 +544,12 @@ class AudioAPI {
     }
 
     getPlaylists (params = {}) {
+
+        /*
+            access_hash?: string
+            owner_id: number
+        */
+
         return new Promise(async (resolve, reject) => {
             const res = await this.request({
                 access_hash: params.access_hash || "",
@@ -556,7 +562,7 @@ class AudioAPI {
             });
 
             const payload = res.payload[1][0];
-            if(payload === "\"Access denied\"") return reject(new Error("Access Denied"));
+            if(/Access denied/.test(payload)) return reject(new Error("Access Denied"));
             
             let playlists = [];
     
