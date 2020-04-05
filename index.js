@@ -173,19 +173,36 @@ class AudioAPI {
     getNormalAudios (audios) {
         return new Promise(async resolve => {
             let ready = [];
-            let restricted = 0;
+            let restricted_ids = [];
 
-            for (const array of this.chunkify(audios, 10)) {
-                const adi = array.map(a => this.getAdi(a));
-                const filtered = adi.filter(v => v !== null);
+            for (const array of this.chunkify(audios)) {
+                const adi = array.map((a, i) => {
+                    const id = this.getAdi(a);
+                    if (id === null) {
+                        restricted_ids = [...restricted_ids, i];
+                        return this.getAudioAsObject(a);
+                    } return id;
+                });
+                
+                const filtered = adi.filter(v => !v.id);
                 const mapped = filtered.map(a => a.join("_"));
-                restricted += adi.filter(v => v === null).length;
                 let audios = await this.getById({ ids: mapped.join(",") }).catch(console.log);
                 audios = audios.map(a => this.getAudioAsObject(a));
-                ready = ready.concat(audios);
-            }
 
-            return resolve({ audios: ready, restricted });
+                const audios_ready = [];
+                let b = 0;
+                adi.forEach((e, i) => {
+                    if (restricted_ids.indexOf(i) === -1) {
+                        audios_ready[i] = audios[b];
+                        b++;
+                    } else audios_ready[i] = e;
+                });
+                
+                restricted_ids = [];
+                ready = ready.concat(audios_ready);
+            } 
+            
+            return resolve(ready);
         });
     }
 
@@ -200,12 +217,12 @@ class AudioAPI {
         const audio_ = {
             id: audio[this.AudioObject.AUDIO_ITEM_INDEX_ID],
             owner_id: audio[this.AudioObject.AUDIO_ITEM_INDEX_OWNER_ID],
-            url: source,
+            url: source || "",
             title: audio[this.AudioObject.AUDIO_ITEM_INDEX_TITLE],
             performer: audio[this.AudioObject.AUDIO_ITEM_INDEX_PERFORMER],
             duration: audio[this.AudioObject.AUDIO_ITEM_INDEX_DURATION],
             covers: c,
-            is_restriction: !!audio[this.AudioObject.AUDIO_ITEM_INDEX_RESTRICTION],
+            is_restriction: !source,
             extra: audio[this.AudioObject.AUDIO_ITEM_INDEX_EXTRA],
             coverUrl_s: cl[0] || "",
             coverUrl_p: cl[1] || "",
@@ -336,10 +353,7 @@ class AudioAPI {
             if (!list) return reject(new Error("Access denied"));
 
             list = list.length > max ? list.splice(0, max) : list;
-            const { audios, restricted } = await this.getNormalAudios(list);
-
-            // Protect from restriction audios
-            count -= restricted;
+            const audios = await this.getNormalAudios(list);
 
             return resolve({ audios, count });
         });
@@ -400,7 +414,7 @@ class AudioAPI {
                 track_code: audio.track_code
             }).catch(reject);
 
-            const { audios } = await this.getNormalAudios([res.payload[1][0]]);
+            const audios = await this.getNormalAudios([res.payload[1][0]]);
             return resolve(audios[0]);
         });
 
@@ -442,7 +456,7 @@ class AudioAPI {
             });
 
             const res = await this.request(params).catch(reject);
-            const { audios } = await this.getNormalAudios(res.payload[1]);
+            const audios = await this.getNormalAudios(res.payload[1]);
             return resolve(audios[0]);
         });
     }
@@ -521,11 +535,8 @@ class AudioAPI {
             const _p = res.payload[1][0];
             const playlist = this.getPlaylistInfo(_p);
 
-            if (params.list) {
-                const { audios, restricted } = await this.getNormalAudios(_p.list);
-                playlist.list = audios;
-                playlist.size -= restricted;
-            }
+            if (params.list) 
+                playlist.list = await this.getNormalAudios(_p.list);
 
             return resolve(playlist);
         });
@@ -568,9 +579,7 @@ class AudioAPI {
                 if (playlist.official) params.count = params.list.length;
                 const count = params.count || 50;
                 const list = payload.list.length > count ? payload.list.splice(0, count) : payload.list;
-                const { audios, restricted } = await this.getNormalAudios(list); 
-                playlist.list = audios;
-                playlist.size -= restricted; // Protect from restriction audios
+                playlist.list = await this.getNormalAudios(list);
             } return resolve(playlist);
         });
     }
@@ -664,7 +673,7 @@ class AudioAPI {
                 section: "updates"
             }).catch(reject);
             const list = res.payload[1][1].feedPlaylist.list;
-            const  { audios } = await this.getNormalAudios(list);
+            const audios = await this.getNormalAudios(list);
             return resolve(audios);
         });
     }
@@ -1062,7 +1071,7 @@ class AudioAPI {
             const r_max = params.r_max || 50;
 
             const _c_audios = charts_playlist.list.length > max ? charts_playlist.list.splice(0, max) : charts_playlist.list;
-            const { audios: resolved_c_audios } = await this.getNormalAudios(_c_audios).catch(reject); 
+            const resolved_c_audios = await this.getNormalAudios(_c_audios).catch(reject); 
 
             const charts = {
                 id: charts_playlist.id,
@@ -1075,7 +1084,7 @@ class AudioAPI {
 
             const _r = await this.loadRecoms(recoms_code, { count: r_max }).catch(reject);
             const _r_audios = _r.length > r_max ? _r.splice(0, r_max) : _r;
-            const { audios: resolved_r_audios } = await this.getNormalAudios(_r_audios).catch(reject);
+            const resolved_r_audios = await this.getNormalAudios(_r_audios).catch(reject);
         
             const recoms = {
                 id: types[0],
@@ -1084,7 +1093,7 @@ class AudioAPI {
         
             const _n = this.matchAll(dom, /data-audio=\"(.*?)\"/, true);
             const _n_audios = _n.length > max ? _n.splice(0, max) : _n;
-            const { audios: resolved_n_audios } = await this.getNormalAudios(_n_audios).catch(reject);
+            const resolved_n_audios = await this.getNormalAudios(_n_audios).catch(reject);
 
             const _new = {
                 id: types[1],
@@ -1117,7 +1126,7 @@ class AudioAPI {
                 XML: true
             });
 
-            const  { audios } = await this.getNormalAudios(res.payload[1][0].list);
+            const audios = await this.getNormalAudios(res.payload[1][0].list);
             return resolve(audios);
         });
     }
@@ -1242,7 +1251,7 @@ class AudioAPI {
                 catch(e) { artist_name = html.match(/header__text\">(.*?)</)[1]; } 
     
                 const matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\">/);
-                const { audios } = await this.getNormalAudios(matches);
+                const audios = await this.getNormalAudios(matches);
                 const playlists = this.buildPlaylistsMobile(html);
       
                 let cover_url = "";
@@ -1402,7 +1411,7 @@ class AudioAPI {
                 matches = this.getAudiosFromHTML(html);
             } catch(e) { matches = this.getAudiosFromHTML(res); }
     
-            const { audios } = await this.getNormalAudios(matches);
+            const audios = await this.getNormalAudios(matches);
             audios.forEach(a => {
                 a.can_edit = false;
                 a.action_hash = a.action_hash.replaceAll("\\", "");
@@ -1443,7 +1452,7 @@ class AudioAPI {
             const start_from = payload.next_from || payload.nextFrom;
 
             const list = payload.playlist.list || payload.playlistData.list;
-            const { audios } = await this.getNormalAudios(list);
+            const audios = await this.getNormalAudios(list);
 
             const artists = this.buildArtists(html);
             const playlists = this.buildPlaylists(html);
@@ -1479,7 +1488,7 @@ class AudioAPI {
             const start_from = payload.next_from || payload.nextFrom;
 
             const list = payload.playlist.list || payload.playlists[0].list;
-            const { audios } = await this.getNormalAudios(list);
+            const audios = await this.getNormalAudios(list);
             
             const _more = { section_id, start_from };
 
@@ -1504,7 +1513,7 @@ class AudioAPI {
             const objects = data[0];
             const values = Object.values(objects);
             const map = values.map(v => v[1]);
-            const { audios } = await this.getNormalAudios(map);
+            const audios = await this.getNormalAudios(map);
             return resolve({
                 list: audios,
                 next: data[2] || null
@@ -1616,7 +1625,7 @@ class AudioAPI {
             let matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
             matches = matches.filter(a => Number(a[1]) === owner_id);
 
-            const { audios } = await this.getNormalAudios(matches);
+            const audios = await this.getNormalAudios(matches);
             return resolve({ list: audios, _q: params.q });
         });
     }
