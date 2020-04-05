@@ -156,6 +156,7 @@ class AudioAPI {
     // --------------------- OBJECTS ----------------------
 
     chunkify (array, chunkSize = 10) {
+        if (!array || !array.length) return reject(new Error("No audios in query"));
         const len = array.length;
         let r = [];
         for (let i = 0; i < Math.ceil(len / 10); i++) {
@@ -171,7 +172,8 @@ class AudioAPI {
     }
 
     getNormalAudios (audios) {
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
+            if (!audios || !audios.length) return reject(new Error("No audios in query"));
             let ready = [];
             let restricted_ids = [];
 
@@ -1243,6 +1245,7 @@ class AudioAPI {
             if (!artist) return reject(new Error("Null artist is not acceptable"));
             artist = artist.toLowerCase();
             let { html } = await this.request({}, true, true, `/artist/${artist}`);
+            if (!html) return reject(new Error("This artist's page is broken due to VK"));
             html = html.replaceAll("\\", "").replaceAll("& quot;", "\"").replaceAll("&quot;", "\"").replaceAll("&#39;", "\"");
 
             try {
@@ -1451,9 +1454,12 @@ class AudioAPI {
             const section_id = payload.sectionId;
             const start_from = payload.next_from || payload.nextFrom;
 
-            const list = payload.playlist.list || payload.playlistData.list;
-            const audios = await this.getNormalAudios(list);
+            const list = payload.playlist.list || payload.playlistData.list || [];
+            let audios = [];
 
+            if (list && list.length)
+                audios = await this.getNormalAudios(list);
+            
             const artists = this.buildArtists(html);
             const playlists = this.buildPlaylists(html);
 
@@ -1607,6 +1613,13 @@ class AudioAPI {
     }
 
     searchInAudios (params) {
+
+        /*
+            q: string
+            owner_id: number
+            count?: number
+        */
+
         if(!params.q) return;
         
         return new Promise(async (resolve, reject) => {
@@ -1624,6 +1637,9 @@ class AudioAPI {
             const html = res.payload[1][0];
             let matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
             matches = matches.filter(a => Number(a[1]) === owner_id);
+
+            if (params.count) 
+                matches = matches.splice(0, params.count);
 
             const audios = await this.getNormalAudios(matches);
             return resolve({ list: audios, _q: params.q });
