@@ -2,6 +2,7 @@ const HTMLParser = require("node-html-parser");
 class AudioAPI {
     constructor (client) {
         this.client = client;
+        this.vk = client._vk;
         this.user_id = client._vk.session.user_id;
         this.uploader = client._vk.uploader;
 
@@ -156,7 +157,7 @@ class AudioAPI {
     // --------------------- OBJECTS ----------------------
 
     chunkify (array, chunkSize = 10) {
-        if (!array || !array.length) return reject(new Error("No audios in query"));
+        if (!array || !array.length) throw new Error("No audios in query");
         const len = array.length;
         let r = [];
         for (let i = 0; i < Math.ceil(len / 10); i++) {
@@ -347,7 +348,7 @@ class AudioAPI {
             }).catch(reject);
 
             const payload = res.payload[1][0];
-            let { totalCount: count } = payload;
+            const { totalCount: count } = payload;
             if (params.getCount) return resolve(count);
             
             const max = params.count || 50;
@@ -775,11 +776,24 @@ class AudioAPI {
         });
     }
 
+    uploadAudio (path = "") {
+        return new Promise(async (resolve, reject) => {
+            if (!path) return reject(new Error("You must to specify path in params"));
+
+            const { upload_url: url } = await this.vk.call("audio.getUploadServer").catch(reject);
+            const data = await this.uploader.uploadFile(url, path, "file", {}).catch(reject);
+            const saved = await this.vk.post("audio.save", data);
+
+            return resolve(saved);
+        });
+    }
+
     uploadCover (path = "") {
         return new Promise(async (resolve, reject) => {
             const url = await this.getPlaylistCoverUploadURL().catch(reject);
             const file = await this.uploader.uploadFile(url, path, "photo", {}).catch(reject);
-            return resolve(JSON.stringify(file));
+            const string = JSON.stringify(file);
+            return resolve(string);
         });
     }
 

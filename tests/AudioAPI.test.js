@@ -102,6 +102,12 @@ describe("AudioAPI", () => {
 
     //     await audio.changeAudioStatus({ raw_audio_id: audios[1].full_id });
     // });
+
+    // test("Upload Audio", async () => {
+    //     const path = "PUT PATH HERE";
+    //     const saved = await audio.uploadAudio(path);
+    //     expect(saved).toBeTruthy();
+    // });
 });
 
 describe("Playlists", () => {
