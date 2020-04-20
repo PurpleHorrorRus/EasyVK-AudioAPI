@@ -552,6 +552,7 @@ class AudioAPI {
             owner_id?: number
             playlist_id: number
             count?: number = 50
+            offset?: number = 0
             list: boolean
         */
 
@@ -581,7 +582,9 @@ class AudioAPI {
             if (params.list) {
                 if (playlist.official) params.count = params.list.length;
                 const count = params.count || 50;
-                const list = payload.list.length > count ? payload.list.splice(0, count) : payload.list;
+                const offset = params.offset || 0;
+                const needSplice = offset > 0 || payload.list.length > count;
+                const list = needSplice ? payload.list.splice(offset, count) : payload.list;
                 playlist.list = await this.getNormalAudios(list);
             } return resolve(playlist);
         });
