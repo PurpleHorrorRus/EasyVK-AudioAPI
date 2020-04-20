@@ -788,7 +788,7 @@ class AudioAPI {
 
             const { upload_url: url } = await this.vk.call("audio.getUploadServer").catch(reject);
             const data = await this.uploader.uploadFile(url, path, "file", {}).catch(reject);
-            const saved = await this.vk.post("audio.save", data);
+            const saved = await this.vk.post("audio.save", data).catch(reject);
 
             return resolve(saved);
         });
