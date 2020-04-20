@@ -222,6 +222,13 @@ describe("Recoms", () => {
     // test("Load", async () => {
     //     const results = await audio.loadNewReleases({ max: 6, r_max: 10 });
     //     expect(results).not.toBeFalsy();
+    // // });
+    // test("Load By Type", async () => {
+    //     const { many_playlists } = await audio.loadNewReleases({ max: 6, r_max: 10 });
+    //     const key = Object.keys(many_playlists)[0];
+    //     const { code } = many_playlists[key];
+    //     const results = await audio.getPlaylistsByType({ type: code });
+    //     expect(results).toBeTruthy();
     // });
     // test("Load Page", async () => {
     //     const { recoms } = await audio.loadNewReleases({ max: 1, r_max: 1 });
@@ -229,7 +236,7 @@ describe("Recoms", () => {
     //     expect(results).not.toBeFalsy();
     // });
     // test("Friend Updates", async () => {
-    // const results = await audio.getFriendsNew();
-    // expect(results).toBeTruthy();
+    //     const results = await audio.getFriendsNew();
+    //     expect(results).toBeTruthy();
     // });
 });

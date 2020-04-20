@@ -173,8 +173,11 @@ class AudioAPI {
     }
 
     getNormalAudios (audios) {
-        return new Promise(async (resolve, reject) => {
-            if (!audios || !audios.length) return reject(new Error("No audios in query"));
+        return new Promise(async resolve => {
+            if (!audios || !audios.length) {
+                new Error("No audios in query");
+                return resolve([]);
+            }
             let ready = [];
             let restricted_ids = [];
 
@@ -979,7 +982,7 @@ class AudioAPI {
     getPlaylistByHTML (playlist) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
         try {
-            const info = playlist.childNodes[0];
+            const info = playlist.childNodes[1];
             const raw = info.rawAttrs;
         
             const bod = HTMLParser.parse(playlist.innerHTML);
@@ -1014,7 +1017,7 @@ class AudioAPI {
                 pl_objects = inner_parsed.querySelectorAll(".audio_pl_item2");
                 for (const object of pl_objects) {
                     const dom = HTMLParser.parse(object.innerHTML);
-                    if (dom.childNodes[0] === null) continue;
+                    if (dom.childNodes[1] === null) continue;
                     const playlist = this.getPlaylistByHTML(dom);
                     if (playlist === null) continue;
                     if (!genres[genre]) genres[genre] = { code, playlists: [] };
