@@ -160,7 +160,7 @@ class AudioAPI {
         if (!array || !array.length) throw new Error("No audios in query");
         const len = array.length;
         let r = [];
-        for (let i = 0; i < Math.ceil(len / 10); i++) {
+        for (let i = 0; i < Math.ceil(len / chunkSize); i++) {
             r = [...r, []];
             for (let j = 0; j < chunkSize; j++) {
                 if (array[j]) r[i] = [...r[i], array[j]];
