@@ -885,9 +885,9 @@ class AudioAPI {
 
             const { edit_hash, list } = playlist;
 
-            const title = params.title !== null ? params.title : playlist.title;
-            const description = params.description !== null ? params.description : playlist.description;
-            const cover = params.cover !== null ? await this.uploadCover(params.cover).catch(reject) : 0;
+            const title = params.title ? params.title : playlist.title;
+            const description = params.description ? params.description : playlist.description;
+            const cover = params.cover ? await this.uploadCover(params.cover).catch(reject) : 0;
 
             const Audios = list.length ? list.map(l => l.full_id).join(",") : "";
 
