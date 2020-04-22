@@ -70,6 +70,7 @@ class AudioAPI {
 
     // --------------------- VK ----------------------
 
+    
     UnmuskTokenAudio (e, vkId = 1) {
         const n = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN0PQRSTUVWXYZO123456789+/=";
 
@@ -149,7 +150,40 @@ class AudioAPI {
             } return e;
         };
 
-        return r(e);
+        const m = e => {
+            /*
+                Какие-то аудио встречаются с такими ссылками:
+                https://psv4.vkuseraudio.net/c813138/u325365941/ac39dd373b8/audios/fc21ebcd3bd2/index.m3u8
+                Меняем её на
+                https://psv4.vkuseraudio.net/c813138/u325365941/audios/fc21ebcd3bd2.mp3
+            */
+
+            /*
+                А иногда с такими (я предполагаю, что это ссылки на оооочень давно загруженные аудиозаписи, хотя могу ошибаться):
+                https://cs4-5v4.vkuseraudio.net/p9/ace9644a9a3/b5b6f7c2685638/index.m3u8
+                Меняем её на
+                https://cs4-5v4.vkuseraudio.net/p9/b5b6f7c2685638.mp3
+            */
+
+            e = e.replace("https://", "");
+            const splitted = e.split("/");
+
+            const isNew = /psv(.*?vkuseraudio.net)/.test(e);
+
+            const filename = splitted[isNew ? 5 : 3];
+            const spliced = splitted.splice(0, isNew ? 3 : 2);
+            const server = spliced.join("/");
+
+            const url = [
+                server,                     // SERVER
+                isNew ? "audios" : null,    // IF AUDIO STORING ON "NEW" SERVER
+                `${filename}.mp3`           // NAME OF FILE
+            ].filter(x => x).join("/");
+
+            return `https://${url}`;
+        };
+
+        return m(r(e));
     }
 
     getURL (token) { return this.UnmuskTokenAudio(token); }
@@ -583,6 +617,7 @@ class AudioAPI {
             if (!payload) return reject(new Error("getPlaylistById error"));
             const playlist = this.getPlaylistInfo(payload);
             if (params.list) {
+                if (!payload.list) return reject(new Error("getPlaylistById fetching list error"));
                 if (playlist.official) params.count = params.list.length;
                 const count = params.count || 50;
                 const offset = params.offset || 0;

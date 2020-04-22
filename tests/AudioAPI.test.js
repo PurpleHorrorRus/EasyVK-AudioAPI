@@ -35,10 +35,10 @@ describe("auth", () => {
 });
 
 describe("AudioAPI", () => {
-    // test("Get Audios", async () => {
-    //     const audios = await audio.get();
-    //     expect(audios).not.toBeFalsy();
-    // });
+    test("Get Audios", async () => {
+        const audios = await audio.get();
+        expect(audios).toBeTruthy();
+    });
 
     // test("Get More Audios", async () => {
     //     const { audios } = await audio.get({
@@ -179,7 +179,7 @@ describe("Playlists", () => {
 
 describe("Search Engine", () => {
     // test("Audio search", async () => {
-    //     const results = await audio.search({ q: "Queen" });
+    //     const results = await audio.search({ q: "Painful History" });
     //     expect(results).not.toBeFalsy();
     // });
 
