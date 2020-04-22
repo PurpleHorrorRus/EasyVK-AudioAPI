@@ -174,6 +174,8 @@ class AudioAPI {
             const spliced = splitted.splice(0, isNew ? 3 : 2);
             const server = spliced.join("/");
 
+            if (!filename || !server) return null;
+
             const url = [
                 server,                     // SERVER
                 isNew ? "audios" : null,    // IF AUDIO STORING ON "NEW" SERVER

@@ -35,10 +35,10 @@ describe("auth", () => {
 });
 
 describe("AudioAPI", () => {
-    test("Get Audios", async () => {
-        const audios = await audio.get();
-        expect(audios).toBeTruthy();
-    });
+    // test("Get Audios", async () => {
+    //     const audios = await audio.get();
+    //     expect(audios).toBeTruthy();
+    // });
 
     // test("Get More Audios", async () => {
     //     const { audios } = await audio.get({
