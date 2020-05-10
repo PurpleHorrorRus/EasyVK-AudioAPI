@@ -30,8 +30,8 @@ beforeAll(async () => {
 });
 
 describe("auth", () => {
-    test("vk", () => expect(vk).not.toBeFalsy());
-    test("http", () => expect(client).not.toBeFalsy());
+    test("vk", () => expect(vk).toBeTruthy());
+    test("http", () => expect(client).toBeTruthy());
 });
 
 describe("AudioAPI", () => {
@@ -57,7 +57,7 @@ describe("AudioAPI", () => {
 
     // test("Get Playlist", async () => {
     //     const playlist = await audio.getPlaylist({ playlist_id: 5, list: true });
-    //     expect(playlist).not.toBeFalsy();
+    //     expect(playlist).toBeTruthy();
     // });
     
     // let add = null;
@@ -65,7 +65,7 @@ describe("AudioAPI", () => {
     // test("Add song", async () => {
     //     const playlist = await audio.getPlaylist({ owner_id: 215185126, playlist_id: 2, list: true });
     //     add = await audio.add(playlist.list[0]);
-    //     expect(add).not.toBeFalsy();
+    //     expect(add).toBeTruthy();
     // });
 
     // test("Delete song", async () => {
@@ -180,7 +180,7 @@ describe("Playlists", () => {
 describe("Search Engine", () => {
     // test("Audio search", async () => {
     //     const results = await audio.search({ q: "Painful History" });
-    //     expect(results).not.toBeFalsy();
+    //     expect(results).toBeTruthy();
     // });
 
     // test("Audio search by offset", async () => {
@@ -199,7 +199,7 @@ describe("Search Engine", () => {
     //         owner_id: -41670861,
     //         q: "Twil"
     //     });
-    //     expect(result).not.toBeFalsy();
+    //     expect(result).toBeTruthy();
     // });
 
     // test("Get Artist", async () => {
@@ -221,19 +221,19 @@ describe("Search Engine", () => {
 describe("Recoms", () => {
     // test("Load", async () => {
     //     const results = await audio.loadNewReleases({ max: 6, r_max: 10 });
-    //     expect(results).not.toBeFalsy();
+    //     expect(results).toBeTruthy();
     // // });
     // test("Load By Type", async () => {
     //     const { many_playlists } = await audio.loadNewReleases({ max: 6, r_max: 10 });
     //     const key = Object.keys(many_playlists)[0];
-    //     const { code } = many_playlists[key];
-    //     const results = await audio.getPlaylistsByType({ type: code });
+    //     const { block } = many_playlists[key];
+    //     const results = await audio.getPlaylistsByBlock({ block });
     //     expect(results).toBeTruthy();
     // });
     // test("Load Page", async () => {
     //     const { recoms } = await audio.loadNewReleases({ max: 1, r_max: 1 });
     //     const results = await audio.loadAudioPage({ type: recoms.id });
-    //     expect(results).not.toBeFalsy();
+    //     expect(results).toBeTruthy();
     // });
     // test("Friend Updates", async () => {
     //     const results = await audio.getFriendsNew();

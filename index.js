@@ -660,20 +660,20 @@ class AudioAPI {
         });
     }
 
-    getPlaylistsByType (params = {}) {
+    getPlaylistsByBlock (params = {}) {
 
         /*
-            type: string
+            block: string
         */
 
         return new Promise(async (resolve, reject) => {
             String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
 
-            if (!params.type) return reject(new Error("You must to specify type"));
+            if (!params.block) return reject(new Error("You must to specify type"));
 
             const res = await this.request({
-                section: "recoms_block",
-                type: params.type
+                block: params.block,
+                section: "recoms"
             }).catch(reject);
 
             let playlists = [];
@@ -1045,14 +1045,14 @@ class AudioAPI {
         const inner = root.querySelectorAll(".CatalogBlock");
         let pl_objects = [];
         let genre = "";
-        let code = "";
+        let block = "";
         const genres = {};
         for (const inner_object of inner) {
             try { 
                 const inner_parsed = HTMLParser.parse(inner_object.innerHTML);
                 try {
                     genre = inner_parsed.querySelectorAll(".CatalogBlock__title")[0].text;
-                    code = inner_parsed.innerHTML.match(/&type=(.*?)\"/)[1];
+                    block = inner_parsed.innerHTML.match(/&block=(.*?)\"/)[1];
                 } catch (e) { continue; }
                 pl_objects = inner_parsed.querySelectorAll(".audio_pl_item2");
                 for (const object of pl_objects) {
@@ -1060,7 +1060,7 @@ class AudioAPI {
                     if (dom.childNodes[1] === null) continue;
                     const playlist = this.getPlaylistByHTML(dom);
                     if (playlist === null) continue;
-                    if (!genres[genre]) genres[genre] = { code, playlists: [] };
+                    if (!genres[genre]) genres[genre] = { block, playlists: [] };
                     genres[genre].playlists = [...genres[genre].playlists, playlist];
                 }
             } catch(e) { return []; }
