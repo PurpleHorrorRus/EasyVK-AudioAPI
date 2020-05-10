@@ -718,7 +718,10 @@ class AudioAPI {
                 owner_id: uid,
                 section: "updates"
             }).catch(reject);
-            const list = res.payload[1][1].feedPlaylist.list;
+            let list = [];
+            const { playlists } = res.payload[1][1];
+            const map = playlists.map(e => e.list);
+            map.forEach(e => e.length ? list = list.concat(e) : list = [...list, e]);
             const audios = await this.getNormalAudios(list);
             return resolve(audios);
         });
