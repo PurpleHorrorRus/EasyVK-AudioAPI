@@ -1,30 +1,30 @@
 {
-  "name": "easyvk-audio",
-  "version": "0.0.8",
-  "description": "An unofficial Audio API for EasyVK",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PurpleHorrorRus/EasyVK-AudioAPI"
-  },
-  "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
-  "keywords": [
-    "VK",
-    "EasyVK",
-    "Audio"
-  ],
-  "author": "PurpleHorrorRus <purplehorrorrus@gmail.com>",
-  "license": "ISC",
-  "dependencies": {
-    "@types/jest": "^25.1.4",
-    "easyvk": "2.7.35",
-    "eslint-plugin-jest": "^23.8.2",
-    "node-html-parser": "^1.2.13"
-  },
-  "devDependencies": {
-    "eslint": "^6.8.0",
-    "jest": "^25.1.0"
-  }
+    "name": "easyvk-audio",
+    "version": "0.0.8",
+    "description": "An unofficial Audio API for EasyVK",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PurpleHorrorRus/EasyVK-AudioAPI"
+    },
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [
+        "VK",
+        "EasyVK",
+        "Audio"
+    ],
+    "author": "PurpleHorrorRus <purplehorrorrus@gmail.com>",
+    "license": "ISC",
+    "dependencies": {
+        "@types/jest": "^25.1.4",
+        "easyvk": "2.7.35",
+        "eslint-plugin-jest": "^23.8.2",
+        "node-html-parser": "^1.2.13"
+    },
+    "devDependencies": {
+        "eslint": "^6.8.0",
+        "jest": "^25.1.0"
+    }
 }
