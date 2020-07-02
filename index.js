@@ -77,11 +77,11 @@ class AudioAPI {
         const s = (e, t) => {
             const { length: n } = e;
             const i = [];
-            if(n) {
+            if (n) {
                 let o = n;
                 for (t = Math.abs(t); true;) {
                     o -= 1;
-                    if(o < 0) break;
+                    if (o < 0) break;
                     t = ((n * o + n) ^ t + o) % n;
                     i[o] = t;
                 }
@@ -100,7 +100,7 @@ class AudioAPI {
             },
             s: (e, t) => {
                 const { length: n } = e;
-                if(n) {
+                if (n) {
                     const i = s(e, t);
                     let o = 0;
                     for (e = e.split(""); ++o < n;) e[o] = e.splice(i[n - 1 - o], 1, e[o])[0];
@@ -131,14 +131,14 @@ class AudioAPI {
         };
 
         const r = e => {
-            if(!o() && ~e.indexOf("audio_api_unavailable")) {
+            if (!o() && ~e.indexOf("audio_api_unavailable")) {
                 const splitted = e.split("?extra=")[1];
                 let t = splitted ? splitted.split("#") : e.split("?extra")[0];
                 const alter = splitted ? t[1] : t[0];
 
                 let n = !alter.length ? "" : a(alter);
                 t = a(t[0]);
-                if(typeof n !== "string" || !t) return e;
+                if (typeof n !== "string" || !t) return e;
                 n = n ? n.split(String.fromCharCode(9)) : [];
                 for (let r, s, l = n.length; l--;) {
                     s = n[l].split(String.fromCharCode(11));
@@ -649,7 +649,7 @@ class AudioAPI {
             });
 
             const payload = res.payload[1][0];
-            if(/Access denied/.test(payload)) return reject(new Error("Access Denied"));
+            if (/Access denied/.test(payload)) return reject(new Error("Access Denied"));
             
             let playlists = [];
     
@@ -692,7 +692,7 @@ class AudioAPI {
                 const cover = playlist.childNodes[1].rawAttrs.match(/background-image: url\(\'(.*)\'\)/)[1];
 
                 let access_hash = split[2];
-                if(access_hash.length) access_hash = access_hash.replaceAll("'", "");
+                if (access_hash.length) access_hash = access_hash.replaceAll("'", "");
 
                 let genre = split[3];
                 genre = genre.replace("genre_", "");
@@ -707,7 +707,7 @@ class AudioAPI {
         });
     }
 
-    getFriendsNew () {
+    getFriendsUpdates () {
         const uid = this.user_id;
         return new Promise(async (resolve, reject) => {
             const res = await this.request({
@@ -720,7 +720,7 @@ class AudioAPI {
             }).catch(reject);
             let list = [];
             const { playlists } = res.payload[1][1];
-            const map = playlists.map(e => e.list);
+            const map = playlists.map(e => e.list).filter(e => e.length);
             map.forEach(e => e.length ? list = list.concat(e) : list = [...list, e]);
             const audios = await this.getNormalAudios(list);
             return resolve(audios);
@@ -1267,7 +1267,7 @@ class AudioAPI {
         let match = regex.exec(html);
 
         const push = data => {
-            if(to_json) {
+            if (to_json) {
                 try { matches = [...matches, JSON.parse(data)]; }
                 catch(e) { throw e; }
             }
@@ -1391,8 +1391,8 @@ class AudioAPI {
         const html = res.replaceAll("\\", "");
         const root = HTMLParser.parse(html);
         let pl_objects = root.querySelectorAll(".audioPlaylists__item");
-        if(!pl_objects.length) pl_objects = root.querySelectorAll(".audioPlaylists__itemLink");
-        if(!pl_objects.length) return;
+        if (!pl_objects.length) pl_objects = root.querySelectorAll(".audioPlaylists__itemLink");
+        if (!pl_objects.length) return;
         
         const getPlaylist = element => {
             let html = element.outerHTML;
@@ -1428,7 +1428,7 @@ class AudioAPI {
         let playlists = [];
         for(const playlist of pl_objects) {
             const builded = getPlaylist(playlist);
-            if(!builded.error) playlists = [...playlists, builded];
+            if (!builded.error) playlists = [...playlists, builded];
         }
 
         return playlists;
@@ -1565,7 +1565,7 @@ class AudioAPI {
 
     searchMore (url, params = {}) {
         const { url: form_url, offset, cursor } = params;
-        if(!url || !url.length) url = form_url;
+        if (!url || !url.length) url = form_url;
         return new Promise(async (resolve, reject) => {
             url = url.toLowerCase();
             const { data } = await this.request({
@@ -1589,7 +1589,7 @@ class AudioAPI {
 
     async searchMorePlaylists (url, params = {}) {
         const { url: form_url, offset, cursor } = params;
-        if(!url || !url.length) url = form_url;
+        if (!url || !url.length) url = form_url;
         return new Promise(async resolve => {
             url = url.toLowerCase();
             const { data, next }  = await this.request({
@@ -1652,7 +1652,7 @@ class AudioAPI {
     }
 
     async searchHints (q = "") {
-        if(!q) return;
+        if (!q) return;
         
         return new Promise(async (resolve, reject) => {
             const res = await this.request({
@@ -1680,7 +1680,7 @@ class AudioAPI {
             count?: number
         */
 
-        if(!params.q) return;
+        if (!params.q) return;
         
         return new Promise(async (resolve, reject) => {
             const owner_id = Number(params.owner_id) || this.user_id;
