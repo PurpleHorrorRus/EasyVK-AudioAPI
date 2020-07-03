@@ -20,7 +20,7 @@ yarn add https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 ```
 
-Recommend can use [#experimental](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/experimental) branch rather than #master
+Recommend to use [#experimental](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/experimental) branch rather than #master
 
 Do auth with EasyVK
 
