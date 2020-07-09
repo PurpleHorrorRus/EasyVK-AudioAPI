@@ -1160,28 +1160,31 @@ class AudioAPI {
             };
 
             const dom = res.payload[1][0];
-            const types = this.matchAll(dom, /&type=(.*?)\"/);
-            const recoms_code = types[0];
+            const types_regex = RegExp("&type=(.*?)\"", "gm");
+            const types = Array.from(dom.matchAll(types_regex)).map(t => t[1]);
 
+            const recoms_code = types[0];
             const _r = await this.loadRecoms(recoms_code, { count: r_max }).catch(reject);
             const _r_audios = _r.length > r_max ? _r.splice(0, r_max) : _r;
             const resolved_r_audios = await this.getNormalAudios(_r_audios).catch(reject);
         
             const recoms = {
-                id: types[0],
+                id: recoms_code,
                 audios: resolved_r_audios
             };
         
-            const _n = this.matchAll(dom, /data-audio=\"(.*?)\"/, true);
+            const _n = this.getAudiosFromHTML(dom);
             const _n_audios = _n.length > max ? _n.splice(0, max) : _n;
             const resolved_n_audios = await this.getNormalAudios(_n_audios).catch(reject);
 
-            const _new = {
-                id: types[1],
-                audios: resolved_n_audios
-            };
+            const _new = { audios: resolved_n_audios };
 
-            return resolve({ recoms, new: _new, charts, many_playlists });
+            return resolve({ 
+                recoms, 
+                new: _new, 
+                charts, 
+                many_playlists 
+            });
         });
     }
 
