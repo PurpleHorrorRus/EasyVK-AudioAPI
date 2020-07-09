@@ -1261,40 +1261,38 @@ class AudioAPI {
         return ready;
     }
 
-    getAudiosFromHTML (html, regex = /data-audio=\"(.*?)\"/, to_json = true) {
-        String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
-        let matches = [];
-        let match = regex.exec(html);
-
-        const push = data => {
-            if (to_json) {
-                try { matches = [...matches, JSON.parse(data)]; }
-                catch(e) { throw e; }
+    parserConfig () {
+        return {
+            audio_regex: RegExp("data-audio=\"(.*?)\">n", "gm"),
+            clearMatch: match => {
+                return match
+                    .replaceAll("&quot;", "\"")
+                    .replaceAll("\\\"", "")
+                    .replace("\\recom\\", "recom")
+                    .replace("\\hash\\:\\", "hash:")
+                    .replace("\\}}", "}}")
+                    .replaceAll("\\", "");
             }
-            else matches = [...matches, data];
         };
+    }
 
-        while(match != null) {
-            html = html.replace(match[0], "");
-            let temp = "";
-            try {
-                temp = match[1];
-                push(match[1]);
-            } catch (e) {
+    getAudiosFromHTML (html, regex = RegExp("data-audio=\"(.*?)\"", "gm")) {
+        String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
+
+        const config = this.parserConfig();
+        const matches = html.matchAll(regex) || html.matchAll(config.audio_regex);
+
+        const audios = Array.from(matches, ([, match]) => {
+            try { return JSON.parse(match); } 
+            catch (exception) {
                 try {
-                    match[1] = match[1].replaceAll("&quot;", "\"").replaceAll("\\\"", "").replace("\\recom\\", "recom").replace("\\hash\\:\\", "hash:").replace("\\}}", "}}");
-                    match[1] = match[1].replaceAll("\\", "");
-                    push(match[1]);
-                } catch (e1) {
-                    try { // Tryhard with regex
-                        const _match = html.match(/data-audio=\"(.*?)\">n/);
-                        push(_match[1]);
-                    } catch(e2) { console.log("to validate:", temp); }
-                }
+                    match = config.clearMatch(match);
+                    return JSON.parse(match);
+                } catch (e1) { throw new Error(`to validate: ${match}`); }
             }
-            match = regex.exec(html);
-        } 
-        return matches;
+        });
+
+        return audios;
     }
 
     // --------------------- ARTISTS ----------------------------------------
