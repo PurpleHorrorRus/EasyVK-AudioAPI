@@ -660,6 +660,25 @@ class AudioAPI {
         });
     }
 
+    getSongsByBlock (params = {}) {
+
+        /*
+            block: string
+        */
+
+        return new Promise(async (resolve, reject) => {
+            if (!params.block) return reject(new Error("You must to specify type"));
+
+            const res = await this.request({
+                block: params.block,
+                section: "recoms"
+            }).catch(reject);
+            const list = this.getAudiosFromHTML(res);
+            const audios = await this.getNormalAudios(list);
+            return resolve(audios);
+        });
+    }
+
     getPlaylistsByBlock (params = {}) {
 
         /*
