@@ -222,7 +222,11 @@ describe("Recoms", () => {
     // test("Load", async () => {
     //     const results = await audio.loadNewReleases({ max: 6, r_max: 10 });
     //     expect(results).toBeTruthy();
-    // // });
+    // });
+    // test("Get New Songs", async () => {
+    //     const results = await audio.getSongsByBlock({ block: "new_songs" });
+    //     expect(results).toBeTruthy();
+    // });
     // test("Load By Type", async () => {
     //     const { many_playlists } = await audio.loadNewReleases({ max: 6, r_max: 10 });
     //     const key = Object.keys(many_playlists)[0];
