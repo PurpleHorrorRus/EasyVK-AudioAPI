@@ -1102,7 +1102,7 @@ class AudioAPI {
                 retOnlyBody: true
             }, true, false, `/audios${uid}`).catch(reject);
             
-            const matches = this.getAudiosFromHTML(res, /data-audio=\"(.*?)\"/, true);
+            const matches = this.getAudiosFromHTML(res);
             return resolve(matches);
         });
     }
@@ -1330,7 +1330,7 @@ class AudioAPI {
                 try { artist_name = html.match(/title\":\"(.*?)\",\"/)[1]; }
                 catch(e) { artist_name = html.match(/header__text\">(.*?)</)[1]; } 
     
-                const matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\">/);
+                const matches = this.getAudiosFromHTML(html, RegExp("data-audio=\"(.*?)\">", "gm"));
                 const audios = await this.getNormalAudios(matches);
                 const playlists = this.buildPlaylistsMobile(html);
       
@@ -1712,7 +1712,7 @@ class AudioAPI {
             }).catch(reject);
             
             const html = res.payload[1][0];
-            let matches = this.getAudiosFromHTML(html, /data-audio=\"(.*?)\" onmouse/);
+            let matches = this.getAudiosFromHTML(html, RegExp("data-audio=\"(.*?)\" onmouse", "gm"));
             matches = matches.filter(a => Number(a[1]) === owner_id);
 
             if (params.count) 
