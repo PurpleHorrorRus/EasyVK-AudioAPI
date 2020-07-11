@@ -648,15 +648,31 @@ class AudioAPI {
                 isPlaylist: true
             });
 
-            const payload = res.payload[1][0];
-            if (/Access denied/.test(payload)) return reject(new Error("Access Denied"));
+            const payload = res.payload[1];
+            const [pl_objects, count] = payload;
+
+            if (params.getCount) {
+                return resolve(count);
+            }
             
-            let playlists = [];
-    
-            for (let i = 0; i < payload.length; i++)
-                playlists = [...playlists, this.getPlaylistAsObject(payload[i])];
-              
+            if (/Access denied/.test(pl_objects)) return reject(new Error("Access Denied"));
+            
+            const playlists = pl_objects.map(e => this.getPlaylistAsObject(e));
             return resolve(playlists);
+        });
+    }
+
+    getPlaylistsCount (params = {}) {
+
+        /*
+            access_hash?: string
+            owner_id: number
+        */
+
+        return new Promise(async (resolve, reject) => {
+            params.getCount = true;
+            const count = await this.getPlaylists(params).catch(reject);
+            return resolve(count);
         });
     }
 
