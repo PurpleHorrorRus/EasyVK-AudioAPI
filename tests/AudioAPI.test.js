@@ -116,6 +116,11 @@ describe("Playlists", () => {
     //     expect(playlists.length).toBeGreaterThan(0);
     // });
 
+    // test("Get Playlists Count", async () => {
+    //     const count = await audio.getPlaylistsCount({ owner_id: -40520174 });
+    //     expect(count).toBeGreaterThan(0);
+    // });
+
     // test("Get Playlist By Id", async () => {
     //     const result = await audio.getPlaylistById({ playlist_id: 35, list: true });
     //     expect(result).toBeTruthy();
