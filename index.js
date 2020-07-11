@@ -60,6 +60,19 @@ class AudioAPI {
             22: "Electropop & Disco",
             1001: "Jazz & Blues"
         };
+
+        this.parserConfig = {
+            audio_regex: RegExp("data-audio=\"(.*?)\">n", "gm"),
+            clearMatch: match => {
+                return match
+                    .replaceAll("&quot;", "\"")
+                    .replaceAll("\\\"", "")
+                    .replace("\\recom\\", "recom")
+                    .replace("\\hash\\:\\", "hash:")
+                    .replace("\\}}", "}}")
+                    .replaceAll("\\", "");
+            }
+        };
     }
 
     // --------------------- API ----------------------
@@ -1287,6 +1300,7 @@ class AudioAPI {
     // --------------------- MISC ----------------------
     matchAll (html, regex, to_json = false) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
+
         let ready = [];
         let match = regex.exec(html);
         while(match != null) {
@@ -1299,32 +1313,16 @@ class AudioAPI {
         return ready;
     }
 
-    parserConfig () {
-        return {
-            audio_regex: RegExp("data-audio=\"(.*?)\">n", "gm"),
-            clearMatch: match => {
-                return match
-                    .replaceAll("&quot;", "\"")
-                    .replaceAll("\\\"", "")
-                    .replace("\\recom\\", "recom")
-                    .replace("\\hash\\:\\", "hash:")
-                    .replace("\\}}", "}}")
-                    .replaceAll("\\", "");
-            }
-        };
-    }
-
     getAudiosFromHTML (html, regex = RegExp("data-audio=\"(.*?)\"", "gm")) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
 
-        const config = this.parserConfig();
-        const matches = html.matchAll(regex) || html.matchAll(config.audio_regex);
+        const matches = html.matchAll(regex) || html.matchAll(this.parserConfig.audio_regex);
 
         const audios = Array.from(matches, ([, match]) => {
             try { return JSON.parse(match); } 
             catch (exception) {
                 try {
-                    match = config.clearMatch(match);
+                    match = this.parserConfig.clearMatch(match);
                     return JSON.parse(match);
                 } catch (e1) { throw new Error(`to validate: ${match}`); }
             }
