@@ -112,8 +112,9 @@ describe("AudioAPI", () => {
 
 describe("Playlists", () => {
     // test("Get Playlists", async () => {
-    //     const playlists = await audio.getPlaylists();
-    //     expect(playlists.length).toBeGreaterThan(0);
+    //     const { playlists, count } = await audio.getPlaylists();
+    //     expect(playlists.length).toBeGreaterThanOrEqual(0);
+    //     expect(count).toBeGreaterThanOrEqual(0);
     // });
 
     // test("Get Playlists Count", async () => {

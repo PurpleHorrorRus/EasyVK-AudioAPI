@@ -671,7 +671,10 @@ class AudioAPI {
             if (/Access denied/.test(pl_objects)) return reject(new Error("Access Denied"));
             
             const playlists = pl_objects.map(e => this.getPlaylistAsObject(e));
-            return resolve(playlists);
+            return resolve({
+                count,
+                playlists
+            });
         });
     }
 
