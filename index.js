@@ -726,7 +726,7 @@ class AudioAPI {
                 const image = object
                     .querySelectorAll(".BannerItem__image")[0]
                     .attributes.style
-                    .match(/background-image:url\((.*?)\?/)[1];
+                    .match(/background-image:url\((.*?)\)/)[1];
 
                 const name = object.querySelectorAll(".BannerItem__title")[0].text;
                 const updated_text = object.querySelectorAll(".BannerItem__text")[0].text;
