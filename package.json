@@ -1,6 +1,6 @@
 {
     "name": "easyvk-audio",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "An unofficial Audio API for EasyVK",
     "repository": {
         "type": "git",
@@ -19,7 +19,7 @@
     "license": "ISC",
     "dependencies": {
         "@types/jest": "^25.1.4",
-        "easyvk": "2.7.35",
+        "easyvk": "2.6.1",
         "eslint-plugin-jest": "^23.8.2",
         "node-html-parser": "^1.2.13"
     },
