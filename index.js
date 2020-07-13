@@ -1161,7 +1161,7 @@ class AudioAPI {
     getWeeklyRecoms (params = {}) {
         return new Promise(async (resolve, reject) => {
             const daily = await this.getSongsByBlock({
-                block: "daily_recoms",
+                block: "weekly_recoms",
                 count: params.count || 0
             }).catch(reject);
             return resolve(daily);
