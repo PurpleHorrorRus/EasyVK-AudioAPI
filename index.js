@@ -696,6 +696,7 @@ class AudioAPI {
 
         /*
             block: string
+            count?: number
         */
 
         return new Promise(async (resolve, reject) => {
@@ -703,9 +704,12 @@ class AudioAPI {
 
             const res = await this.request({
                 block: params.block,
-                section: "recoms"
+                section: params.section || "recoms"
             }).catch(reject);
-            const list = this.getAudiosFromHTML(res);
+            
+            let list = this.getAudiosFromHTML(res);
+            if (params.count) list = list.splice(0, params.count);
+            
             const audios = await this.getNormalAudios(list);
             return resolve(audios);
         });
@@ -1119,37 +1123,11 @@ class AudioAPI {
         return genres;
     }
 
-    loadRecoms (code = "") {
-
-        /*
-            code: string
-        */
-
-        const uid = this.user_id;
-    
-        return new Promise(async (resolve, reject) => {
-            const res = await this.request({
-                section: "recoms_block",
-                type: code,
-                retOnlyBody: true
-            }, true, false, `/audios${uid}`).catch(reject);
-            
-            const matches = this.getAudiosFromHTML(res);
-            return resolve(matches);
-        });
-    }
-
-    loadNewReleases (params = {}) {
-
-        /*
-            max?: number = 50
-            r_max?: number = 50
-        */
-
+    getRecomsArtsits () {
         const uid = this.user_id;
 
         return new Promise(async (resolve, reject) => {
-            const res = await this.request({
+            const { payload } = await this.request({
                 act: "section",
                 al: 1,
                 claim: 0,
@@ -1158,93 +1136,105 @@ class AudioAPI {
                 section: "recoms"
             }).catch(reject);
 
-            const html = res.payload[1][0];
-            const payload = res.payload[1][1];
-            const { sectionId } = payload;
-            const next_from = payload.next_from || payload.nextFrom;
+            const html = payload[1][0];
+            const artists = this.buildArtists(html);
+            return resolve(artists);
+        });
+    }
 
-            let many_playlists = this.getGenreByHTML(html);
-            
-            const _add = await this.request({
+    getDailyRecoms (params = {}) {
+        return new Promise(async (resolve, reject) => {
+            const daily = await this.getSongsByBlock({
+                block: "daily_recoms",
+                count: params.count || 0
+            }).catch(reject);
+            return resolve(daily);
+        });
+    }
+
+    getWeeklyRecoms (params = {}) {
+        return new Promise(async (resolve, reject) => {
+            const daily = await this.getSongsByBlock({
+                block: "daily_recoms",
+                count: params.count || 0
+            }).catch(reject);
+            return resolve(daily);
+        });
+    }
+    
+    getNewReleases (params = {}) {
+        return new Promise(async (resolve, reject) => {
+            const new_songs = await this.getSongsByBlock({
+                block: "new_songs",
+                section: "explore",
+                count: params.count || 0
+            }).catch(reject);
+            return resolve(new_songs);
+        });
+    }
+
+    getChart (params = {}) {
+        return new Promise(async (resolve, reject) => {
+            const chart = await this.getSongsByBlock({
+                block: "chart",
+                section: "explore",
+                count: params.count || 0
+            }).catch(reject);
+            return resolve(chart);
+        });
+    }
+
+    getOfficialPlaylists () {
+        const uid = this.user_id;
+
+        return new Promise(async (resolve, reject) => {
+            const { payload } = await this.request({
+                act: "section",
+                al: 1,
+                claim: 0,
+                is_layer: 0,
+                owner_id: uid,
+                section: "explore"
+            }).catch(reject);
+
+            const html = payload[1][0];
+            let playlists = this.getGenreByHTML(html);
+
+            const section = payload[1][1];
+            const next_from = section.next_from || section.nextFrom;
+            const sectionId = section.sectionId;
+
+            const { payload: addition } = await this.request({
                 act: "load_catalog_section",
                 al: 1,
                 section_id: sectionId,
                 start_from: next_from
             }).catch(reject);
 
-            const catalogs = _add.payload[1][0];
+            const catalogs = addition[1][0];
             for (const _c of catalogs) {
                 const build = this.getGenreByHTML(_c);
-                many_playlists = Object.assign(many_playlists, build);
+                playlists = Object.assign(playlists, build);
             }
 
-            const { playlist: charts_playlist } = payload;
-
-            const max = params.max || 50;
-            const r_max = params.r_max || 50;
-
-            const _c_audios = charts_playlist.list.length > max ? charts_playlist.list.splice(0, max) : charts_playlist.list;
-            const resolved_c_audios = await this.getNormalAudios(_c_audios).catch(reject); 
-
-            const charts = {
-                id: charts_playlist.id,
-                audios: resolved_c_audios
-            };
-
-            const dom = res.payload[1][0];
-            const types_regex = RegExp("&type=(.*?)\"", "gm");
-            const types = Array.from(dom.matchAll(types_regex)).map(t => t[1]);
-
-            const recoms_code = types[0];
-            const _r = await this.loadRecoms(recoms_code, { count: r_max }).catch(reject);
-            const _r_audios = _r.length > r_max ? _r.splice(0, r_max) : _r;
-            const resolved_r_audios = await this.getNormalAudios(_r_audios).catch(reject);
-        
-            const recoms = {
-                id: recoms_code,
-                audios: resolved_r_audios
-            };
-        
-            const _n = this.getAudiosFromHTML(dom);
-            const _n_audios = _n.length > max ? _n.splice(0, max) : _n;
-            const resolved_n_audios = await this.getNormalAudios(_n_audios).catch(reject);
-
-            const _new = { audios: resolved_n_audios };
-
-            return resolve({ 
-                recoms, 
-                new: _new, 
-                charts, 
-                many_playlists 
-            });
+            return resolve(playlists);
         });
     }
 
-    loadAudioPage (params = {}) {
-
+    loadExplore (params = {}) {
+        
         /*
-            type: string
+            count?: number = 0 (load all songs)
         */
 
         return new Promise(async (resolve, reject) => {
-            if (!params.type) return reject(new Error("You must to specify type"));
-            const uid = this.user_id;
-
-            const res = await this.request({
-                act: "load_section",
-                al: 1,
-                claim: 0,
-                offset: 0,
-                owner_id: uid,
-                playlist_id: params.type,
-                type: "recoms",
-                track_type: "default",
-                XML: true
+            return resolve({
+                new_releases: await this.getNewReleases(params),
+                chart: await this.getChart(params),
+                playlists: await this.getOfficialPlaylists()
             });
-
-            const audios = await this.getNormalAudios(res.payload[1][0].list);
-            return resolve(audios);
         });
+
     }
     
     // --------------------- STATUS ----------------------

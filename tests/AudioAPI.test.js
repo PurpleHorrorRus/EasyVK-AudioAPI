@@ -23,7 +23,7 @@ beforeAll(async () => {
     client = await vk.http.loginByForm({
         username,
         password,
-        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/78.0",
         cookies: "./cookies.json" 
     });
     audio = new AudioAPI(client);
@@ -225,8 +225,20 @@ describe("Search Engine", () => {
 });
 
 describe("Recoms", () => {
-    // test("Load", async () => {
-    //     const results = await audio.loadNewReleases({ max: 6, r_max: 10 });
+    // test("Load Explore", async () => {
+    //     const results = await audio.loadExplore({ count: 6 });
+    //     expect(results).toBeTruthy();
+    // });
+    // test("Get Recoms Artists", async () => {
+    //     const results = await audio.getRecomsArtsits();
+    //     expect(results).toBeTruthy();
+    // });
+    // test("Get Daily Recoms", async () => {
+    //     const results = await audio.getDailyRecoms();
+    //     expect(results).toBeTruthy();
+    // });
+    // test("Get Weekly Recoms", async () => {
+    //     const results = await audio.getWeeklyRecoms();
     //     expect(results).toBeTruthy();
     // });
     // test("Get New Songs", async () => {
