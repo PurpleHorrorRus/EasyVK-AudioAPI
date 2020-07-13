@@ -1099,14 +1099,14 @@ class AudioAPI {
         const root = HTMLParser.parse(html);
         const inner = root.querySelectorAll(".CatalogBlock");
         let pl_objects = [];
-        let genre = "";
+        let name = "";
         let block = "";
         const genres = {};
         for (const inner_object of inner) {
             try { 
                 const inner_parsed = HTMLParser.parse(inner_object.innerHTML);
                 try {
-                    genre = inner_parsed.querySelectorAll(".CatalogBlock__title")[0].text;
+                    name = inner_parsed.querySelectorAll(".CatalogBlock__title")[0].text;
                     block = inner_parsed.innerHTML.match(/&block=(.*?)\"/)[1];
                 } catch (e) { continue; }
                 pl_objects = inner_parsed.querySelectorAll(".audio_pl_item2");
@@ -1115,14 +1115,14 @@ class AudioAPI {
                     if (dom.childNodes[1] === null) continue;
                     const playlist = this.getPlaylistByHTML(dom);
                     if (playlist === null) continue;
-                    if (!genres[genre]) {
-                        genres[genre] = { 
-                            name: genre,
+                    if (!genres[block]) {
+                        genres[block] = { 
+                            name,
                             block, 
                             playlists: [] 
                         };
                     }
-                    genres[genre].playlists.push(playlist);
+                    genres[block].playlists.push(playlist);
                 }
             } catch(e) { return []; }
         }
