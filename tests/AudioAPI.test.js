@@ -225,6 +225,10 @@ describe("Search Engine", () => {
 });
 
 describe("Recoms", () => {
+    // test("Get Collections", async () => {
+    //     const results = await audio.getCollections();
+    //     expect(results).toBeTruthy();
+    // });
     // test("Load Explore", async () => {
     //     const results = await audio.loadExplore({ count: 6 });
     //     expect(results).toBeTruthy();

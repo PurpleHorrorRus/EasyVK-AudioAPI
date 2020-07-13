@@ -692,6 +692,58 @@ class AudioAPI {
         });
     }
 
+    getSection (params = {}) {
+
+        /*
+            section: String
+        */
+        
+        return new Promise(async (resolve, reject) => {
+            if (!params.section) return reject(new Error("You must to specify section"));
+
+            const res = await this.request({
+                section: params.section
+            }).catch(reject);
+
+            return resolve(res);
+        });
+    }
+
+    getCollections () {
+        return new Promise(async (resolve, reject) => {
+            const html = await this.getSection({ section: "recoms" });
+            
+            const parsed = HTMLParser.parse(html);
+            const objects = parsed.querySelectorAll(".ui_gallery_item");
+
+            const build = object => {
+                const block_props = object
+                    .querySelectorAll(".BannerItem__content")[0]
+                    .attributes.href
+                    .match(/\?(.*)/)[1];
+
+                const { block } = require("querystring").parse(block_props);
+                const image = object
+                    .querySelectorAll(".BannerItem__image")[0]
+                    .attributes.style
+                    .match(/background-image:url\((.*?)\?/)[1];
+
+                const name = object.querySelectorAll(".BannerItem__title")[0].text;
+                const updated_text = object.querySelectorAll(".BannerItem__text")[0].text;
+
+                return {
+                    block,
+                    image,
+                    name,
+                    updated_text
+                };
+            };
+
+            const collections = objects.map(build);
+            return resolve(collections);
+        });
+    }
+
     getSongsByBlock (params = {}) {
 
         /*
