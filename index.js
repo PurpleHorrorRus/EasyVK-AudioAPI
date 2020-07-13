@@ -1115,8 +1115,14 @@ class AudioAPI {
                     if (dom.childNodes[1] === null) continue;
                     const playlist = this.getPlaylistByHTML(dom);
                     if (playlist === null) continue;
-                    if (!genres[genre]) genres[genre] = { block, playlists: [] };
-                    genres[genre].playlists = [...genres[genre].playlists, playlist];
+                    if (!genres[genre]) {
+                        genres[genre] = { 
+                            name: genre,
+                            block, 
+                            playlists: [] 
+                        };
+                    }
+                    genres[genre].playlists.push(playlist);
                 }
             } catch(e) { return []; }
         }
