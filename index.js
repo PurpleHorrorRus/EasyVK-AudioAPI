@@ -696,7 +696,7 @@ class AudioAPI {
 
         /*
             block: string
-            count?: number
+            count?: number - By default, ALL audios are returned
         */
 
         return new Promise(async (resolve, reject) => {
@@ -706,9 +706,30 @@ class AudioAPI {
                 block: params.block,
                 section: params.section || "recoms"
             }).catch(reject);
-            
+
             let list = this.getAudiosFromHTML(res);
-            if (params.count) list = list.splice(0, params.count);
+
+            if (!params.count) {
+                let [, section_id, start_from] = res.match(/data-id='(.*?)' data-next='(.*?)'/);
+
+                while (section_id && start_from) {
+                    const { audios, more } = await this.searchWithMore({
+                        normalize: false,
+                        search: {
+                            more: {
+                                section_id,
+                                start_from
+                            }
+                        }
+                    });
+                    
+                    list = [...list, ...audios];
+                    section_id = more.section_id;
+                    start_from = more.start_from;
+                }
+            } else {
+                list = list.splice(0, params.count);
+            }
             
             const audios = await this.getNormalAudios(list);
             return resolve(audios);
@@ -1573,6 +1594,7 @@ class AudioAPI {
             
             const more = params.search.more;
             if (!more.section_id || !more.start_from) return reject(new Error("Pass a valid \"search\" object"));
+            params.normalize = params.normalize === null;
 
             const res = await this.request({
                 act: "load_catalog_section",
@@ -1587,7 +1609,7 @@ class AudioAPI {
             const start_from = payload.next_from || payload.nextFrom;
 
             const list = payload.playlist.list || payload.playlists[0].list;
-            const audios = await this.getNormalAudios(list);
+            const audios = params.normalize ? await this.getNormalAudios(list) : list;
             
             const _more = { section_id, start_from };
 
