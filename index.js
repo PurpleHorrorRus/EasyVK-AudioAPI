@@ -711,6 +711,8 @@ class AudioAPI {
 
     getCollections () {
         return new Promise(async (resolve, reject) => {
+            String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
+
             const html = await this.getSection({ section: "recoms" });
             
             const parsed = HTMLParser.parse(html);
@@ -726,7 +728,8 @@ class AudioAPI {
                 const image = object
                     .querySelectorAll(".BannerItem__image")[0]
                     .attributes.style
-                    .match(/background-image:url\((.*?)\)/)[1];
+                    .match(/background-image:url\((.*?)\)/)[1]
+                    .replaceAll("'", "");
 
                 const name = object.querySelectorAll(".BannerItem__title")[0].text;
                 const updated_text = object.querySelectorAll(".BannerItem__text")[0].text;
@@ -809,7 +812,7 @@ class AudioAPI {
             const root = HTMLParser.parse(res);
             const pl_objects = root.querySelectorAll(".audio_pl_item2");
 
-            for(const playlist of pl_objects) {   
+            for (const playlist of pl_objects) {   
                 const raw = playlist.childNodes[1].rawAttrs;
                 const match = raw.match(/showAudioPlaylist\((.*),/)[1];
                 const split = match.split(", ");
@@ -1532,7 +1535,7 @@ class AudioAPI {
         };
 
         let playlists = [];
-        for(const playlist of pl_objects) {
+        for (const playlist of pl_objects) {
             const builded = getPlaylist(playlist);
             if (!builded.error) playlists = [...playlists, builded];
         }
