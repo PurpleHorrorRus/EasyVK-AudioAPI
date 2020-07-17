@@ -229,26 +229,32 @@ describe("Recoms", () => {
     //     const results = await audio.getCollections();
     //     expect(results).toBeTruthy();
     // });
+
     // test("Load Explore", async () => {
     //     const results = await audio.loadExplore({ count: 6 });
     //     expect(results).toBeTruthy();
     // });
+
     // test("Get Recoms Artists", async () => {
     //     const results = await audio.getRecomsArtsits();
     //     expect(results).toBeTruthy();
     // });
+
     // test("Get Daily Recoms", async () => {
     //     const results = await audio.getDailyRecoms();
     //     expect(results).toBeTruthy();
     // });
+
     // test("Get Weekly Recoms", async () => {
     //     const results = await audio.getWeeklyRecoms();
     //     expect(results).toBeTruthy();
     // });
+
     // test("Get New Songs", async () => {
     //     const results = await audio.getSongsByBlock({ block: "new_songs" });
     //     expect(results).toBeTruthy();
     // });
+
     // test("Load By Type", async () => {
     //     const { many_playlists } = await audio.loadNewReleases({ max: 6, r_max: 10 });
     //     const key = Object.keys(many_playlists)[0];
@@ -256,11 +262,13 @@ describe("Recoms", () => {
     //     const results = await audio.getPlaylistsByBlock({ block });
     //     expect(results).toBeTruthy();
     // });
+
     // test("Load Page", async () => {
     //     const { recoms } = await audio.loadNewReleases({ max: 1, r_max: 1 });
     //     const results = await audio.loadAudioPage({ type: recoms.id });
     //     expect(results).toBeTruthy();
     // });
+
     // test("Friend Updates", async () => {
     //     const results = await audio.getFriendsNew();
     //     expect(results).toBeTruthy();

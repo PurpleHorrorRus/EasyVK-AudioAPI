@@ -1165,9 +1165,16 @@ class AudioAPI {
             const split = match.split(", ");
             const owner_id = split[0], 
                 playlist_id = split[1], 
-                access_hash = split[2] == "''" ? "" : split[2].replaceAll("'", "");
+                access_hash = split[2] === "''" ? "" : split[2].replaceAll("'", "");
         
-            return { access_hash, owner_id, playlist_id, cover, title, raw_id: `${owner_id}_${playlist_id}` };
+            return { 
+                access_hash, 
+                owner_id, 
+                playlist_id, 
+                cover, 
+                title, 
+                raw_id: `${owner_id}_${playlist_id}`
+            };
         } catch (e) { return null; }
     }
 
@@ -1206,19 +1213,8 @@ class AudioAPI {
     }
 
     getRecomsArtsits () {
-        const uid = this.user_id;
-
         return new Promise(async (resolve, reject) => {
-            const { payload } = await this.request({
-                act: "section",
-                al: 1,
-                claim: 0,
-                is_layer: 0,
-                owner_id: uid,
-                section: "recoms"
-            }).catch(reject);
-
-            const html = payload[1][0];
+            const html = this.rawRecomsPage || await this.getRawRecomsPage().catch(reject);
             const artists = this.buildArtists(html);
             return resolve(artists);
         });
@@ -1243,6 +1239,34 @@ class AudioAPI {
             return resolve(daily);
         });
     }
+
+    getRawRecomsPage () {
+        return new Promise(async (resolve, reject) => {
+            this.rawRecomsPage = await this.getSection({ section: "recoms" }).catch(reject);
+            setTimeout(async () => await this.getRawRecomsPage(), 60 * 1000 * 60);
+            return resolve(this.rawRecomsPage);
+        });
+    }
+
+    getRawExplorePage () {
+        const uid = this.user_id;
+
+        return new Promise(async (resolve, reject) => {
+            const { payload } = await this.request({
+                act: "section",
+                al: 1,
+                claim: 0,
+                is_layer: 0,
+                owner_id: uid,
+                section: "explore"
+            }).catch(reject);
+
+            this.rawExplorePage = payload;
+            setTimeout(async () => await this.getRawExplorePage(), 60 * 1000 * 60); // for support actual results
+            return resolve(payload);
+        });
+    }
+    
     getNewAlbums () {
         return new Promise(async (resolve, reject) => {
             String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
@@ -1335,17 +1359,8 @@ class AudioAPI {
     }
 
     getOfficialPlaylists () {
-        const uid = this.user_id;
-
         return new Promise(async (resolve, reject) => {
-            const { payload } = await this.request({
-                act: "section",
-                al: 1,
-                claim: 0,
-                is_layer: 0,
-                owner_id: uid,
-                section: "explore"
-            }).catch(reject);
+            const payload = this.rawExplorePage || await this.getRawExplorePage().catch(reject);
 
             const html = payload[1][0];
             let playlists = this.getGenreByHTML(html);
@@ -1718,7 +1733,6 @@ class AudioAPI {
             
             const more = params.search.more;
             if (!more.section_id || !more.start_from) return reject(new Error("Pass a valid \"search\" object"));
-            params.normalize = params.normalize === null;
 
             const res = await this.request({
                 act: "load_catalog_section",
