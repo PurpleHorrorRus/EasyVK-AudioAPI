@@ -1243,6 +1243,74 @@ class AudioAPI {
             return resolve(daily);
         });
     }
+    getNewAlbums () {
+        return new Promise(async (resolve, reject) => {
+            String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
+
+            const payload = this.rawExplorePage || await this.getRawExplorePage().catch(reject);
+
+            const html = payload[1][0];
+            const root = HTMLParser.parse(html);
+
+            const a_items = root.querySelectorAll(".ui_gallery_item");
+
+            const regex = {
+                album: /album\/(.*)/,
+                artist: /artist\/(.*)/
+            };
+
+            const build = item => {
+                const title = item.querySelector(".BannerItem__title").text;
+                const text = item.querySelector(".BannerItem__text").innerHTML;
+                const image = item
+                    .querySelector(".BannerItem--cover")
+                    .attributes.style
+                    .match(/background-image:url\((.*?)\)/)[1]
+                    .replaceAll("'", "");
+
+                let data = {
+                    title,
+                    text,
+                    image
+                };
+
+                const link = item
+                    .querySelector(".BannerItem__content")
+                    .attributes.href;
+
+                const isAlbum = regex.album.test(link);
+
+                if (isAlbum) {
+                    const [owner_id, playlist_id, access_hash] = link
+                        .match(regex.album)[1]
+                        .split("_");
+
+                    data = Object.assign(data, {
+                        type: "album",
+                        owner_id: Number(owner_id),
+                        playlist_id: Number(playlist_id),
+                        access_hash
+                    });
+                } else {
+                    const isArtist = regex.artist.test(link);
+                    if (isArtist) {
+                        const [, artist] = link.match(regex.artist);
+                        data = Object.assign(data, {
+                            type: "artist",
+                            artist
+                        });
+                    } else {
+                        return null;
+                    }
+                }
+
+                return data;
+            };
+
+            const albums = a_items.map(build).filter(a => a);
+            return resolve(albums);
+        });
+    }
     
     getNewReleases (params = {}) {
         return new Promise(async (resolve, reject) => {
