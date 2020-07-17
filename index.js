@@ -1379,6 +1379,7 @@ class AudioAPI {
 
         return new Promise(async (resolve, reject) => {
             return resolve({
+                albums: await this.getNewAlbums(),
                 new_releases: await this.getNewReleases(params),
                 chart: await this.getChart(params),
                 playlists: await this.getOfficialPlaylists()
