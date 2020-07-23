@@ -60,7 +60,9 @@ class AudioAPI {
             22: "Electropop & Disco",
             1001: "Jazz & Blues"
         };
-
+        
+        this.parser = new DOMParser();
+        
         this.parserConfig = {
             audio_regex: RegExp("data-audio=\"(.*?)\">n", "gm"),
             clearMatch: match => {
@@ -221,6 +223,11 @@ class AudioAPI {
         return r;
     }
 
+    unescape (text) {
+        const doc = this.parser.parseFromString(text, "text/html");
+        return doc.documentElement.textContent;
+    }
+
     getNormalAudios (audios) {
         return new Promise(async resolve => {
             if (!audios || !audios.length) {
@@ -254,8 +261,11 @@ class AudioAPI {
                 });
                 
                 restricted_ids = [];
-                ready = ready.concat(audios_ready);
-            } 
+                ready = [
+                    ...ready,
+                    ...audios_ready
+                ];
+            }
             
             return resolve(ready);
         });
@@ -273,8 +283,8 @@ class AudioAPI {
             id: audio[this.AudioObject.AUDIO_ITEM_INDEX_ID],
             owner_id: audio[this.AudioObject.AUDIO_ITEM_INDEX_OWNER_ID],
             url: source || "",
-            title: audio[this.AudioObject.AUDIO_ITEM_INDEX_TITLE],
-            performer: audio[this.AudioObject.AUDIO_ITEM_INDEX_PERFORMER],
+            title: this.unescape(audio[this.AudioObject.AUDIO_ITEM_INDEX_TITLE]),
+            performer: this.unescape(audio[this.AudioObject.AUDIO_ITEM_INDEX_PERFORMER]),
             duration: audio[this.AudioObject.AUDIO_ITEM_INDEX_DURATION],
             covers: c,
             is_restriction: !source,
@@ -288,7 +298,7 @@ class AudioAPI {
             album_id: audio[this.AudioObject.AUDIO_ITEM_INDEX_ALBUM_ID],
             full_id: `${audio[this.AudioObject.AUDIO_ITEM_INDEX_OWNER_ID]}_${audio[this.AudioObject.AUDIO_ITEM_INDEX_ID]}`,
             explicit: !!(audio[this.AudioObject.AUDIO_ITEM_INDEX_FLAGS] & this.AudioObject.AUDIO_ITEM_EXPLICIT_BIT),
-            subtitle: audio[this.AudioObject.AUDIO_ITEM_INDEX_SUBTITLE],
+            subtitle: this.unescape(audio[this.AudioObject.AUDIO_ITEM_INDEX_SUBTITLE]),
             add_hash: e[0] || "",
             edit_hash: e[1] || "",
             action_hash: e[2] || "",
