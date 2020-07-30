@@ -222,16 +222,16 @@ class AudioAPI {
     }
 
     unescape (text) {
-        if (DOMParser) {
+        try {
             if (!this.parser) {
                 this.parser = new DOMParser();
             }
 
             const doc = this.parser.parseFromString(text, "text/html");
             return doc.documentElement.textContent;
+        } catch (e) {
+            return text;
         }
-        
-        return text;
     }
 
     getNormalAudios (audios) {
