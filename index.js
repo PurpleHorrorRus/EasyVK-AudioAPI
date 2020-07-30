@@ -61,7 +61,6 @@ class AudioAPI {
             1001: "Jazz & Blues"
         };
         
-        
         this.parserConfig = {
             audio_regex: RegExp("data-audio=\"(.*?)\">n", "gm"),
             clearMatch: match => {
@@ -821,36 +820,13 @@ class AudioAPI {
 
             const res = await this.request({
                 block: params.block,
-                section: "recoms"
+                section: params.section || "recoms"
             }).catch(reject);
-
-            let playlists = [];
 
             const root = HTMLParser.parse(res);
             const pl_objects = root.querySelectorAll(".audio_pl_item2");
 
-            for (const playlist of pl_objects) {   
-                const raw = playlist.childNodes[1].rawAttrs;
-                const match = raw.match(/showAudioPlaylist\((.*),/)[1];
-                const split = match.split(", ");
-                const owner_id = split[0];
-                const playlist_id = split[1];
-                const subtitle = playlist.childNodes[3].childNodes[3].childNodes[0].childNodes[0].rawText;
-                const title = playlist.childNodes[3].childNodes[1].childNodes[1].rawText;
-                const cover = playlist.childNodes[1].rawAttrs.match(/background-image: url\(\'(.*)\'\)/)[1];
-
-                let access_hash = split[2];
-                if (access_hash.length) access_hash = access_hash.replaceAll("'", "");
-
-                let genre = split[3];
-                genre = genre.replace("genre_", "");
-                genre = genre.replaceAll("'", "");
-                genre = genre.charAt(0).toUpperCase() + genre.substring(1, genre.length);
-      
-                const _playlist = { access_hash, owner_id, playlist_id, cover, title, subtitle, genre, raw_id: `${owner_id}_${playlist_id}` };
-                playlists = [...playlists, _playlist];
-            }
-
+            const playlists = this.buildPlaylists(pl_objects);
             return resolve(playlists);
         });
     }
@@ -1538,8 +1514,6 @@ class AudioAPI {
     
     buildPlaylists (html) {
         String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
-        
-        let playlists = [];
 
         const title_template = /\(this\)\)">(.*?)</;
         const cover_template = /background-image: url\(\'(.*?)\'/;
@@ -1549,50 +1523,40 @@ class AudioAPI {
         const root = HTMLParser.parse(html);
         const blocks = root.querySelectorAll("._audio_pl_item");
 
-        for (const block of blocks) {
-            try {
-                const inner = block.innerHTML;
+        const playlists = blocks.map(block => {
+            const inner = block.innerHTML;
+            const title = title_template.test(inner) ? inner.match(title_template)[1] : "";
+            const cover = cover_template.test(inner) ? inner.match(cover_template)[1] : "";
 
-                const title = title_template.test(inner) ? inner.match(title_template)[1] : "";
-                if (!title) continue;
+            const info  = info_template.test(inner) ? inner.match(info_template)[1].split(", ") : [];
 
-                const cover = cover_template.test(inner) ? inner.match(cover_template)[1] : "";
-                const info  = info_template.test(inner) ? inner.match(info_template)[1].split(", ") : [];
-                if (!info.length) continue;
-    
-                const owner_id = info[0],
-                    playlist_id = info[1],
-                    access_hash = info[2].replaceAll("'", "");
+            const [owner_id, playlist_id, access_hash] = info;
+            const raw_id = `${owner_id}_${playlist_id}`;
+            const root_block = HTMLParser.parse(inner);
+            const subtitle_block = root_block.querySelector(".audio_pl__year_subtitle");
+            const subtitle_inner = subtitle_block.innerHTML;
+            const subtitle_test  = subtitle_template.test(subtitle_inner);
+            
+            let year = "";
+            let subtitle = "";
+            
+            if (subtitle_test) {
+                const match = subtitle_inner.match(subtitle_template);
+                year = match[1];
+                subtitle = match[3];
+            }
 
-                const raw_id = `${owner_id}_${playlist_id}`;
-
-                const root_block = HTMLParser.parse(inner);
-                const subtitle_block = root_block.querySelector(".audio_pl__year_subtitle");
-                const subtitle_inner = subtitle_block.innerHTML;
-                const subtitle_test  = subtitle_template.test(subtitle_inner);
-                
-                let year = "";
-                let subtitle = "";
-                
-                if (subtitle_test) {
-                    const match = subtitle_inner.match(subtitle_template);
-                    year = match[1];
-                    subtitle = match[3];
-                }
-
-                playlists = [...playlists, { 
-                    access_hash, 
-                    owner_id, 
-                    playlist_id, 
-                    raw_id, 
-                    title, 
-                    cover_url: cover, 
-                    year, 
-                    subtitle 
-                }];
-
-            } catch (e) { continue; }
-        }
+            return { 
+                access_hash: access_hash.replaceAll("'", ""), 
+                owner_id: Number(owner_id), 
+                playlist_id: Number(playlist_id), 
+                raw_id, 
+                title, 
+                cover_url: cover, 
+                year: Number(year), 
+                subtitle 
+            };
+        });
 
         return playlists;
     }
@@ -1810,12 +1774,11 @@ class AudioAPI {
             }, true, true, url);
 
             const buildPlaylist = (raw_id, object) => {
-                const title = object[0];
-                const html = object[1];
+                const [title, html] = object;
 
-                const split = raw_id.split("_");
-                const owner_id = Number(split[0]);
-                const playlist_id = Number(split[1]);
+                let [owner_id, playlist_id] = raw_id.split("_");
+                owner_id = Number(owner_id);
+                playlist_id = Number(playlist_id);
 
                 const access_hash = html.match(/access_hash=(.*?)\"/)[1].trim();
                 const cover_url   = html.match(/background-image: url\(\'(.*?)\'/)[1].trim();
@@ -1825,7 +1788,8 @@ class AudioAPI {
                     const subtitle_match = html.match(/__stats\">(.*?)<(.*?)<\/span>(.*?)</);
                     subtitle             = subtitle_match[1].trim(),
                     year                 = subtitle_match[3].trim() != "n" ? subtitle_match[3].trim() : "";
-                } catch(e) { console.log(e); }
+                // eslint-disable-next-line no-empty
+                } catch(e) { }
 
                 return {
                     access_hash,
@@ -1838,21 +1802,12 @@ class AudioAPI {
                     year
                 };
             };
-          
-            const pl_objects = data[0];
-            const raw_ids = data[1];
 
-            let playlists = [];
-            for (const raw_id of raw_ids) {
-                const object = pl_objects[raw_id];
-                try {
-                    const playlist = buildPlaylist(raw_id, object); 
-                    playlists = [...playlists, playlist];
-                } catch (e) {
-                    console.error("Can't parse playlist", object);
-                    continue;
-                }
-            }
+            const [pl_objects, raw_ids] = data;
+
+            const playlists = raw_ids.
+                map(id => 
+                    buildPlaylist(id, pl_objects[id]));
             
             return resolve({
                 list: playlists,
