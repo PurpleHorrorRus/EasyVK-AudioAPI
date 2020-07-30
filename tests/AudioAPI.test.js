@@ -255,17 +255,11 @@ describe("Recoms", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    // test("Load By Type", async () => {
-    //     const { many_playlists } = await audio.loadNewReleases({ max: 6, r_max: 10 });
-    //     const key = Object.keys(many_playlists)[0];
-    //     const { block } = many_playlists[key];
-    //     const results = await audio.getPlaylistsByBlock({ block });
-    //     expect(results).toBeTruthy();
-    // });
-
-    // test("Load Page", async () => {
-    //     const { recoms } = await audio.loadNewReleases({ max: 1, r_max: 1 });
-    //     const results = await audio.loadAudioPage({ type: recoms.id });
+    // test("Load By Block", async () => {
+    //     const results = await audio.getPlaylistsByBlock({ 
+    //         block: "rap",
+    //         section: "explore"
+    //     });
     //     expect(results).toBeTruthy();
     // });
 
