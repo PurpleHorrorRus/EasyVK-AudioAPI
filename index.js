@@ -61,7 +61,6 @@ class AudioAPI {
             1001: "Jazz & Blues"
         };
         
-        this.parser = new DOMParser();
         
         this.parserConfig = {
             audio_regex: RegExp("data-audio=\"(.*?)\">n", "gm"),
