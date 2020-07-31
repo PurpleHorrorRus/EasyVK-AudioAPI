@@ -224,6 +224,7 @@ class AudioAPI {
     unescape (text) {
         try {
             if (!this.parser) {
+                // eslint-disable-next-line no-undef
                 this.parser = new DOMParser();
             }
 
@@ -726,7 +727,7 @@ class AudioAPI {
     }
 
     getCollections () {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async resolve => {
             String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); };
 
             const html = await this.getSection({ section: "recoms" });
@@ -1387,10 +1388,10 @@ class AudioAPI {
 
         return new Promise(async (resolve, reject) => {
             return resolve({
-                albums: await this.getNewAlbums(),
-                new_releases: await this.getNewReleases(params),
-                chart: await this.getChart(params),
-                playlists: await this.getOfficialPlaylists()
+                albums: await this.getNewAlbums().catch(reject),
+                new_releases: await this.getNewReleases(params).catch(reject),
+                chart: await this.getChart(params).catch(reject),
+                playlists: await this.getOfficialPlaylists().catch(reject)
             });
         });
 
