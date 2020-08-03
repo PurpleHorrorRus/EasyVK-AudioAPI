@@ -1,8 +1,14 @@
 # EasyVK AudioAPI
 
-This is an unofficial AudioAPI for [EasyVK](https://github.com/ciricc/easyvk). Works as an extension for the library
+This is an unofficial AudioAPI for [EasyVK](https://github.com/ciricc/easyvk). Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
 
-## Install
+Recommended version of easyvk for using this API: 2.6.1
+
+# Migration
+
+Soon the library will be upload to #experimental and #master branch. If you used this API before, you must to prepare your project for these changes. Please read this documentation.
+
+# Installation
 
 Install [EasyVK](https://www.npmjs.com/package/easyvk) via npm or yarn
 
@@ -21,6 +27,8 @@ npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 ```
 
 Recommend to use [#experimental](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/experimental) branch rather than #master
+
+# Getting Started
 
 Do auth with EasyVK
 
@@ -44,7 +52,7 @@ const audio = new AudioAPI(client);
 
 **You awesome!!**
 
-## Full example
+# Full example
 
 ```javascript
 const easyvk = require("easyvk");
@@ -56,9 +64,9 @@ const run = async () => {
 
     const vk =  await easyvk({ username, password });
     const client = await vk.http.loginByForm({ username, password });
-    const audio = new AudioAPI(client);
+    const API = new AudioAPI(client);
 
-    const { audios: my_audios, count } = await audio.get();
+    const { audios: my_audios, count } = await API.audio.get();
     console.log(my_audios);
     console.log(`Wow, I have ${count} audio!`);
 };
@@ -66,6 +74,94 @@ const run = async () => {
 run();
 ```
 
-## Methods
+# Usage
 
-This part is locked. Please buy this DLC... Oh, nevermind. Well, you can check JEST test for more examples
+The API splitted into 5 parts: audio, playlists, search, artists, recommendations.
+To use each of this you must to specify part which you would to use. Example:
+
+```javascript
+const { audios } = await API.audio.get();
+const { playlists } = await API.playlists.get();
+const search = await API.search.query("Queen");
+const artsits = await API.artists.get("Queen");
+const recoms = await API.recoms.loadExplore();
+```
+
+Now let's see each part.
+
+## Audio
+
+| Function  | Params | Description |
+| :-----     | :--:   | :------ |
+| ```get```       | owner_id?<br/>playlist_id?<br/>access_hash?<br/>count? | Returns the list of first %count% audios|
+| ```getCount```     | owner_id?<br/>playlist_id?<br/>access_hash? | Returns a count audios of user/community |
+| ```add``` | Audio object | Add audio in "My Audios" |
+| ```delete``` | Audio object | Delete audio from "My Audios" |
+| ```edit``` | Audio object<br/>params | Edit the audio file if it available. In params you can to specify fields: title?: string, performer?: string, privacy?: number |
+| ```reorder``` | audio_id<br/>next_audio_id<br/>owner_id? | Reorder audios in playlist |
+| ```upload```| path | Upload audio file |
+
+<br/>
+
+## Playlists
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```get``` | access_hash?<br/>offset?<br/>owner_id? | Returns the list of first playlists by offset |
+| ```getPlaylist``` | owner_id<br/>playlist_id<br/>list?<br/>access_hash? | Return a single playlist object. Boolean list meaning parsing audios in playlist, but it takes a longer time. access_hash forces list = true automatically if you want to load third-party playlists (general page or search for example) |
+| ```getById``` | owner_id<br/>playlist_id<br/>list?<br/>access_hash?<br/>count? | The same as ```getPlaylist()```, but better for getting of user/community playlists. You can to specify count in params to splice audios in list for faster loading |
+| ```getCount```| owner_id? | Return the count of playlists of user/community |
+| ```getByBlock```| block<br/>section? | Return playlists by block and section |
+| ```create```| title<br/>description?<br/>cover? | Create new playlist.<br/>Cover must be a path to cover file |
+| ```edit```| playlist_id<br/>title?<br/>description?<br/>cover? | Edit the existing playlist |
+| ```delete```| Playlist object | Delete playlist |
+| ```follow```| Playlist object | Follow playlist |
+| ```reorder```| playlist_id<br/>prev_playlist_id | Reorder playlists |
+| ```addSong```| Audio object<br/>Playlist object | Add song to playlist |
+| ```removeSong```| Audio object<br/>Playlist object | Remove song from playlist |
+| ```follow```| Playlist object | Follow playlist |
+| ```reorderSongs```| Audios<br/>playlist_id<br/>force? | Reorder songs in playlist.<br/>Audios: string (it must be string of full_ids, you can use join() for example, see example in unit-tests)<br/>force saving you from full cleaning of playlist if you make mistake with Audios string. If you really wish to clean playlist you must to specify force: true |
+
+## Search
+
+Pay your attention to ```more``` object! 
+
+```more``` object is a object that contain information for continuing searching. You can't load more results without this object.
+
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```query``` | q | Returns the artists, playlists, audios and ```more``` object by query |
+| ```withMore``` | ```more``` object | Returns more results by ```more``` object |
+| ```hints```| q | Return search hints |
+| ```inAudios```| q<br/>owner_id<br/>count? | Returns a list of finded audios of user/community |
+
+## Artists
+
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```get```| artist | Get artist page. Returns the popular audios and playlists.<br/>artist param must be an endpoint, not full name. You can get endpoint at ```link``` field of ```search.query``` for example |
+
+You can see how to get full list of audio or playlists of artist in jest testing file.
+
+## Recommendations
+
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```loadExplore```| - | Load full explore page |
+| ```getCollections```| - | Returns the collections offering by VK |
+| ```getNewAlbums```| - | Returns the new albums |
+| ```getRecomsArtists```| - | Returns the daily recommendation artists |
+| ```getNewReleases```| - | Returns the list of audios of new releases |
+| ```getChart```| - | Returns the list of VK Chart |
+| ```getOfficialPlaylists```| - | Returns the list of official collections of playlists splitted to categories |
+| ```getDailyRecoms```| count? | Returns the list of daily audios |
+| ```getWeeklyRecoms```| count? | Returns the list of weekly audios |
+
+The explore and recoms sections caching and updating every hour itself for make loading faster.
+
+# Contribution
+
+You can feel free to open issues tickets or PR to help me with this API.
+
+# Conclusion
+
+You can check jest tests to check more functional or see examples.
