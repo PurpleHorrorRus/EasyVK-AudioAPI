@@ -1,11 +1,11 @@
-const staticMethods = require("./lib/staticMethods");
+const Static = require("./lib/static");
 
 const Audio = require("./lib/requests/audio");
 const Playlists = require("./lib/requests/playlists");
 const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
 const Recoms = require("./lib/requests/recoms");
-class AudioAPI extends staticMethods {
+class AudioAPI extends Static {
     constructor (client) {
         super(client);
         this.audio = new Audio(client);
