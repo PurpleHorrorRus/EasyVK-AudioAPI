@@ -37,10 +37,10 @@ describe("auth", () => {
 });
 
 describe("AudioAPI", () => {
-    // test("Get Audios", async () => {
-    //     const audios = await API.audio.get();
-    //     expect(audios).toBeTruthy();
-    // });
+    test("Get Audios", async () => {
+        const audios = await API.audio.get();
+        expect(audios).toBeTruthy();
+    });
 
     // test("Get More Audios", async () => {
     //     const { audios } = await audio.get({
@@ -53,7 +53,7 @@ describe("AudioAPI", () => {
     // });
 
     // test("Get Count", async () => {
-    //     const results = await audio.getCount();
+    //     const results = await API.audio.getCount();
     //     expect(results).toBeTruthy();
     // });
 
