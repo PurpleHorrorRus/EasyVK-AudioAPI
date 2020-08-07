@@ -38,7 +38,15 @@ describe("auth", () => {
 
 describe("AudioAPI", () => {
     // test("Get Audios", async () => {
-    //     const audios = await API.audio.get();
+    //     const audios = await API.audio.get({ raw: true });
+    //     expect(audios).toBeTruthy();
+    // });
+
+    // test("Get With More", async () => {
+    /*
+        DO NOT USE THIS IF FUNCTION get() IS WORKING. THIS IS A KIND OF "BIG RED BUTTON"
+    */
+    //     const audios = await API.audio.getWithMore({ raw: true });
     //     expect(audios).toBeTruthy();
     // });
 
