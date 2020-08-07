@@ -37,10 +37,15 @@ describe("auth", () => {
 });
 
 describe("AudioAPI", () => {
-    test("Get Audios", async () => {
-        const audios = await API.audio.get();
-        expect(audios).toBeTruthy();
-    });
+    // test("Get Audios", async () => {
+    //     const audios = await API.audio.get();
+    //     expect(audios).toBeTruthy();
+    // });
+
+    // test("Process Raw Audio Manually", async () => {
+    //     const raw = await API.audio.get({ raw: true });
+    //     expect(raw.audios).toBeTruthy();
+    // });
 
     // test("Get More Audios", async () => {
     //     const { audios } = await audio.get({
