@@ -15,11 +15,11 @@ class AudioAPI extends Static {
         this.recoms = new Recoms(client);
     }
 
-    getFriendsUpdates () {
+    getFriendsUpdates (params = {}) {
         const uid = this.user_id;
 
         return new Promise(async (resolve, reject) => {
-            const res = await this.request({
+            const { payload } = await this.request({
                 act: "section",
                 al: 1,
                 claim: 0,
@@ -27,13 +27,17 @@ class AudioAPI extends Static {
                 owner_id: uid,
                 section: "updates"
             }).catch(reject);
+            
             let list = [];
-            const { playlists } = res.payload[1][1];
+            const { playlists } = payload[1][1];
 
             const map = playlists.map(e => e.list).filter(e => e.length);
-            map.forEach(e => e.length ? list = list.concat(e) : list = [...list, e]);
+            map.forEach(e => e.length ? list = [...list, ...e] : list = [...list, e]);
 
-            const audios = await this.audio.getNormalAudios(list);
+            const audios = params.raw
+                ? this.audio.getRawAudios(list)
+                : await this.audio.getNormalAudios(list);
+
             return resolve(audios);
         });
     }
@@ -43,8 +47,10 @@ class AudioAPI extends Static {
     getStatusExportHash () {
         return new Promise(async resolve => {
             const res = await this.request({ retOnlyBody: true }, false);
+
             const hash = res.match(/statusExportHash: \'(.*?)\'/)[1];
             this.statusExportHash = hash;
+
             return resolve(hash);
         });
     }
