@@ -263,10 +263,19 @@ describe("Artists", () => {
 
     // test("Get Artist Top Songs", async () => {
     //     const result = await API.search.more("artist/queen/top_audios", { 
-    //         offset: 0, 
-    //         next_from: "",
     //         raw: true
     //     });
+    //     expect(result).toBeTruthy();
+    // });
+    
+    // test("Get More Artist Top Songs", async () => {
+    //     let result = await API.search.more("artist/queen/top_audios", { raw: true });
+
+    //     result = await API.search.more("artist/queen/top_audios", {
+    //         start_from: result.start_from,
+    //         raw: true
+    //     });
+
     //     expect(result).toBeTruthy();
     // });
 
