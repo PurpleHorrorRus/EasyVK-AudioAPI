@@ -42,6 +42,17 @@ describe("AudioAPI", () => {
     //     expect(audios).toBeTruthy();
     // });
 
+    // test("Get Raw Audios", async () => {
+    //     const raw = await API.audio.get({ raw: true });
+    //     expect(raw.audios).toBeTruthy();
+    // });
+
+    // test("Process Raw Audio Manually", async () => {
+    //     const raw = await API.audio.get({ raw: true });
+    //     const audio = await API.audio.parse([raw.audios[0].raw]);
+    //     expect(audio).toBeTruthy();
+    // });
+
     // test("Get With More", async () => {
     /*
         DO NOT USE THIS IF FUNCTION get() IS WORKING. THIS IS A KIND OF "BIG RED BUTTON"
@@ -50,17 +61,13 @@ describe("AudioAPI", () => {
     //     expect(audios).toBeTruthy();
     // });
 
-    // test("Process Raw Audio Manually", async () => {
-    //     const raw = await API.audio.get({ raw: true });
-    //     expect(raw.audios).toBeTruthy();
-    // });
-
     // test("Get More Audios", async () => {
-    //     const { audios } = await audio.get({
+    //     const { audios } = await API.audio.get({
     //         owner_id: -41670861,
     //         playlist_id: -1,
     //         offset: 100,
-    //         count: 50
+    //         count: 50,
+    //         raw: true
     //     });
     //     expect(audios).toBeTruthy();
     // });
@@ -71,56 +78,60 @@ describe("AudioAPI", () => {
     // });
 
     // test("Get Playlist", async () => {
-    //     const playlist = await audio.getPlaylist({ playlist_id: 5, list: true });
+    //     const playlist = await API.playlists.getPlaylist({ 
+    //         playlist_id: 5, 
+    //         list: true,
+    //         raw: true
+    //     });
     //     expect(playlist).toBeTruthy();
     // });
     
     // let add = null;
 
     // test("Add song", async () => {
-    //     const playlist = await audio.getPlaylist({ owner_id: 215185126, playlist_id: 2, list: true });
-    //     add = await audio.add(playlist.list[0]);
+    //     const playlist = await API.audio.getPlaylist({ owner_id: 215185126, playlist_id: 2, list: true });
+    //     add = await API.audio.add(playlist.list[0]);
     //     expect(add).toBeTruthy();
     // });
 
     // test("Delete song", async () => {
-    //     const { audios } = await audio.get();
-    //     const deleted = await audio.delete(audios[0]);
+    //     const { audios } = await API.audio.get();
+    //     const deleted = await API.audio.delete(audios[0]);
     //     expect(deleted).toBe(true);
     // });
 
     // test("Reorder songs", async () => {
-    //     const { audios } = await audio.get();
+    //     const { audios } = await API.audio.get();
 
     //     const audio_id = audios[1].id;
     //     const next_audio_id = audios[2].id;
 
-    //     const reorder = await audio.reorder({ audio_id, next_audio_id });
+    //     const reorder = await API.audio.reorder({ audio_id, next_audio_id });
 
     //     expect(reorder).toBe(true);
     // });
     
     // test("Edit song", async () => {
-    //     const { audios } = await audio.get();
+    //     const { audios } = await API.audio.get();
     //     const can_edit = audios.filter(a => a.can_edit);
     //     const song = can_edit[0];
-    //     const results = await audio.edit(song, { performer: "Meridius", title: "Test" });
+    //     const results = await API.audio.edit(song, { performer: "Meridius", title: "Test" });
     //     expect(results).toBeTruthy();
     // });
 
     // test("Audio status", async () => {
-    //     const { audios } = await audio.get();
-    //     await audio.toggleAudioStatus({
+    //     const { audios } = await API.audio.get();
+    //     await API.audio.toggleAudioStatus({
     //         enable: true,
     //         raw_audio_id: audios[0].full_id
     //     });
 
-    //     await audio.changeAudioStatus({ raw_audio_id: audios[1].full_id });
+    //     await API.audio.changeAudioStatus({ raw_audio_id: audios[1].full_id });
     // });
 
     // test("Upload Audio", async () => {
     //     const path = "PUT PATH HERE";
-    //     const saved = await audio.uploadAudio(path);
+    //     const saved = await API.audio.uploadAudio(path);
     //     expect(saved).toBeTruthy();
     // });
 });
@@ -139,8 +150,9 @@ describe("Playlists", () => {
 
     // test("Get Playlist By Id", async () => {
     //     const result = await API.playlists.getById({ 
-    //         playlist_id: 35, 
-    //         list: true 
+    //         playlist_id: 5, 
+    //         list: true,
+    //         raw: true
     //     });
     //     expect(result).toBeTruthy();
     // });
@@ -209,12 +221,18 @@ describe("Playlists", () => {
 
 describe("Search Engine", () => {
     // test("Audio Searching", async () => {
-    //     const results = await API.search.query({ q: "Queen" });
+    //     const results = await API.search.query({ 
+    //         q: "Queen",
+    //         raw: true
+    //     });
     //     expect(results).toBeTruthy();
     // });
 
     // test("Audio search by offset", async () => {
-    //     const search = await API.search.query({ q: "Queen" });
+    //     const search = await API.search.query({ 
+    //         q: "Queen",
+    //         raw: true
+    //     });
     //     const results = await API.search.withMore({ more: search.more });
     //     expect(results).toBeTruthy();
     // });
@@ -227,7 +245,8 @@ describe("Search Engine", () => {
     // test("Search in audios", async () => {
     //     const result = await API.search.inAudios({
     //         owner_id: -41670861,
-    //         q: "Twil"
+    //         q: "Twil",
+    //         raw: true
     //     });
     //     expect(result).toBeTruthy();
     // });
@@ -235,19 +254,29 @@ describe("Search Engine", () => {
 
 describe("Artists", () => {
     // test("Get Artist", async () => {
-    //     const result = await API.artists.get({ artist: "Queen" });
+    //     const result = await API.artists.get({ 
+    //         artist: "Queen",
+    //         raw: true
+    //     });
     //     expect(result).toBeTruthy();
     // });
 
-    // test("Get Artist Top Songs", async () => {
-    //     const result = await API.search.more("/artist/queen/top_audios", { offset: 0, cursor: "" });
-    //     expect(result).toBeTruthy();
-    // });
+    test("Get Artist Top Songs", async () => {
+        const result = await API.search.more("artist/queen/top_audios", { 
+            offset: 0, 
+            next_from: "",
+            raw: true
+        });
+        expect(result).toBeTruthy();
+    });
  
-    // test("Get Artist Playlists", async () => {
-    //     const result = await API.search.morePlaylists("/artist/queen/albums", { offset: 0, cursor: "" });
-    //     expect(result).toBeTruthy();
-    // });
+    test("Get Artist Playlists", async () => {
+        const result = await API.search.morePlaylists("artist/queen/albums", { 
+            offset: 0, 
+            next_from: "" 
+        });
+        expect(result).toBeTruthy();
+    });
 });
 
 describe("Recoms", () => {
