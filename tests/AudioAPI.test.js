@@ -269,12 +269,19 @@ describe("Artists", () => {
     //     });
     //     expect(result).toBeTruthy();
     // });
- 
+
     // test("Get Artist Playlists", async () => {
-    //     const result = await API.search.morePlaylists("artist/queen/albums", { 
-    //         offset: 0, 
-    //         next_from: "" 
+    //     const result = await API.search.morePlaylists("artist/queen/albums");
+    //     expect(result).toBeTruthy();
+    // });
+ 
+    // test("Get More Artist Playlists", async () => {
+    //     let result = await API.search.morePlaylists("artist/queen/albums");
+
+    //     result = await API.search.morePlaylists("artist/queen/albums", { 
+    //         start_from: result.start_from 
     //     });
+
     //     expect(result).toBeTruthy();
     // });
 });
