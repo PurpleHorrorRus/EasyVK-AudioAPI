@@ -261,22 +261,22 @@ describe("Artists", () => {
     //     expect(result).toBeTruthy();
     // });
 
-    test("Get Artist Top Songs", async () => {
-        const result = await API.search.more("artist/queen/top_audios", { 
-            offset: 0, 
-            next_from: "",
-            raw: true
-        });
-        expect(result).toBeTruthy();
-    });
+    // test("Get Artist Top Songs", async () => {
+    //     const result = await API.search.more("artist/queen/top_audios", { 
+    //         offset: 0, 
+    //         next_from: "",
+    //         raw: true
+    //     });
+    //     expect(result).toBeTruthy();
+    // });
  
-    test("Get Artist Playlists", async () => {
-        const result = await API.search.morePlaylists("artist/queen/albums", { 
-            offset: 0, 
-            next_from: "" 
-        });
-        expect(result).toBeTruthy();
-    });
+    // test("Get Artist Playlists", async () => {
+    //     const result = await API.search.morePlaylists("artist/queen/albums", { 
+    //         offset: 0, 
+    //         next_from: "" 
+    //     });
+    //     expect(result).toBeTruthy();
+    // });
 });
 
 describe("Recoms", () => {
