@@ -2,11 +2,7 @@
 
 This is an unofficial AudioAPI for [EasyVK](https://github.com/ciricc/easyvk). Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
 
-Recommended version of easyvk for using this API: 2.6.1
-
-# Migration
-
-Soon the library will be upload to #experimental and #master branch. If you used this API before, you must to prepare your project for these changes. Please read this documentation.
+Recommended version of EasyVK for using this API: 2.6.1
 
 # Installation
 
@@ -87,6 +83,31 @@ const artsits = await API.artists.get("Queen");
 const recoms = await API.recoms.loadExplore();
 ```
 
+## Recommendation for optimizing the requests
+
+Each URL storing separately from audio object and needs to single request (10 audios per request). This is increased time of request and flooding to vk servers. To avoid this, read below.
+
+I highly recomends you to set in parameters of each function fetching raw audio object. This returns audio full audio objects with "raw" array, but without URL's. Then you can use audio.fetch(raw) in any time. This method allows you to reduce the request time (1300ms -> 300ms average, you can check tests manually) and avoid flooding to vk servers. Here is another example:
+
+```javascript
+const getMyAudios = async () => { // Fetch audio objects without urls
+    const { audios } = await API.audio.get({ raw: true });
+    return audios;
+};
+
+const getFullAudio = async audio => { // Fetch full audio object with url
+    const [full] = await API.audio.parse([audio]);
+    return full;
+};
+
+const audios = await getMyAudios();
+const full = await getFullAudio(audios[0].raw);
+
+/*
+    A certain scientific PlayMusicLogic()
+*/
+```
+
 Now let's see each part.
 
 ## Audio
@@ -100,6 +121,7 @@ Now let's see each part.
 | ```edit``` | Audio object<br/>params | Edit the audio file if it available. In params you can to specify fields: title?: string, performer?: string, privacy?: number |
 | ```reorder``` | audio_id<br/>next_audio_id<br/>owner_id? | Reorder audios in playlist |
 | ```upload```| path | Upload audio file |
+| ```parse```| array of audios | Fetch full audio objects (with URL, etc.) |
 
 <br/>
 
