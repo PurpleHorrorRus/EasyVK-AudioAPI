@@ -36,7 +36,7 @@ class AudioAPI extends Static {
 
             const audios = params.raw
                 ? this.audio.getRawAudios(list)
-                : await this.audio.getNormalAudios(list);
+                : await this.audio.parse(list);
 
             return resolve(audios);
         });
