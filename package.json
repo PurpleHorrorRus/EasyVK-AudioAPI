@@ -20,9 +20,8 @@
     "dependencies": {
         "@types/jest": "^25.1.4",
         "bluebird": "^3.7.2",
-        "easyvk": "2.6.1",
+        "easyvk": "2.7.41",
         "eslint-plugin-jest": "^23.8.2",
-        "m3u8stream": "^0.7.1",
         "node-html-parser": "^1.2.13"
     },
     "devDependencies": {
