@@ -22,6 +22,9 @@
         "bluebird": "^3.7.2",
         "easyvk": "2.7.41",
         "eslint-plugin-jest": "^23.8.2",
+        "ffmpeg-static": "^4.2.7",
+        "ffprobe-static": "^3.0.0",
+        "fluent-ffmpeg": "^2.1.2",
         "node-html-parser": "^1.2.13"
     },
     "devDependencies": {
