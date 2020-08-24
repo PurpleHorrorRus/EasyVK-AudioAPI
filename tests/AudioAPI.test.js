@@ -38,8 +38,22 @@ describe("auth", () => {
 
 describe("AudioAPI", () => {
     // test("Get Audios", async () => {
-    //     const audios = await API.audio.get();
+    //     const { audios } = await API.audio.get({
+    //         owner_id: -9125493,
+    //         count: 5
+    //     });
+        
     //     expect(audios).toBeTruthy();
+    // });
+
+    // test("Get Audios m3u8 base64 url", async () => { // Лютая хрень, но работет
+    //     const { audios } = await API.audio.get({
+    //         owner_id: -9125493,
+    //         count: 1
+    //     });
+
+    //     const base64 = await audios[0].url;
+    //     expect(base64).toBeTruthy();
     // });
 
     // test("Get Raw Audios", async () => {
