@@ -46,15 +46,15 @@ describe("AudioAPI", () => {
     //     expect(audios).toBeTruthy();
     // });
 
-    test("Get Audios m3u8 base64 url", async () => { // Лютая хрень, но работет
-        const { audios } = await API.audio.get({
-            owner_id: -9125493,
-            count: 1
-        });
+    // test("Get Audios m3u8 base64 url", async () => { // Лютая хрень, но работет
+    //     const { audios } = await API.audio.get({
+    //         owner_id: -9125493,
+    //         count: 1
+    //     });
 
-        const base64 = await audios[0].url;
-        expect(base64).toBeTruthy();
-    });
+    //     const base64 = await audios[0].url;
+    //     expect(base64).toBeTruthy();
+    // });
 
     // test("Get Raw Audios", async () => {
     //     const raw = await API.audio.get({ raw: true });
