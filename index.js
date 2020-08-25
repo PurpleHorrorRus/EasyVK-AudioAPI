@@ -6,13 +6,17 @@ const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
 const Recoms = require("./lib/requests/recoms");
 class AudioAPI extends Static {
-    constructor (client) {
-        super(client);
-        this.audio = new Audio(client);
-        this.playlists = new Playlists(client);
-        this.search = new Search(client);
-        this.artists = new Artists(client);
-        this.recoms = new Recoms(client);
+    constructor (client, params = {}) {
+        super(client, params);
+        this.audio = new Audio(client, params);
+        this.playlists = new Playlists(client, params);
+        this.search = new Search(client, params);
+        this.artists = new Artists(client, params);
+        this.recoms = new Recoms(client, params);
+
+        if (!params.ffmpeg) {
+            console.warn("[EasyVK-Audio] You didn't set the path to ffmpeg, you won't be able to convert .m3u8 to .mp3");
+        }
     }
 
     getFriendsUpdates (params = {}) {

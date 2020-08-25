@@ -1,5 +1,6 @@
 const easyvk = require("easyvk");
 const fs = require("fs");
+const path = require("path");
 const AudioAPI = require("../index.js");
 
 const ReadJSON = dir => JSON.parse(fs.readFileSync(dir, "UTF-8"));
@@ -28,7 +29,9 @@ beforeAll(async () => {
         cookies: "./cookies.json" 
     });
 
-    API = new AudioAPI(client);
+    API = new AudioAPI(client, {
+        ffmpeg: path.resolve("ffmpeg.exe")
+    });
 });
 
 describe("auth", () => {
