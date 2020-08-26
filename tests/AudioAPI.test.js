@@ -55,8 +55,8 @@ describe("AudioAPI", () => {
     //         count: 1
     //     });
 
-    //     const base64 = await audios[0].url;
-    //     expect(base64).toBeTruthy();
+    //     const buffer = await audios[0].url;
+    //     expect(buffer).toBeTruthy();
     // });
 
     // test("Get Raw Audios", async () => {
