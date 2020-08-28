@@ -320,6 +320,11 @@ describe("Recoms", () => {
     //     expect(results).toBeTruthy();
     // });
 
+    // test("Get New Albums", async () => {
+    //     const results = await API.recoms.getNewAlbums();
+    //     expect(results).toBeTruthy(); 
+    // });
+
     // test("Load Explore", async () => {
     //     const results = await API.recoms.loadExplore({ count: 6 });
     //     expect(results).toBeTruthy();
