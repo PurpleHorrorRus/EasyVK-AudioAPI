@@ -31,8 +31,7 @@ beforeAll(async () => {
 
     API = new AudioAPI(client, {
         ffmpeg: {
-            path: path.resolve("ffmpeg.exe"),
-            compression: true
+            path: path.resolve("ffmpeg.exe")
         }
     });
 });
