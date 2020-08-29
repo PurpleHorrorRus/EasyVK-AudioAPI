@@ -59,6 +59,7 @@ describe("AudioAPI", () => {
 
     //     const buffer = await audios[0].url;
     //     expect(buffer).toBeTruthy();
+    //     expect(audios[0].url).toBeInstanceOf(Promise);
     // });
 
     // test("Get Raw Audios", async () => {
