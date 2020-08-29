@@ -51,6 +51,13 @@ describe("AudioAPI", () => {
     //     expect(audios).toBeTruthy();
     // });
 
+    // test("Get All Audios", async () => {
+    //     const { audios, count } = await API.audio.getAll({
+    //         owner_id: -9125493
+    //     });
+    //     expect(audios).toBeTruthy();    
+    // });
+
     // test("Get Audios m3u8 base64 url", async () => { // Лютая хрень, но работет
     //     const { audios } = await API.audio.get({
     //         owner_id: -9125493,
