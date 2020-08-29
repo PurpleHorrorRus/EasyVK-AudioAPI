@@ -23,6 +23,7 @@
         "easyvk": "2.7.41",
         "eslint-plugin-jest": "^23.8.2",
         "fluent-ffmpeg": "^2.1.2",
+        "m3u8-parser": "^4.4.3",
         "node-html-parser": "^1.2.13"
     },
     "devDependencies": {
