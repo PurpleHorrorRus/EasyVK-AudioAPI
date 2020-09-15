@@ -74,6 +74,17 @@ describe("AudioAPI", () => {
     //     expect(raw.audios).toBeTruthy();
     // });
 
+    // test("Get Audios From Wall", async () => {
+    //     const audios = await API.audio.getFromWall({ 
+    //         owner_id: 529592613,
+    //         post_id: 103,
+    //         raw: true
+    //     });
+
+    //     const result = await API.audio.parse(audios.map(a => a.raw));
+    //     expect(result).toBeTruthy();
+    // });
+
     // test("Process Raw Audio Manually", async () => {
     //     const raw = await API.audio.get({ raw: true });
     //     const audio = await API.audio.parse([raw.audios[0].raw]);
