@@ -117,9 +117,9 @@ To do this, EasyVK-Audio does the following:
 2. Parse all links in the .m3u8 file.
 3. Download all files from the links and decrypt them using the encryption key.
 4. Using FFmpeg, it combines all files into one .mp3 file without additional compression.
-5. Converts .mp3 file to base64 and deletes all previous files.
+5. Converts .mp3 file to Buffer object and deletes all previous files.
 
-One such conversion takes about 3 seconds. I recommend manually caching the received data to avoid re-converting.
+One such conversion takes about 3 seconds. I recommend manually caching the received buffer (to base64 or own .mp3 file) to avoid re-converting.
 
 You just need:
 1. Download FFmpeg binaries (one ffmpeg.exe is enough) from any reliable source.
