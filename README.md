@@ -2,8 +2,6 @@
 
 This is an unofficial AudioAPI for [EasyVK](https://github.com/ciricc/easyvk). Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
 
-Recommended version of EasyVK for using this API: 2.6.1
-
 # Installation
 
 Install [EasyVK](https://www.npmjs.com/package/easyvk) via npm or yarn
