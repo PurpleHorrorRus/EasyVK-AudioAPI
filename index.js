@@ -15,7 +15,7 @@ class AudioAPI extends Static {
         this.recoms = new Recoms(client, params);
 
         if (!params.ffmpeg) {
-            console.warn("[EasyVK-Audio] You didn't set the path to ffmpeg, you won't be able to convert .m3u8 to .mp3");
+            console.warn("[EasyVK-Audio] You didn't set the path to FFmpeg, you won't be able to convert .m3u8 to .mp3");
         }
     }
 
