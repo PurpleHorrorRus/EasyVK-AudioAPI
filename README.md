@@ -144,6 +144,7 @@ Now let's see each part.
 | :-----     | :--:   | :------ |
 | ```get```       | owner_id?<br/>playlist_id?<br/>access_hash?<br/>count? | Returns the list of first %count% audios|
 | ```getCount```     | owner_id?<br/>playlist_id?<br/>access_hash? | Returns a count audios of user/community |
+| ```getFromWall```     | owner_id<br/>post_id<br/> | Returns the list of audios from wall post |
 | ```add``` | Audio object | Add audio in "My Audios" |
 | ```delete``` | Audio object | Delete audio from "My Audios" |
 | ```edit``` | Audio object<br/>params | Edit the audio file if it available. In params you can to specify fields: title?: string, performer?: string, privacy?: number |
