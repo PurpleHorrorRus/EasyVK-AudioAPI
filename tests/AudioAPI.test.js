@@ -43,18 +43,21 @@ describe("auth", () => {
 
 describe("AudioAPI", () => {
     // test("Get Audios", async () => {
-    //     const { audios } = await API.audio.get({
-    //         owner_id: -9125493,
-    //         count: 5
+    //     const audios = await API.audio.get({
+    //         raw: true 
+    //     });
+
+    //     const next = await API.audio.get({
+    //         more: audios.more,
+    //         raw: true
     //     });
         
     //     expect(audios).toBeTruthy();
+    //     expect(next).toBeTruthy();
     // });
 
     // test("Get All Audios", async () => {
-    //     const { audios, count } = await API.audio.getAll({
-    //         owner_id: -9125493
-    //     });
+    //     const audios = await API.audio.getAll({ raw: true });
     //     expect(audios).toBeTruthy();    
     // });
 
@@ -91,14 +94,6 @@ describe("AudioAPI", () => {
     //     expect(audio).toBeTruthy();
     // });
 
-    // test("Get With More", async () => {
-    /*
-        DO NOT USE THIS IF FUNCTION get() IS WORKING. THIS IS A KIND OF "BIG RED BUTTON"
-    */
-    //     const audios = await API.audio.getWithMore({ raw: true });
-    //     expect(audios).toBeTruthy();
-    // });
-
     // test("Get More Audios", async () => {
     //     const { audios } = await API.audio.get({
     //         owner_id: -41670861,
@@ -111,7 +106,10 @@ describe("AudioAPI", () => {
     // });
 
     // test("Get Count", async () => {
-    //     const results = await API.audio.getCount();
+    //     const results = await API.audio.getCount({
+    //         owner_id: 133988143
+    //     });
+
     //     expect(results).toBeTruthy();
     // });
 
@@ -271,7 +269,7 @@ describe("Search Engine", () => {
     //         q: "Queen",
     //         raw: true
     //     });
-    //     const results = await API.search.withMore({ more: search.more });
+    //     const results = await API.audio.withMore({ more: search.more });
     //     expect(results).toBeTruthy();
     // });
 
