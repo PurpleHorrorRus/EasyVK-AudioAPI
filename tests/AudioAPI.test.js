@@ -244,6 +244,16 @@ describe("Playlists", () => {
     //     expect(result).toBe(true);
     // });
 
+    // test("Reorder Playlists", async () => {
+    //     const { playlists } = await API.playlists.get();
+    //     const reorderResult = await API.playlists.reorder({
+    //         playlist_id: playlists[1].playlist_id,
+    //         prev_playlist_id: 0
+    //     });
+
+    //     expect(reorderResult).toBe(true);
+    // });
+
     // test("Reorder Songs in Playlist", async () => {
     //     const { audios } = await API.audio.get({ playlist_id: 35 });
     //     const reverse = audios.reverse().map(a => a.full_id).join(",");
