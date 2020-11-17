@@ -279,7 +279,13 @@ describe("Search Engine", () => {
     //         q: "Queen",
     //         raw: true
     //     });
-    //     const results = await API.audio.withMore({ more: search.more });
+
+    //     const results = await API.audio.withMore({ 
+    //         more: search.more,
+    //         raw: true,
+    //         normalize: true
+    //     });
+
     //     expect(results).toBeTruthy();
     // });
 
