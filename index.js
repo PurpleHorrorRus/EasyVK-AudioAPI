@@ -19,44 +19,49 @@ class AudioAPI extends Static {
         }
     }
 
-    getFriendsUpdates (params = {}) {
+    async getAll (params = {}) {
+        params.owner_id = params.owner_id ? Number(params.owner_id) : this.user_id;
+        params.playlist_id = params.playlist_id ? Number(params.playlist_id) : -1;
+        
+        return ~params.playlist_id 
+            ? this.playlists.getAllSongs(params) 
+            : this.audio.getAll(params);
+    }
+
+    async getFriendsUpdates (params = {}) {
         const uid = this.user_id;
 
-        return new Promise(async (resolve, reject) => {
-            const { payload } = await this.request({
-                act: "section",
-                al: 1,
-                claim: 0,
-                is_layer: 0,
-                owner_id: uid,
-                section: "updates"
-            }).catch(reject);
-            
-            let list = [];
-            const { playlists } = payload[1][1];
-
-            const map = playlists.map(e => e.list).filter(e => e.length);
-            map.forEach(e => e.length ? list = [...list, ...e] : list = [...list, e]);
-
-            const audios = params.raw
-                ? this.audio.getRawAudios(list)
-                : await this.audio.parse(list);
-
-            return resolve(audios);
+        const { payload } = await this.request({
+            act: "section",
+            al: 1,
+            claim: 0,
+            is_layer: 0,
+            owner_id: uid,
+            section: "updates"
         });
+
+        let list = [];
+        const { playlists } = payload[1][1];
+
+        const map = playlists.map(e => e.list).filter(e => e.length);
+        map.forEach(e => e.length ? list = [...list, ...e] : list = [...list, e]);
+
+        const audios = params.raw
+            ? this.audio.getRawAudios(list)
+            : await this.audio.parse(list);
+
+        return audios;
     }
 
     // --------------------- STATUS ----------------------
 
-    getStatusExportHash () {
-        return new Promise(async resolve => {
-            const res = await this.request({ retOnlyBody: true }, false);
+    async getStatusExportHash () {
+        const res = await this.request({ retOnlyBody: true }, false);
 
-            const hash = res.match(/statusExportHash: \'(.*?)\'/)[1];
-            this.statusExportHash = hash;
+        const hash = res.match(/statusExportHash: \'(.*?)\'/)[1];
+        this.statusExportHash = hash;
 
-            return resolve(hash);
-        });
+        return hash;
     }
 
     toggleAudioStatus (params = {}) {

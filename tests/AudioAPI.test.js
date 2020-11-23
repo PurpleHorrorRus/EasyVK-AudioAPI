@@ -57,7 +57,7 @@ describe("AudioAPI", () => {
     // });
 
     // test("Get All Audios", async () => {
-    //     const audios = await API.audio.getAll({ raw: true });
+    //     const audios = await API.getAll({ raw: true  });
     //     expect(audios).toBeTruthy();    
     // });
 
