@@ -63,11 +63,13 @@ describe("AudioAPI", () => {
 
     // test("Get Audios m3u8 base64 url", async () => { // Лютая хрень, но работет
     //     const { audios } = await API.audio.get({
-    //         owner_id: -9125493,
-    //         count: 1
+    //         count: 2,
+    //         raw: true
     //     });
 
-    //     const buffer = await audios[0].url;
+    //     const parsed = await API.audio.parse([audios[1].raw]);
+    //     const buffer = await parsed[0].url;
+
     //     expect(buffer).toBeTruthy();
     //     expect(audios[0].url).toBeInstanceOf(Promise);
     // });
