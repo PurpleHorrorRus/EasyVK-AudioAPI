@@ -64,7 +64,7 @@ class AudioAPI extends Static {
         return hash;
     }
 
-    toggleAudioStatus (params = {}) {
+    async toggleAudioStatus (params = {}) {
 
         /*
             enable: boolean
@@ -72,38 +72,34 @@ class AudioAPI extends Static {
             owner_id?: number
         */
 
-        return new Promise(async (resolve ,reject) => {
-            await this.request({
-                act: "toggle_status",
-                al: 1,
-                exp: params.enable !== false ? 1 : 0,
-                hash: this.statusExportHash || await this.getStatusExportHash(),
-                id: params.raw_audio_id,
-                oid: params.owner_id ? Number(params.owner_id) : this.user_id,
-                top: 0
-            }).catch(reject);
-            
-            return resolve(true);
+        await this.request({
+            act: "toggle_status",
+            al: 1,
+            exp: params.enable !== false ? 1 : 0,
+            hash: this.statusExportHash || await this.getStatusExportHash(),
+            id: params.raw_audio_id,
+            oid: params.owner_id ? Number(params.owner_id) : this.user_id,
+            top: 0
         });
+
+        return true;
     }
     
-    changeAudioStatus (params = {}) {
+    async changeAudioStatus (params = {}) {
 
         /*
             raw_audio_id: string
         */
 
-        return new Promise(async (resolve, reject) => {
-            await this.request({
-                act: "audio_status",
-                al: 1,
-                hash: this.statusExportHash || await this.getStatusExportHash(),
-                full_id: params.raw_audio_id,
-                top: 0
-            }).catch(reject);
-            
-            return resolve(true);
+        await this.request({
+            act: "audio_status",
+            al: 1,
+            hash: this.statusExportHash || await this.getStatusExportHash(),
+            full_id: params.raw_audio_id,
+            top: 0
         });
+        
+        return true;
     }
 }
 
