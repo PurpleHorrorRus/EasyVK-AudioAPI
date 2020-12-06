@@ -79,6 +79,15 @@ describe("AudioAPI", () => {
     //     expect(raw.audios).toBeTruthy();
     // });
 
+    // test("Get Lyrics", async () => {
+    //     const lyrics = await API.audio.getLyrics({
+    //         full_id: "529592613_456239699",
+    //         lyrics_id: 446974289
+    //     });
+
+    //     expect(lyrics).toBeTruthy();
+    // });
+
     // test("Get Audios From Wall", async () => {
     //     const audios = await API.audio.getFromWall({ 
     //         owner_id: 529592613,
