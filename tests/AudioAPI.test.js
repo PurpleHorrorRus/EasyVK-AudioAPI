@@ -167,6 +167,11 @@ describe("AudioAPI", () => {
     //     expect(results).toBeTruthy();
     // });
 
+    // test("Upload Audio", async () => {
+    //     const saved = await API.audio.upload("./test.mp3");
+    //     expect(saved).toBeTruthy();
+    // });
+
     // test("Audio status", async () => {
     //     const { audios } = await API.audio.get();
     //     await API.audio.toggleAudioStatus({
