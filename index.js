@@ -29,14 +29,12 @@ class AudioAPI extends Static {
     }
 
     async getFriendsUpdates (params = {}) {
-        const uid = this.user_id;
-
         const { payload } = await this.request({
             act: "section",
             al: 1,
             claim: 0,
             is_layer: 0,
-            owner_id: uid,
+            owner_id: this.user_id,
             section: "updates"
         });
 
@@ -48,7 +46,7 @@ class AudioAPI extends Static {
 
         const audios = params.raw
             ? this.audio.getRawAudios(list)
-            : await this.audio.parse(list);
+            : await this.audio.parse(list, params);
 
         return audios;
     }

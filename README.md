@@ -60,7 +60,7 @@ const run = async () => {
     const client = await vk.http.loginByForm({ username, password });
     const API = new AudioAPI(client);
 
-    const { audios: my_audios, count } = await API.audio.get();
+    const { audios: my_audios, count } = await API.audio.getAll();
     console.log(my_audios);
     console.log(`Wow, I have ${count} audio!`);
 };
@@ -88,18 +88,8 @@ Each URL storing separately from audio object and needs to single request (10 au
 I highly recomends you to set in parameters of each function fetching raw audio object. This returns audio full audio objects with "raw" array, but without URL's. Then you can use audio.fetch(raw) in any time. This method allows you to reduce the request time (1300ms -> 300ms average, you can check tests manually) and avoid flooding to vk servers. Here is another example:
 
 ```javascript
-const getMyAudios = async () => { // Fetch audio objects without urls
-    const { audios } = await API.audio.get({ raw: true });
-    return audios;
-};
-
-const getFullAudio = async audio => { // Fetch full audio object with url
-    const [full] = await API.audio.parse([audio]);
-    return full;
-};
-
-const audios = await getMyAudios();
-const full = await getFullAudio(audios[0].raw);
+const { audios } = await API.audio.get({ raw: true });
+const [full] = await API.audio.parse([audio[0].raw]);
 
 /*
     A certain scientific PlayMusicLogic(full)
@@ -136,7 +126,19 @@ const API = new AudioAPI(client, {
 
 Otherwise, if you do not use FFmpeg, then EasyVK-Audio will advise you to use it anyway. This is to provide a 100% guarantee for fetching audio links.
 
-Now let's see each part.
+## Manually processing
+
+Also you can fetch .m3u8 links manually. See example:
+
+```javascript
+const { audios } = await API.audio.get({ raw: true });
+const [full] = await API.audio.parse([audio], { rawLinks: true });
+const parsed = await API.m3u8.get(full.url);
+```
+
+You can add ```rawLinks: true``` params to any request.
+
+### Now let's see each part.
 
 ## Audio
 
