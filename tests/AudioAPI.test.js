@@ -1,44 +1,41 @@
-const easyvk = require("easyvk");
-const fs = require("fs");
+// eslint-disable-next-line no-unused-vars
+
+const { CallbackService } = require("vk-io");
+const { DirectAuthorization } = require("@vk-io/authorization");
+
 const path = require("path");
 const AudioAPI = require("../index.js");
+const httpClient = require("../lib/http");
 
-const ReadJSON = dir => JSON.parse(fs.readFileSync(dir, "UTF-8"));
+const credits = require("../vk.json");
 
 const timeout = 5; // mins
 jest.setTimeout(timeout * 60 * 1000);
 
 let vk = null;
-let client = null;
-// eslint-disable-next-line no-unused-vars
 let API = null;
 
-beforeAll(async () => {
-    const { username, password } = ReadJSON("vk.json");
-    vk = await easyvk({
-        username,
-        password,
-        save: true,
-        sessionFile: "./.vksession"
-    });
-    
-    client = await vk.http.loginByForm({
-        username,
-        password,
-        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/78.0",
-        cookies: "./cookies.json" 
-    });
+const direct = new DirectAuthorization({
+    callbackService: new CallbackService(),
 
-    API = new AudioAPI(client, {
-        ffmpeg: {
-            path: path.resolve("ffmpeg.exe")
-        }
-    });
+    scope: "all",   
+
+    clientId: "2274003",
+    clientSecret: "hHbZxrka2uZ6jB1inYsH",
+
+    login: credits.username,
+    password: credits.password
 });
 
-describe("auth", () => {
-    test("vk", () => expect(vk).toBeTruthy());
-    test("http", () => expect(client).toBeTruthy());
+beforeAll(async () => {
+    vk = await direct.run();
+
+    API = new AudioAPI(
+        await new httpClient(vk).login(credits), {
+            ffmpeg: {
+                path: path.resolve("ffmpeg.exe")
+            }
+        });
 });
 
 describe("AudioAPI", () => {
