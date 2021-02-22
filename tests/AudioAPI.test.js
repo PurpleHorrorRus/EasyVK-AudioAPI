@@ -8,11 +8,11 @@ const AudioAPI = require("../index.js");
 const httpClient = require("../lib/http");
 
 const credits = require("../vk.json");
+const { VK } = require("vk-io");
 
 const timeout = 5; // mins
 jest.setTimeout(timeout * 60 * 1000);
 
-let vk = null;
 let API = null;
 
 const direct = new DirectAuthorization({
@@ -28,10 +28,13 @@ const direct = new DirectAuthorization({
 });
 
 beforeAll(async () => {
-    vk = await direct.run();
+    const { token, user } = await direct.run();
 
     API = new AudioAPI(
-        await new httpClient(vk).login(credits), {
+        await new httpClient({
+            ...new VK({ token }),
+            user
+        }).login(credits), {
             ffmpeg: {
                 path: path.resolve("ffmpeg.exe")
             }
@@ -167,10 +170,10 @@ describe("AudioAPI", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    // test("Upload Audio", async () => {
-    //     const saved = await API.audio.upload("./test.mp3");
-    //     expect(saved).toBeTruthy();
-    // });
+    test("Upload Audio", async () => {
+        const saved = await API.audio.upload("./test.mp3");
+        expect(saved).toBeTruthy();
+    });
 
     // test("Audio status", async () => {
     //     const { audios } = await API.audio.get();
@@ -221,7 +224,7 @@ describe("Playlists", () => {
     // });
 
     // test("Create playlist", async () => {
-    //     const cover_path = "PUT PATH HERE";
+    //     const cover_path = "./pic.jpg";
 
     //     const result = await API.playlists.create({
     //         title: "Meridius playlist",
