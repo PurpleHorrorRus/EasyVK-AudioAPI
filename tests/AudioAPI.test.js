@@ -198,12 +198,12 @@ describe("AudioAPI", () => {
 
     // test("Audio status", async () => {
     //     const { audios } = await API.audio.get();
-    //     await API.audio.toggleAudioStatus({
+    //     await API.toggleAudioStatus({
     //         enable: true,
     //         raw_audio_id: audios[0].full_id
     //     });
 
-    //     await API.audio.changeAudioStatus({ raw_audio_id: audios[1].full_id });
+    //     await API.changeAudioStatus({ raw_audio_id: audios[1].full_id });
     // });
 
     // test("Upload Audio", async () => {

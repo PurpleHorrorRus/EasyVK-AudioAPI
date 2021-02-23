@@ -54,7 +54,7 @@ class AudioAPI extends Static {
     // --------------------- STATUS ----------------------
 
     async getStatusExportHash () {
-        const res = await this.request({ retOnlyBody: true }, false);
+        const res = await this.audio.mainPage();
 
         const hash = res.match(/statusExportHash: \'(.*?)\'/)[1];
         this.statusExportHash = hash;
