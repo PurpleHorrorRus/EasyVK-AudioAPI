@@ -18,12 +18,12 @@
     "author": "PurpleHorrorRus <purplehorrorrus@gmail.com>",
     "license": "ISC",
     "dependencies": {
-        "@types/jest": "^25.1.4",
+        "@types/jest": "^26.0.20",
         "@vk-io/authorization": "^1.0.0",
         "bluebird": "^3.7.2",
-        "eslint-plugin-jest": "^23.8.2",
+        "eslint-plugin-jest": "^24.1.5",
         "fluent-ffmpeg": "^2.1.2",
-        "m3u8-parser": "^4.4.3",
+        "m3u8-parser": "^4.5.2",
         "node-fetch": "^2.6.1",
         "node-html-parser": "^1.2.13",
         "tough-cookie": "3.0.1",
@@ -31,7 +31,7 @@
         "vk-io": "^4.1.4"
     },
     "devDependencies": {
-        "eslint": "^6.8.0",
-        "jest": "^25.1.0"
+        "eslint": "^7.20.0",
+        "jest": "^26.6.3"
     }
 }
