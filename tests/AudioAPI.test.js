@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-unused-vars
+const fs = require("fs");
+const readline = require("readline");
 
 const { CallbackService } = require("vk-io");
 const { DirectAuthorization } = require("@vk-io/authorization");
@@ -7,16 +9,27 @@ const path = require("path");
 const AudioAPI = require("../index.js");
 const httpClient = require("../lib/http");
 
-const credits = require("../vk.json");
+let credits = require("../vk.json");
 const { VK } = require("vk-io");
 
 const timeout = 5; // mins
 jest.setTimeout(timeout * 60 * 1000);
 
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 let API = null;
 
+const callbackService = new CallbackService();
+callbackService.onTwoFactor(async (payload, retry) => {
+    const code = await new Promise(resolve => rl.question("Two factor code", resolve));
+    await retry(code);
+});
+
 const direct = new DirectAuthorization({
-    callbackService: new CallbackService(),
+    callbackService,
 
     scope: "all",   
 
@@ -28,12 +41,21 @@ const direct = new DirectAuthorization({
 });
 
 beforeAll(async () => {
-    const { token, user } = await direct.run();
+    if (!credits.token) {
+        const data = await direct.run();
+        credits = {
+            ...credits,
+            token: data.token,
+            user: data.user
+        };
+
+        fs.writeFileSync("./vk.json", JSON.stringify(credits, null, 4));
+    }
 
     API = new AudioAPI(
         await new httpClient({
-            ...new VK({ token }),
-            user
+            ...new VK({ token: credits.token }),
+            user: credits.user
         }).login(credits), {
             ffmpeg: {
                 path: path.resolve("ffmpeg.exe")
@@ -170,10 +192,10 @@ describe("AudioAPI", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    test("Upload Audio", async () => {
-        const saved = await API.audio.upload("./test.mp3");
-        expect(saved).toBeTruthy();
-    });
+    // test("Upload Audio", async () => {
+    //     const saved = await API.audio.upload("./test.mp3");
+    //     expect(saved).toBeTruthy();
+    // });
 
     // test("Audio status", async () => {
     //     const { audios } = await API.audio.get();
