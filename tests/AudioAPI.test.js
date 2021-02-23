@@ -2,7 +2,7 @@
 const fs = require("fs");
 const readline = require("readline");
 
-const { CallbackService } = require("vk-io");
+const { VK, CallbackService } = require("vk-io");
 const { DirectAuthorization } = require("@vk-io/authorization");
 
 const path = require("path");
@@ -10,7 +10,6 @@ const AudioAPI = require("../index.js");
 const httpClient = require("../lib/http");
 
 let credits = require("../vk.json");
-const { VK } = require("vk-io");
 
 const timeout = 5; // mins
 jest.setTimeout(timeout * 60 * 1000);
