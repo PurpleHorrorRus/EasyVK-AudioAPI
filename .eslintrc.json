@@ -17,7 +17,9 @@
     "rules": {
         "semi": ["error", "always"],
         "quotes": ["error", "double"],
-        "indent": ["error", 4],
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
         "no-constant-condition": 0,
         "no-async-promise-executor": 0,
         "no-useless-catch": 0,
