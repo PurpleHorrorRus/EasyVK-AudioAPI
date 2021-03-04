@@ -20,7 +20,7 @@ class AudioAPI extends Static {
     }
 
     async getAll (params = {}) {
-        params.owner_id = params.owner_id ? Number(params.owner_id) : this.user_id;
+        params.owner_id = params.owner_id ? Number(params.owner_id) : this.user;
         params.playlist_id = params.playlist_id ? Number(params.playlist_id) : -1;
         
         return ~params.playlist_id 
@@ -34,7 +34,7 @@ class AudioAPI extends Static {
             al: 1,
             claim: 0,
             is_layer: 0,
-            owner_id: this.user_id,
+            owner_id: this.user,
             section: "updates"
         });
 
@@ -76,7 +76,7 @@ class AudioAPI extends Static {
             exp: params.enable !== false ? 1 : 0,
             hash: this.statusExportHash || await this.getStatusExportHash(),
             id: params.raw_audio_id,
-            oid: params.owner_id ? Number(params.owner_id) : this.user_id,
+            oid: params.owner_id ? Number(params.owner_id) : this.user,
             top: 0
         });
 
