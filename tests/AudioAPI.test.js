@@ -32,8 +32,8 @@ const direct = new DirectAuthorization({
 
     scope: "all",   
 
-    clientId: "2274003",
-    clientSecret: "hHbZxrka2uZ6jB1inYsH",
+    clientId: "3697615",
+    clientSecret: "AlVXZFMUqyrnABp8ncuU",
 
     login: credits.username,
     password: credits.password
@@ -55,11 +55,7 @@ beforeAll(async () => {
         await new httpClient({
             ...new VK({ token: credits.token }),
             user: credits.user
-        }).login(credits), {
-            ffmpeg: {
-                path: path.resolve("ffmpeg.exe")
-            }
-        });
+        }).login(credits), { ffmpeg: { path: path.resolve("ffmpeg.exe") } });
 });
 
 describe("AudioAPI", () => {
