@@ -305,13 +305,14 @@ describe("Playlists", () => {
 });
 
 describe("Search Engine", () => {
-//     test("Audio Searching", async () => {
-//         const results = await API.search.query({ 
-//             q: "Queen",
-//             raw: true
-//         });
-//         expect(results).toBeTruthy();
-//     });
+    // test("Audio Searching", async () => {
+    //     const results = await API.search.query({ 
+    //         q: "Queen",
+    //         raw: true
+    //     });
+
+    //     expect(results).toBeTruthy();
+    // });
 
     //     test("Audio search by offset", async () => {
     //         const search = await API.search.query({ 
