@@ -32,8 +32,8 @@ const direct = new DirectAuthorization({
 
     scope: "all",   
 
-    clientId: "3697615",
-    clientSecret: "AlVXZFMUqyrnABp8ncuU",
+    clientId: "2274003",
+    clientSecret: "hHbZxrka2uZ6jB1inYsH",
 
     login: credits.username,
     password: credits.password
