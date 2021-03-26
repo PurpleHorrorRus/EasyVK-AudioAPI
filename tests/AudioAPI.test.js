@@ -410,14 +410,14 @@ describe("Search Engine", () => {
         //     expect(results).toBeTruthy(); 
         // });
 
-        test("Load Explore", async () => {
-            const results = await API.recoms.loadExplore({ 
-                count: 6, 
-                raw: true 
-            });
+        // test("Load Explore", async () => {
+        //     const results = await API.recoms.loadExplore({ 
+        //         count: 6, 
+        //         raw: true 
+        //     });
 
-            expect(results).toBeTruthy();
-        });
+        //     expect(results).toBeTruthy();
+        // });
 
         // test("Get Artists", async () => {
         //     const results = await API.recoms.artists();
