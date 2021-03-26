@@ -73,7 +73,7 @@ class AudioAPI extends Static {
         await this.request({
             act: "toggle_status",
             al: 1,
-            exp: params.enable !== false ? 1 : 0,
+            exp: Number(params.enable),
             hash: this.statusExportHash || await this.getStatusExportHash(),
             id: params.raw_audio_id,
             oid: params.owner_id ? Number(params.owner_id) : this.user,
