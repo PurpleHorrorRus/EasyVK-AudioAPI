@@ -28,8 +28,11 @@ class AudioAPI extends Static {
         }
     }
 
-    async login () {
-        this.client = await new HTTPClient(this.vk).login(this.credits);
+    async login (params = {}) {
+        this.client = await new HTTPClient(this.vk).login({
+            ...this.credits,
+            ...params
+        });
 
         return {
             audio: new Audio(this.client, this.vk),
