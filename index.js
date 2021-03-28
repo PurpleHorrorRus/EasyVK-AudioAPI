@@ -39,11 +39,7 @@ class AudioAPI extends Static {
             playlists: new Playlists(this.client, this.vk),
             search: new Search(this.client, this.vk),
             artists: new Artists(this.client, this.vk),
-            recoms: new Recoms(this.client, this.vk),
-
-            vk: this.vk,
-            user: this.vk.user,
-            uploaded: this.vk.upload
+            recoms: new Recoms(this.client, this.vk)
         };
     }
 
