@@ -1,47 +1,54 @@
 # EasyVK AudioAPI
 
-This is an unofficial AudioAPI for [EasyVK](https://github.com/ciricc/easyvk). Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
+This is an unofficial Audio API for VK. Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
 
 # Installation
 
-Install [EasyVK](https://www.npmjs.com/package/easyvk) via npm or yarn
+Install [VK-IO](https://www.npmjs.com/package/vk-io) via npm or yarn
 
 ```bash
-yarn add easyvk
+yarn add vk-io
 // or
-npm install easyvk
+npm install vk-io
 ```
 
 Install AudioAPI package
 
 ```bash
-yarn add https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
+yarn add https://github.com/PurpleHorrorRus/EasyVK-AudioAPI#standalone
 // or
-npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
+npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI#standalone
 ```
 
 Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/meridius) branch rather than #master
 
 # Getting Started
 
-Do auth with EasyVK
+Do auth with VK-IO
 
 ```javascript
-const easyvk = require("easyvk");
-const vk = await easyvk({ username, password });
+const { VK } = require("vk-io");
+const VKClient = new VK({ token: "xxxxxxxxxxx" });
 ```
 
-Do the same for HTTP Client
+Create an API
 
 ```javascript
-const client = await vk.http.loginByForm({ username, password });
-```
+const credits = {
+    username: "xxxxxxxxxxx",
+    password: "xxxxxxxxxxx",
+    user_id:  "xxxxxxxxxxx"
+};
 
-Import and enable AudioAPI
-
-```javascript
 const AudioAPI = require("easyvk-audio");
-const audio = new AudioAPI(client);
+const AudioHTTP = require("easyvk-audio/lib/http");
+
+const HTTPClient = await new AudioHTTP(({ // Later it will be rework
+    ...VKClient,
+    user: credits.user_id
+})).login(credits);
+
+const API = new AudioAPI(HTTPClient);
 ```
 
 **You awesome!!**
@@ -49,16 +56,26 @@ const audio = new AudioAPI(client);
 # Full example
 
 ```javascript
-const easyvk = require("easyvk");
+const credits = {
+    username: "xxxxxxxxxxx",
+    password: "xxxxxxxxxxx",
+    token:    "xxxxxxxxxxx"
+    user_id:  "xxxxxxxxxxx"
+};
+
+const { VK } = require("vk-io");
+const VKClient = new VK({ token: credits.token });
+
 const AudioAPI = require("easyvk-audio");
+const AudioHTTP = require("easyvk-audio/lib/http");
 
 const run = async () => {
-    const username = "xxxxxxxxxxx";
-    const password = "xxxxxxxxxxx";
+    const HTTPClient = await new AudioHTTP(({ // Later it will be rework
+        ...VKClient,
+        user: credits.user_id
+    })).login(credits);
 
-    const vk =  await easyvk({ username, password });
-    const client = await vk.http.loginByForm({ username, password });
-    const API = new AudioAPI(client);
+    const API = new AudioAPI(HTTPClient);
 
     const { audios: my_audios, count } = await API.audio.getAll();
     console.log(my_audios);
@@ -78,7 +95,8 @@ const { audios } = await API.audio.get();
 const { playlists } = await API.playlists.get();
 const search = await API.search.query("Queen");
 const artsits = await API.artists.get("Queen");
-const recoms = await API.recoms.loadExplore();
+const recommendations = await API.recoms.loadRecoms();
+const explore = await API.recoms.loadExplore();
 ```
 
 ## Recommendation for optimizing the requests
@@ -96,7 +114,27 @@ const [full] = await API.audio.parse([audio[0].raw]);
 */
 ```
 
-## Processing .m3u8 using FFmpeg
+## Play .m3u8 files with hls.js
+
+VK uses .m3u8 file formats for music. So you can use [hls.js](https://github.com/video-dev/hls.js/) package to play it.
+
+Example:
+```javascript
+const hlsjs = require("hls.js");
+
+const sound = new Audio();
+const hls = new hlsjs();
+
+const { audios } = await API.audio.get({ raw: true });
+const parsed = await API.audio.parse([audio[0].raw]);
+
+hls.attachMedia(sound);
+hls.on(hlsjs.Events.MEDIA_ATTACHED, hls.loadSource(parsed[0].url));
+
+sound.addEventListener("canplaythrough", () => sound.play());
+```
+
+## Processing .m3u8 using FFmpeg for downloading
 
 Sometimes VK returns links to .m3u8 files that cannot be converted into a direct link before .mp3. It is for such cases that you need to use FFmpeg for processing.
 
@@ -117,9 +155,12 @@ You just need:
 
 Example:
 ```javascript
-const API = new AudioAPI(client, {
+const HTTPClient = await new AudioHTTP(({ // Later it will be rework
+    ...VKClient,
+    user: credits.user_id
+})).login(credits, {
     ffmpeg: {
-        path: "./ffmpeg.exe"
+        path: "Path to ffmpeg.exe"
     }
 });
 ```
@@ -200,14 +241,15 @@ You can see how to get full list of audio or playlists of artist in jest testing
 | Function  | Params | Description |
 | :-----    | :--:   | :------     |
 | ```loadExplore```| - | Load full explore page |
-| ```getCollections```| - | Returns the collections offering by VK |
-| ```getNewAlbums```| - | Returns the new albums |
-| ```getRecomsArtists```| - | Returns the daily recommendation artists |
-| ```getNewReleases```| - | Returns the list of audios of new releases |
-| ```getChart```| - | Returns the list of VK Chart |
-| ```getOfficialPlaylists```| - | Returns the list of official collections of playlists splitted to categories |
-| ```getDailyRecoms```| count? | Returns the list of daily audios |
-| ```getWeeklyRecoms```| count? | Returns the list of weekly audios |
+| ```loadRecoms``` | - | Load full recoms page |
+| ```collections```| - | Returns the collections offering by VK |
+| ```newAlbums```| - | Returns the new albums |
+| ```artists```| - | Returns the daily recommendation artists |
+| ```releases```| - | Returns the list of audios of new releases |
+| ```chart ```| - | Returns the list of VK Chart |
+| ```officialPlaylists```| - | Returns the list of official collections of playlists splitted to categories |
+| ```daily```| count? | Returns the list of daily audios |
+| ```weekly```| count? | Returns the list of weekly audios |
 
 The explore and recoms sections caching and updating every hour itself for make loading faster.
 
