@@ -1,4 +1,11 @@
+const fs = require("fs");
+const path = require("path");
+
+const m3u8 = require("./lib/requests/audio_m3u8");
+
 const Static = require("./lib/static");
+
+const HTTPClient = require("./lib/http");
 
 const Audio = require("./lib/requests/audio");
 const Playlists = require("./lib/requests/playlists");
@@ -6,17 +13,35 @@ const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
 const Recoms = require("./lib/requests/recoms");
 class AudioAPI extends Static {
-    constructor (client, params = {}) {
-        super(client, params);
-        this.audio = new Audio(client, params);
-        this.playlists = new Playlists(client, params);
-        this.search = new Search(client, params);
-        this.artists = new Artists(client, params);
-        this.recoms = new Recoms(client, params);
+    constructor (vk, credits, params = {}) {
+        super({}, vk);
+        this.vk = { ...vk, user: credits.user };
+        this.credits = credits;
 
-        if (!params.ffmpeg) {
-            console.warn("[EasyVK-Audio] You didn't set the path to FFmpeg, you won't be able to convert .m3u8 to .mp3");
+        if (params.ffmpeg) {
+            params.ffmpeg.path = path.resolve(params.ffmpeg.path);
+            if (fs.existsSync(params.ffmpeg.path)) {
+                this.m3u8 = new m3u8(params.ffmpeg);
+            } else {
+                console.error("Can't find FFmpeg executable on", params.ffmpeg.path);
+            }
         }
+    }
+
+    async login () {
+        this.client = await new HTTPClient(this.vk).login(this.credits);
+
+        return {
+            audio: new Audio(this.client, this.vk),
+            playlists: new Playlists(this.client, this.vk),
+            search: new Search(this.client, this.vk),
+            artists: new Artists(this.client, this.vk),
+            recoms: new Recoms(this.client, this.vk),
+
+            vk: this.vk,
+            user: this.vk.user,
+            uploaded: this.vk.upload
+        };
     }
 
     async getAll (params = {}) {

@@ -7,7 +7,6 @@ const { DirectAuthorization } = require("@vk-io/authorization");
 
 const path = require("path");
 const AudioAPI = require("../index.js");
-const httpClient = require("../lib/http");
 
 let credits = require("../vk.json");
 
@@ -51,11 +50,8 @@ beforeAll(async () => {
         fs.writeFileSync("./vk.json", JSON.stringify(credits, null, 4));
     }
 
-    API = new AudioAPI(
-        await new httpClient({
-            ...new VK({ token: credits.token }),
-            user: credits.user
-        }).login(credits), { ffmpeg: { path: path.resolve("ffmpeg.exe") } });
+    const VKClient = new VK({ token: credits.token });
+    API = await new AudioAPI(VKClient, credits, { ffmpeg: { path: path.resolve("ffmpeg.exe") } }).login();
 });
 
 describe("AudioAPI", () => {
@@ -72,7 +68,7 @@ describe("AudioAPI", () => {
     // });
 
     // test("Get All Audios", async () => {
-    //     const audios = await API.getAll({ raw: true });
+    //     const audios = await API.audio.getAll({ raw: true });
     //     expect(audios).toBeTruthy();    
     // });
 

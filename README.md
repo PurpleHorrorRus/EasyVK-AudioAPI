@@ -37,18 +37,11 @@ Create an API
 const credits = {
     username: "xxxxxxxxxxx",
     password: "xxxxxxxxxxx",
-    user_id:  "xxxxxxxxxxx"
+    user:     "xxxxxxxxxxx" // Your user_id
 };
 
 const AudioAPI = require("easyvk-audio");
-const AudioHTTP = require("easyvk-audio/lib/http");
-
-const HTTPClient = await new AudioHTTP(({ // Later it will be rework
-    ...VKClient,
-    user: credits.user_id
-})).login(credits);
-
-const API = new AudioAPI(HTTPClient);
+const API = await new AudioHTTP(VKClient, credits).login();
 ```
 
 **You awesome!!**
@@ -59,23 +52,16 @@ const API = new AudioAPI(HTTPClient);
 const credits = {
     username: "xxxxxxxxxxx",
     password: "xxxxxxxxxxx",
-    token:    "xxxxxxxxxxx"
-    user_id:  "xxxxxxxxxxx"
+    token:    "xxxxxxxxxxx",
+    user:     "xxxxxxxxxxx" // Your user_id
 };
 
 const { VK } = require("vk-io");
-const VKClient = new VK({ token: credits.token });
-
 const AudioAPI = require("easyvk-audio");
-const AudioHTTP = require("easyvk-audio/lib/http");
 
 const run = async () => {
-    const HTTPClient = await new AudioHTTP(({ // Later it will be rework
-        ...VKClient,
-        user: credits.user_id
-    })).login(credits);
-
-    const API = new AudioAPI(HTTPClient);
+    const VKClient = new VK({ token: credits.token });
+    const API = await new AudioAPI(VKClient, credits).login();
 
     const { audios: my_audios, count } = await API.audio.getAll();
     console.log(my_audios);
@@ -155,14 +141,11 @@ You just need:
 
 Example:
 ```javascript
-const HTTPClient = await new AudioHTTP(({ // Later it will be rework
-    ...VKClient,
-    user: credits.user_id
-})).login(credits, {
+const API = await new AudioAPI(VKClient, credits, {
     ffmpeg: {
         path: "Path to ffmpeg.exe"
     }
-});
+}).login();
 ```
 
 Otherwise, if you do not use FFmpeg, then EasyVK-Audio will advise you to use it anyway. This is to provide a 100% guarantee for fetching audio links.
