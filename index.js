@@ -34,13 +34,13 @@ class AudioAPI extends Static {
             ...params
         });
 
-        return {
-            audio: new Audio(this.client, this.vk),
-            playlists: new Playlists(this.client, this.vk),
-            search: new Search(this.client, this.vk),
-            artists: new Artists(this.client, this.vk),
-            recoms: new Recoms(this.client, this.vk)
-        };
+        this.audio = new Audio(this.client, this.vk),
+        this.playlists = new Playlists(this.client, this.vk),
+        this.search = new Search(this.client, this.vk),
+        this.artists = new Artists(this.client, this.vk),
+        this.recoms = new Recoms(this.client, this.vk);
+
+        return this;
     }
 
     async getAll (params = {}) {
