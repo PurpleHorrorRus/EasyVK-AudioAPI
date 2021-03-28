@@ -12,6 +12,7 @@ class AudioAPI extends Static {
         super({}, vk, params);
         this.vk = { ...vk, user: credits.user };
         this.credits = credits;
+        this.params = params;
     }
 
     async login (params = {}) {
@@ -20,11 +21,11 @@ class AudioAPI extends Static {
             ...params
         });
 
-        this.audio = new Audio(this.client, this.vk),
-        this.playlists = new Playlists(this.client, this.vk),
-        this.search = new Search(this.client, this.vk),
-        this.artists = new Artists(this.client, this.vk),
-        this.recoms = new Recoms(this.client, this.vk);
+        this.audio = new Audio(this.client, this.vk, this.params),
+        this.playlists = new Playlists(this.client, this.vk, this.params),
+        this.search = new Search(this.client, this.vk, this.params),
+        this.artists = new Artists(this.client, this.vk, this.params),
+        this.recoms = new Recoms(this.client, this.vk, this.params);
 
         return this;
     }
