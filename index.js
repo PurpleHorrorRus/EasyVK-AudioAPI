@@ -1,8 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
-const m3u8 = require("./lib/requests/audio_m3u8");
-
 const Static = require("./lib/static");
 
 const HTTPClient = require("./lib/http");
@@ -14,18 +9,9 @@ const Artists = require("./lib/requests/artists");
 const Recoms = require("./lib/requests/recoms");
 class AudioAPI extends Static {
     constructor (vk, credits, params = {}) {
-        super({}, vk);
+        super({}, vk, params);
         this.vk = { ...vk, user: credits.user };
         this.credits = credits;
-
-        if (params.ffmpeg) {
-            params.ffmpeg.path = path.resolve(params.ffmpeg.path);
-            if (fs.existsSync(params.ffmpeg.path)) {
-                this.m3u8 = new m3u8(params.ffmpeg);
-            } else {
-                console.error("Can't find FFmpeg executable on", params.ffmpeg.path);
-            }
-        }
     }
 
     async login (params = {}) {
