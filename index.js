@@ -7,11 +7,14 @@ const Playlists = require("./lib/requests/playlists");
 const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
 const Recoms = require("./lib/requests/recoms");
+
+const Promise = require("bluebird");
 class AudioAPI extends Static {
     constructor (vk, credits, params = {}) {
         super({}, vk, params);
         this.vk = { ...vk, user: credits.user };
         this.credits = credits;
+        this.user = credits.user;
         this.params = params;
     }
 
@@ -49,17 +52,14 @@ class AudioAPI extends Static {
             section: "updates"
         });
 
-        let list = [];
-        const { playlists } = payload[1][1];
-
-        const map = playlists.map(e => e.list).filter(e => e.length);
-        map.forEach(e => e.length ? list = [...list, ...e] : list = [...list, e]);
-
-        const audios = params.raw
-            ? this.audio.getRawAudios(list)
-            : await this.audio.parse(list, params);
-
-        return audios;
+        try {
+            return await Promise.map(payload[1][1].playlists, async playlist => ({
+                owner_id: playlist.ownerId,
+                audios: params.raw ? this.audio.getRawAudios(playlist.list) : await this.audio.parse(playlist.list, params)
+            }));
+        } catch (e) {
+            return [];
+        }
     }
 
     // --------------------- STATUS ----------------------
