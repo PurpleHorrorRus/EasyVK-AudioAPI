@@ -2,7 +2,7 @@
 
 This is an unofficial Audio API for VK. Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
 
-See CHANGELOG.md
+See [CHANGELOG.md](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/blob/meridius/CHANGELOG.md)
 
 # Installation
 
@@ -108,10 +108,10 @@ VK uses .m3u8 file formats for music. So you can use [hls.js](https://github.com
 
 Example:
 ```javascript
-const hlsjs = require("hls.js");
+const Hls = require("hls.js");
 
 const sound = new Audio();
-const hls = new hlsjs();
+const hls = new Hls();
 
 const { audios } = await API.audio.get({ raw: true });
 const parsed = await API.audio.parse([audio[0].raw]);
@@ -121,7 +121,7 @@ hls.on(hlsjs.Events.MEDIA_ATTACHED, hls.loadSource(parsed[0].url));
 
 sound.addEventListener("canplaythrough", () => sound.play());
 ```
-## Downloading audio
+## Downloading audio (Breaking Change from 1.2.0)
 
 Also you can fetch .m3u8 links manually using ffmpeg. See example:
 
