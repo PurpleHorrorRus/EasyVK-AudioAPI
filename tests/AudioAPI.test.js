@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 const fs = require("fs");
 const readline = require("readline");
+const path = require("path");
 
 const { VK, CallbackService } = require("vk-io");
 const { DirectAuthorization } = require("@vk-io/authorization");
 
-const path = require("path");
 const AudioAPI = require("../index.js");
 
 let credits = require("../vk.json");
@@ -51,7 +51,7 @@ beforeAll(async () => {
     }
 
     const VKClient = new VK({ token: credits.token });
-    API = await new AudioAPI(VKClient, credits, { ffmpeg: { path: path.resolve("ffmpeg.exe") } }).login();
+    API = await new AudioAPI(VKClient, credits).login();
 });
 
 describe("AudioAPI", () => {
@@ -68,7 +68,7 @@ describe("AudioAPI", () => {
     // });
 
     // test("Get All Audios", async () => {
-    //     const audios = await API.audio.getAll({ raw: true });
+    //     const audios = await API.audio.getAll();
     //     expect(audios).toBeTruthy();    
     // });
 
@@ -78,22 +78,44 @@ describe("AudioAPI", () => {
     //         raw: true
     //     });
 
-    //     const [full] = await API.audio.parse([audios[0].raw], { rawLinks: true });
-    //     const parsed = await API.m3u8.get(full.url);
-
-    //     expect(parsed).toBeTruthy();
+    //     const [full] = await API.audio.parse([audios[0].raw]);
+    //     expect(full).toBeTruthy();
     // });
 
-    // test("Get Audios m3u8 buffer", async () => { // Лютая хрень, но работет
-    //     const { audios } = await API.audio.get({
-    //         count: 2,
-    //         raw: true
-    //     });
+    // test("Download Audio (Buffer)", async () => {
+    //     const { audios } = await API.audio.get({ count: 1 });
 
-    //     const parsed = await API.audio.parse([audios[0].raw]);
-    //     const buffer = await parsed[0].url;
+    //     API.hls.once("processing", () => console.log("Start processing file using ffmpeg..."));
+    //     API.hls.on("progress", answer => console.log(answer));
+
+    //     const buffer = await API.hls.download(
+    //         audios[0].url, 
+    //         path.resolve("ffmpeg.exe"), 
+    //         path.resolve("hls", "result"),
+    //         { chunksFolder: path.resolve("hls") }
+    //     );
 
     //     expect(Buffer.isBuffer(buffer)).toBe(true);
+    // });
+
+    // test("Download Audio (Output Path)", async () => {
+    //     const { audios } = await API.audio.get({ count: 1 });
+
+    //     API.hls.once("processing", () => console.log("Start processing file using ffmpeg..."));
+    //     API.hls.on("progress", answer => console.log(answer));
+
+    //     const output = await API.hls.download(
+    //         audios[0].url, 
+    //         path.resolve("ffmpeg.exe"), 
+    //         path.resolve("hls", "result"),
+    //         { 
+    //             // name: "Persona 3 OST - Mass Destruction",
+    //             chunksFolder: path.resolve("hls"),
+    //             delete: false
+    //         }
+    //     );
+
+    //     expect(output).toBeTruthy();
     // });
 
     // test("Get Raw Audios", async () => {

@@ -2,6 +2,8 @@
 
 This is an unofficial Audio API for VK. Works as an extension for the library. This API using in [Meridius](https://github.com/PurpleHorrorRus/Meridius) project.
 
+See CHANGELOG.md
+
 # Installation
 
 Install [VK-IO](https://www.npmjs.com/package/vk-io) via npm or yarn
@@ -15,9 +17,9 @@ npm install vk-io
 Install AudioAPI package
 
 ```bash
-yarn add https://github.com/PurpleHorrorRus/EasyVK-AudioAPI#standalone
+yarn add https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 // or
-npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI#standalone
+npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 ```
 
 Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/meridius) branch rather than #master
@@ -119,48 +121,30 @@ hls.on(hlsjs.Events.MEDIA_ATTACHED, hls.loadSource(parsed[0].url));
 
 sound.addEventListener("canplaythrough", () => sound.play());
 ```
+## Downloading audio
 
-## Processing .m3u8 using FFmpeg for downloading
-
-Sometimes VK returns links to .m3u8 files that cannot be converted into a direct link before .mp3. It is for such cases that you need to use FFmpeg for processing.
-
-This method will not affect links that can be explicitly converted.
-
-To do this, EasyVK-Audio does the following:
-1. Get a link to the .m3u8 file.
-2. Parse all links in the .m3u8 file.
-3. Download all files from the links and decrypt them using the encryption key.
-4. Using FFmpeg, it combines all files into one .mp3 file without additional compression.
-5. Converts .mp3 file to Buffer object and deletes all previous files.
-
-One such conversion takes about 3 seconds. I recommend manually caching the received buffer (to base64 or own .mp3 file) to avoid re-converting.
-
-You just need:
-1. Download FFmpeg binaries (one ffmpeg.exe is enough) from any reliable source.
-2. Specify the path to ffmpeg.exe in the parameters for creating an instance of AudioAPI.
-
-Example:
-```javascript
-const API = await new AudioAPI(VKClient, credits, {
-    ffmpeg: {
-        path: "Path to ffmpeg.exe"
-    }
-}).login();
-```
-
-Otherwise, if you do not use FFmpeg, then EasyVK-Audio will advise you to use it anyway. This is to provide a 100% guarantee for fetching audio links.
-
-## Manually processing
-
-Also you can fetch .m3u8 links manually. See example:
+Also you can fetch .m3u8 links manually using ffmpeg. See example:
 
 ```javascript
-const { audios } = await API.audio.get({ raw: true });
-const [full] = await API.audio.parse([audio], { rawLinks: true });
-const parsed = await API.m3u8.get(full.url);
+const { audios } = await API.audio.get();
+
+// Events
+API.hls.once("processing", () => console.log("Start processing..."));
+API.hls.on("progress", progress => console.log(progress));
+
+const output = await API.hls.download(audios[0].url, ffmpegPath, outputPath, params?);
 ```
 
-You can add ```rawLinks: true``` params to any request.
+Params object:
+
+```typescript
+params = {
+    name: string, // name of output file
+    chunksFolder: string, // folder to store downloaded chunks. Chunks deletes automatically after processing
+    delete: boolean // resolve buffer and delete output file
+};
+```
+
 
 ### Now let's see each part.
 
