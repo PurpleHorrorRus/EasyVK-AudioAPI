@@ -1,7 +1,6 @@
 const Static = require("./lib/static");
 
 const HTTPClient = require("./lib/http");
-const Hls = require("./lib/hls");
 
 const Audio = require("./lib/requests/audio");
 const Playlists = require("./lib/requests/playlists");
@@ -30,7 +29,6 @@ class AudioAPI extends Static {
         this.search = new Search(this.client, this.vk, this.params),
         this.artists = new Artists(this.client, this.vk, this.params),
         this.recoms = new Recoms(this.client, this.vk, this.params);
-        this.hls = new Hls();
 
         return this;
     }

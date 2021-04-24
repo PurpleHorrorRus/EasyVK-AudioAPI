@@ -126,22 +126,27 @@ sound.addEventListener("canplaythrough", () => sound.play());
 Also you can fetch .m3u8 links manually using ffmpeg. See example:
 
 ```javascript
+import AudioAPIHLS from "easyvk-audio/lib/hls";
+
 const { audios } = await API.audio.get();
 
-// Events
-API.hls.once("processing", () => console.log("Start processing..."));
-API.hls.on("progress", progress => console.log(progress));
+const instance = new AudioAPIHLS(params?);
 
-const output = await API.hls.download(audios[0].url, ffmpegPath, outputPath, params?);
+// Events
+instance.once("processing", () => console.log("Start processing..."));
+instance.on("progress", progress => console.log(progress));
+
+const output = await instance.download(audios[0].url, ffmpegPath, outputPath);
 ```
 
 Params object:
 
 ```typescript
 params = {
-    name: string, // name of output file
-    chunksFolder: string, // folder to store downloaded chunks. Chunks deletes automatically after processing
-    delete: boolean // resolve buffer and delete output file
+    name: string, // name of output file (default: name of first chunk's file)
+    chunksFolder: string, // folder to store downloaded chunks. Chunks deletes automatically after processing (default: "hls")
+    delete: boolean, // resolve buffer and delete output file (default: false)
+    concurrency: Number // number of parallel downloadings (default: 5)
 };
 ```
 

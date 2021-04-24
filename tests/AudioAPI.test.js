@@ -7,6 +7,7 @@ const { VK, CallbackService } = require("vk-io");
 const { DirectAuthorization } = require("@vk-io/authorization");
 
 const AudioAPI = require("../index.js");
+const AudioAPIHLS = require("../lib/hls");
 
 let credits = require("../vk.json");
 
@@ -101,18 +102,19 @@ describe("AudioAPI", () => {
     // test("Download Audio (Output Path)", async () => {
     //     const { audios } = await API.audio.get({ count: 1 });
 
-    //     API.hls.once("processing", () => console.log("Start processing file using ffmpeg..."));
-    //     API.hls.on("progress", answer => console.log(answer));
+    //     const instance = new AudioAPIHLS({ 
+    //         name: "Persona 3 OST - Mass Destruction",
+    //         chunksFolder: path.resolve("hls"),
+    //         delete: false
+    //     });
 
-    //     const output = await API.hls.download(
+    //     instance.once("processing", () => console.log("Start processing file using ffmpeg..."));
+    //     instance.on("progress", answer => console.log(answer));
+
+    //     const output = await instance.download(
     //         audios[0].url, 
     //         path.resolve("ffmpeg.exe"), 
-    //         path.resolve("hls", "result"),
-    //         { 
-    //             // name: "Persona 3 OST - Mass Destruction",
-    //             chunksFolder: path.resolve("hls"),
-    //             delete: false
-    //         }
+    //         path.resolve("hls", "result")
     //     );
 
     //     expect(output).toBeTruthy();

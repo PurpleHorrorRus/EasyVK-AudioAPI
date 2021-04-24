@@ -1,5 +1,17 @@
 # [EasyVK-Audio] Changelog
 
+## 1.2.1
+
+**BREAKING CHANGES**:
+
+* Downloader module (hls) now working as separate part. Now you must manually import and create new instance. See updated [README.md](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/blob/meridius/README.md) for details
+* Params for download also moved to instance constructor
+
+**Other**:
+
+* Added new params field: ```concurrency``` (default: 5). You can set the number of parallel downloads manually 
+* Decryption key now storing in instance instead of chunks
+
 ## 1.2.0
 
 **BREAKING CHANGES**:
