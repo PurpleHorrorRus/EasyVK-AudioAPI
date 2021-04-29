@@ -177,6 +177,7 @@ params = {
 | ```getById``` | owner_id<br/>playlist_id<br/>list?<br/>access_hash?<br/>count? | The same as ```getPlaylist()```, but better for getting of user/community playlists. You can to specify count in params to splice audios in list for faster loading |
 | ```getCount```| owner_id? | Return the count of playlists of user/community |
 | ```getByBlock```| block<br/>section? | Return playlists by block and section |
+| ```getFromWall```| owner_id?<br/>playlist_id | Fetching playlist from wall |
 | ```create```| title<br/>description?<br/>cover? | Create new playlist.<br/>Cover must be a path to cover file |
 | ```edit```| playlist_id<br/>title?<br/>description?<br/>cover? | Edit the existing playlist |
 | ```delete```| Playlist object | Delete playlist |

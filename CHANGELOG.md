@@ -1,5 +1,10 @@
 # [EasyVK-Audio] Changelog
 
+## 1.2.2
+
+* Add new API.playlists.getFromWall() request
+* Fix playlists deleting
+
 ## 1.2.1
 
 **BREAKING CHANGES**:

@@ -258,6 +258,15 @@ describe("Playlists", () => {
     //     expect(result).toBeTruthy();
     // });
 
+    // test("Get Playlist From Wall", async () => {
+    //     const playlist = await API.playlists.getFromWall({
+    //         owner_id: -9125493,
+    //         playlist_id: 62695084
+    //     });
+
+    //     expect(playlist).toBeTruthy();
+    // });
+
     // test("Create playlist", async () => {
     //     const cover_path = "./pic.jpg";
 
