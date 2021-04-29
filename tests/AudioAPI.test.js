@@ -270,6 +270,12 @@ describe("Playlists", () => {
     //     expect(result).toBeTruthy();
     // });
 
+    // test("Delete Playlist", async () => {
+    //     const { playlists } = await API.playlists.get();
+    //     const deleted = await API.playlists.delete(playlists[1]);
+    //     expect(deleted).toBe(true);
+    // });
+
     // test("Edit", async () => {
     //     const cover_path = "PUT PATH HERE";
 
@@ -362,7 +368,7 @@ describe("Search Engine", () => {
     //     });
     // });
 
-    // describe("Artists", () => {
+    describe("Artists", () => {
     //     test("Get Artist", async () => {
     //         const result = await API.artists.get({ 
     //             artist: "Queen",
@@ -371,39 +377,39 @@ describe("Search Engine", () => {
     //         expect(result).toBeTruthy();
     //     });
 
-    //     test("Get Artist Top Songs", async () => {
-    //         const result = await API.search.more("artist/queen/top_audios", { 
-    //             raw: true
-    //         });
-    //         expect(result).toBeTruthy();
-    //     });
+        //     test("Get Artist Top Songs", async () => {
+        //         const result = await API.search.more("artist/queen/top_audios", { 
+        //             raw: true
+        //         });
+        //         expect(result).toBeTruthy();
+        //     });
     
-    //     test("Get More Artist Top Songs", async () => {
-    //         let result = await API.search.more("artist/queen/top_audios", { raw: true });
+        //     test("Get More Artist Top Songs", async () => {
+        //         let result = await API.search.more("artist/queen/top_audios", { raw: true });
 
-    //         result = await API.search.more("artist/queen/top_audios", {
-    //             start_from: result.start_from,
-    //             raw: true
-    //         });
+        //         result = await API.search.more("artist/queen/top_audios", {
+        //             start_from: result.start_from,
+        //             raw: true
+        //         });
 
-    //         expect(result).toBeTruthy();
-    //     });
+        //         expect(result).toBeTruthy();
+        //     });
 
-    //     test("Get Artist Playlists", async () => {
-    //         const result = await API.search.morePlaylists("artist/queen/albums");
-    //         expect(result).toBeTruthy();
-    //     });
+        //     test("Get Artist Playlists", async () => {
+        //         const result = await API.search.morePlaylists("artist/queen/albums");
+        //         expect(result).toBeTruthy();
+        //     });
  
-    //     test("Get More Artist Playlists", async () => {
-    //         let result = await API.search.morePlaylists("artist/queen/albums");
+        //     test("Get More Artist Playlists", async () => {
+        //         let result = await API.search.morePlaylists("artist/queen/albums");
 
-    //         result = await API.search.morePlaylists("artist/queen/albums", { 
-    //             start_from: result.start_from 
-    //         });
+        //         result = await API.search.morePlaylists("artist/queen/albums", { 
+        //             start_from: result.start_from 
+        //         });
 
     //         expect(result).toBeTruthy();
     //     });
-    // });
+    });
 
     describe("Recoms", () => {
         // test("Load", async () => {
