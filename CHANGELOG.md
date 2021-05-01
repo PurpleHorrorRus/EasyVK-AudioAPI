@@ -1,5 +1,11 @@
 # [EasyVK-Audio] Changelog
 
+## 1.2.3
+
+* Add chart field to songs from VK Charts
+* Fix for charts loading
+* Now lyrics_id is always include in song object. Value 0 means there is no lyrics for song
+
 ## 1.2.2
 
 * Add new API.playlists.getFromWall() request

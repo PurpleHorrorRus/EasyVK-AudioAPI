@@ -58,13 +58,14 @@ beforeAll(async () => {
 describe("AudioAPI", () => {
     // test("Get Audios", async () => {
     //     const audios = await API.audio.get({ raw: true });
+        
+    //     expect(audios).toBeTruthy();
 
     //     const next = await API.audio.get({
     //         more: audios.more,
     //         raw: true
     //     });
         
-    //     expect(audios).toBeTruthy();
     //     expect(next).toBeTruthy();
     // });
 
@@ -443,6 +444,11 @@ describe("Search Engine", () => {
         //     const results = await API.recoms.newAlbums({ raw: true });
         
         //     expect(results).toBeTruthy(); 
+        // });
+
+        // test("Get Chart", async () => {
+        //     const chart = await API.recoms.chart({ raw: true });
+        //     expect(chart).toBeTruthy();
         // });
 
         // test("Load Explore", async () => {
