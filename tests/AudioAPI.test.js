@@ -379,13 +379,10 @@ describe("Search Engine", () => {
     // });
 
     describe("Artists", () => {
-    //     test("Get Artist", async () => {
-    //         const result = await API.artists.get({ 
-    //             artist: "Queen",
-    //             raw: true
-    //         });
-    //         expect(result).toBeTruthy();
-    //     });
+        // test("Get Artist", async () => {
+        //     const result = await API.artists.get("Queen", { raw: true });  
+        //     expect(result).toBeTruthy();
+        // });
 
         //     test("Get Artist Top Songs", async () => {
         //         const result = await API.search.more("artist/queen/top_audios", { 

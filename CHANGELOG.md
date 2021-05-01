@@ -1,5 +1,11 @@
 # [EasyVK-Audio] Changelog
 
+## 1.2.4
+
+**BREAKING CHANGES**:
+
+* Changes in ```artists.get``` request. Now you need pass artist endpoint as first argument and params as second. See updated README and unit tests.
+
 ## 1.2.3
 
 * Add chart field to songs from VK Charts

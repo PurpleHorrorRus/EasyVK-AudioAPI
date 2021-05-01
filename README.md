@@ -150,7 +150,6 @@ params = {
 };
 ```
 
-
 ### Now let's see each part.
 
 ## Audio
@@ -203,9 +202,9 @@ Pay your attention to ```more``` object!
 
 ## Artists
 
-| Function  | Params | Description |
+| Function  | Arguments | Description |
 | :-----    | :--:   | :------     |
-| ```get```| artist | Get artist page. Returns the popular audios and playlists.<br/>artist param must be an endpoint, not full name. You can get endpoint at ```link``` field of ```search.query``` for example |
+| ```get```| artist<br/>params? | Get artist page. Returns the popular audios and playlists.<br/>artist param must be an endpoint, not full name. You can get endpoint at ```link``` field of ```search.query``` for example. You can specify ```list: false``` in params to fetch artist information only |
 
 You can see how to get full list of audio or playlists of artist in jest testing file.
 
