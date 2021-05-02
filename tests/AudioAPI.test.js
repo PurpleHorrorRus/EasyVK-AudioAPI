@@ -458,14 +458,14 @@ describe("Recoms", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    // test("Get Artists", async () => {
-    //     const results = await API.recoms.artists();
+    test("Get Artists", async () => {
+        const results = await API.recoms.artists();
         
-    //     expect(results).toBeTruthy();
+        expect(results).toBeTruthy();
 
-    //     const full = await API.recoms.allArtists(results.type);
-    //     expect(full).toBeTruthy();
-    // });
+        const full = await API.recoms.allArtists(results.type);
+        expect(full).toBeTruthy();
+    });
 
     // test("Get Daily", async () => {
     //     const results = await API.recoms.daily({ raw: true });
