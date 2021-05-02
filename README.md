@@ -206,6 +206,7 @@ Pay your attention to ```more``` object!
 | :-----    | :--:   | :------     |
 | ```get```| artist<br/>params? | Get artist page. Returns the popular audios, playlists collections, similar artists.<br/>artist param must be an endpoint, not full name. You can get endpoint at ```link``` field of ```search.query``` for example. You can specify ```list: false``` in params to fetch artist information only |
 | ```collections```| link | Parse collections inside collections page |
+| ```similar``` | artist | Get similar artists |
 
 You can see how to get full list of audio or playlists of artist in jest testing file.
 

@@ -369,6 +369,11 @@ describe("Artists", () => {
     //     expect(result).toBeTruthy();
     // });
 
+    // test("Get Similar Artists", async () => {
+    //     const result = await API.artists.similar("Queen");
+    //     expect(result).toBeTruthy();
+    // });
+
     // test("Get Artist's Collecitons", async () => {
     //     const artist = await API.artists.get("multiverse", { raw: true });  
     //     const releases = await API.artists.collections(artist.collections[0].link);

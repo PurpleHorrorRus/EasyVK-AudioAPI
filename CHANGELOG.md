@@ -1,5 +1,9 @@
 # [EasyVK-Audio] Changelog
 
+## 1.3.1
+
+* Added ```artist.similar``` request
+
 ## 1.3.0
 
 * Added artist's collections (releases, singles, etc)
