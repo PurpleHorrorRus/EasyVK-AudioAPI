@@ -412,10 +412,10 @@ describe("Recoms", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    test("Get Collections", async () => {
-        const results = await API.recoms.collections();
-        expect(results).toBeTruthy();
-    });
+    // test("Get Collections", async () => {
+    //     const results = await API.recoms.collections();
+    //     expect(results).toBeTruthy();
+    // });
 
     // test("Get Playlists", async () => {
     //     const playlists = await API.recoms.playlists();
@@ -426,8 +426,7 @@ describe("Recoms", () => {
     // });
 
     // test("Get New Albums", async () => {
-    //     const results = await API.recoms.newAlbums({ raw: true });
-        
+    //     const results = await API.recoms.newAlbums();
     //     expect(results).toBeTruthy(); 
     // });
 
@@ -458,14 +457,14 @@ describe("Recoms", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    test("Get Artists", async () => {
-        const results = await API.recoms.artists();
+    // test("Get Artists", async () => {
+    //     const results = await API.recoms.artists();
         
-        expect(results).toBeTruthy();
+    //     expect(results).toBeTruthy();
 
-        const full = await API.recoms.allArtists(results.type);
-        expect(full).toBeTruthy();
-    });
+    //     const full = await API.recoms.allArtists(results.type);
+    //     expect(full).toBeTruthy();
+    // });
 
     // test("Get Daily", async () => {
     //     const results = await API.recoms.daily({ raw: true });
