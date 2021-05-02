@@ -1,5 +1,10 @@
 # [EasyVK-Audio] Changelog
 
+## 1.2.5
+
+* Added ```feat``` field to song object
+* Revert ```lyrics_id``` as a required field. Also for fields ```artists, fields, chart```
+
 ## 1.2.4
 
 **BREAKING CHANGES**:

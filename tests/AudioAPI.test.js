@@ -443,8 +443,21 @@ describe("Search Engine", () => {
         //     expect(results).toBeTruthy(); 
         // });
 
+        // test("Get New Relaeses", async () => {
+        //     const releases = await API.recoms.newReleases({
+        //         count: 6,
+        //         raw: true
+        //     });
+
+        //     expect(releases).toBeTruthy();
+        // }); 
+
         // test("Get Chart", async () => {
-        //     const chart = await API.recoms.chart({ raw: true });
+        //     const chart = await API.recoms.chart({ 
+        //         count: 6,
+        //         raw: true
+        //     });
+
         //     expect(chart).toBeTruthy();
         // });
 
