@@ -146,12 +146,6 @@ describe("AudioAPI", () => {
     //     expect(result).toBeTruthy();
     // });
 
-    // test("Process Raw Audio Manually", async () => {
-    //     const raw = await API.audio.get({ raw: true });
-    //     const audio = await API.audio.parse([raw.audios[0].raw]);
-    //     expect(audio).toBeTruthy();
-    // });
-
     // test("Get More Audios", async () => {
     //     const { audios } = await API.audio.get({
     //         owner_id: -41670861,
@@ -161,16 +155,6 @@ describe("AudioAPI", () => {
     //         raw: true
     //     });
     //     expect(audios).toBeTruthy();
-    // });
-
-    // test("Get Playlist", async () => {
-    //     const playlist = await API.playlists.getPlaylist({ 
-    //         playlist_id: 5, 
-    //         list: true,
-    //         raw: true
-    //     });
-
-    //     expect(playlist).toBeTruthy();
     // });
     
     // let add = null;
@@ -348,172 +332,175 @@ describe("Search Engine", () => {
     //     expect(results).toBeTruthy();
     // });
 
-    //     test("Audio search by offset", async () => {
-    //         const search = await API.search.query({ 
-    //             q: "Queen",
-    //             raw: true
-    //         });
-
-    //         const results = await API.audio.withMore({ 
-    //             more: search.more,
-    //             raw: true,
-    //             normalize: true
-    //         });
-
-    //         expect(results).toBeTruthy();
+    // test("Audio search by offset", async () => {
+    //     const search = await API.search.query({ 
+    //         q: "Queen",
+    //         raw: true
     //     });
 
-    //     test("Search Hints", async () => {
-    //         const results = await API.search.hints({ q: "Que" });
-    //         expect(results[0][1]).toBe("queen");
+    //     const results = await API.audio.withMore({ 
+    //         more: search.more,
+    //         raw: true,
+    //         normalize: true
     //     });
 
-    //     test("Search in audios", async () => {
-    //         const result = await API.search.inAudios({
-    //             owner_id: -41670861,
-    //             q: "Twil",
-    //             raw: true
-    //         });
-    //         expect(result).toBeTruthy();
-    //     });
+    //     expect(results).toBeTruthy();
     // });
 
-    describe("Artists", () => {
-        // test("Get Artist", async () => {
-        //     const result = await API.artists.get("Queen", { raw: true });  
-        //     expect(result).toBeTruthy();
-        // });
+    // test("Search Hints", async () => {
+    //     const results = await API.search.hints({ q: "Que" });
+    //     expect(results[0][1]).toBe("queen");
+    // });
 
-        //     test("Get Artist Top Songs", async () => {
-        //         const result = await API.search.more("artist/queen/top_audios", { 
-        //             raw: true
-        //         });
-        //         expect(result).toBeTruthy();
-        //     });
-    
-        //     test("Get More Artist Top Songs", async () => {
-        //         let result = await API.search.more("artist/queen/top_audios", { raw: true });
-
-        //         result = await API.search.more("artist/queen/top_audios", {
-        //             start_from: result.start_from,
-        //             raw: true
-        //         });
-
-        //         expect(result).toBeTruthy();
-        //     });
-
-        //     test("Get Artist Playlists", async () => {
-        //         const result = await API.search.morePlaylists("artist/queen/albums");
-        //         expect(result).toBeTruthy();
-        //     });
- 
-        //     test("Get More Artist Playlists", async () => {
-        //         let result = await API.search.morePlaylists("artist/queen/albums");
-
-        //         result = await API.search.morePlaylists("artist/queen/albums", { 
-        //             start_from: result.start_from 
-        //         });
-
-    //         expect(result).toBeTruthy();
+    // test("Search in audios", async () => {
+    //     const result = await API.search.inAudios({
+    //         owner_id: -41670861,
+    //         q: "Twil",
+    //         raw: true
     //     });
+
+    //     expect(result).toBeTruthy();
+    // });
+});
+
+describe("Artists", () => {
+    // test("Get Artist", async () => {
+    //     const result = await API.artists.get("Queen", { raw: true });  
+    //     expect(result).toBeTruthy();
+    // });
+
+    // test("Get Artist's Collecitons", async () => {
+    //     const artist = await API.artists.get("multiverse", { raw: true });  
+    //     const releases = await API.artists.collections(artist.collections[0].link);
+    //     const singles = await API.search.morePlaylists(releases[1].link);
+    //     expect(singles).toBeTruthy();
+    // });
+
+    // test("Get Artist Top Songs", async () => {
+    //     const result = await API.search.more("artist/queen/top_audios", { raw: true });
+    //     expect(result).toBeTruthy();
+    // });
+    
+    // test("Get More Artist Top Songs", async () => {
+    //     let result = await API.search.more("artist/queen/top_audios", { raw: true });
+
+    //     result = await API.search.more("artist/queen/top_audios", {
+    //         start_from: result.start_from,
+    //         raw: true
+    //     });
+
+    //     expect(result).toBeTruthy();
+    // });
+
+    // test("Get Artist Playlists", async () => {
+    //     const result = await API.search.morePlaylists("artist/multiverse/releases");
+    //     expect(result).toBeTruthy();
+    // });
+ 
+    // test("Get More Artist Playlists", async () => {
+    //     let result = await API.search.morePlaylists("artist/queen/albums");
+
+    //     result = await API.search.morePlaylists("artist/queen/albums", { start_from: result.start_from });
+
+    //     expect(result).toBeTruthy();
+    // });
+});
+
+describe("Recoms", () => {
+    // test("Load", async () => {
+    //     const results = await API.recoms.loadRecoms();
+    //     expect(results).toBeTruthy();
+    // });
+
+    test("Get Collections", async () => {
+        const results = await API.recoms.collections();
+        expect(results).toBeTruthy();
     });
 
-    describe("Recoms", () => {
-        // test("Load", async () => {
-        //     const results = await API.recoms.loadRecoms();
-        //     expect(results).toBeTruthy();
-        // });
+    // test("Get Playlists", async () => {
+    //     const playlists = await API.recoms.playlists();
+    //     expect(playlists).toBeTruthy();
 
-        // test("Get Collections", async () => {
-        //     const results = await API.recoms.collections();
-        //     expect(results).toBeTruthy();
-        // });
+    //     const full = await API.recoms.allPlaylists();
+    //     expect(full).toBeTruthy();
+    // });
 
-        // test("Get Playlists", async () => {
-        //     const playlists = await API.recoms.playlists();
-        //     expect(playlists).toBeTruthy();
-
-        //     const full = await API.recoms.allPlaylists();
-        //     expect(full).toBeTruthy();
-        // });
-
-        // test("Get New Albums", async () => {
-        //     const results = await API.recoms.newAlbums({ raw: true });
+    // test("Get New Albums", async () => {
+    //     const results = await API.recoms.newAlbums({ raw: true });
         
-        //     expect(results).toBeTruthy(); 
-        // });
+    //     expect(results).toBeTruthy(); 
+    // });
 
-        // test("Get New Relaeses", async () => {
-        //     const releases = await API.recoms.newReleases({
-        //         count: 6,
-        //         raw: true
-        //     });
+    // test("Get New Relaeses", async () => {
+    //     const releases = await API.recoms.newReleases({
+    //         count: 6,
+    //         raw: true
+    //     });
 
-        //     expect(releases).toBeTruthy();
-        // }); 
+    //     expect(releases).toBeTruthy();
+    // }); 
 
-        // test("Get Chart", async () => {
-        //     const chart = await API.recoms.chart({ 
-        //         count: 6,
-        //         raw: true
-        //     });
+    // test("Get Chart", async () => {
+    //     const chart = await API.recoms.chart({ 
+    //         count: 6,
+    //         raw: true
+    //     });
 
-        //     expect(chart).toBeTruthy();
-        // });
+    //     expect(chart).toBeTruthy();
+    // });
 
-        // test("Load Explore", async () => {
-        //     const results = await API.recoms.loadExplore({ 
-        //         count: 6, 
-        //         raw: true 
-        //     });
+    // test("Load Explore", async () => {
+    //     const results = await API.recoms.loadExplore({ 
+    //         count: 6, 
+    //         raw: true 
+    //     });
 
-        //     expect(results).toBeTruthy();
-        // });
+    //     expect(results).toBeTruthy();
+    // });
 
-        // test("Get Artists", async () => {
-        //     const results = await API.recoms.artists();
+    // test("Get Artists", async () => {
+    //     const results = await API.recoms.artists();
         
-        //     expect(results).toBeTruthy();
+    //     expect(results).toBeTruthy();
 
-        //     const full = await API.recoms.allArtists(results.type);
-        //     expect(full).toBeTruthy();
-        // });
+    //     const full = await API.recoms.allArtists(results.type);
+    //     expect(full).toBeTruthy();
+    // });
 
-        // test("Get Daily", async () => {
-        //     const results = await API.recoms.daily({ raw: true });
+    // test("Get Daily", async () => {
+    //     const results = await API.recoms.daily({ raw: true });
 
-        //     expect(results).toBeTruthy();
-        // });
+    //     expect(results).toBeTruthy();
+    // });
 
-        // test("Get Weekly", async () => {
-        //     const results = await API.recoms.weekly({ raw: true });
+    // test("Get Weekly", async () => {
+    //     const results = await API.recoms.weekly({ raw: true });
 
-        //     expect(results).toBeTruthy();
-        // });
+    //     expect(results).toBeTruthy();
+    // });
 
-        // test("Get New Songs", async () => {
-        //     const results = await API.search.getByBlock({ 
-        //         block: "new_songs",
-        //         section: "explore",
-        //         raw: true
-        //     });
+    // test("Get New Songs", async () => {
+    //     const results = await API.search.getByBlock({ 
+    //         block: "new_songs",
+    //         section: "explore",
+    //         raw: true
+    //     });
 
-        //     expect(results).toBeTruthy();
-        // });
+    //     expect(results).toBeTruthy();
+    // });
 
-        // test("Load By Block", async () => {
-        //     const results = await API.playlists.getByBlock({ 
-        //         block: "rap",
-        //         section: "explore",
-        //         raw: true
-        //     });
+    // test("Load By Block", async () => {
+    //     const results = await API.playlists.getByBlock({ 
+    //         block: "rap",
+    //         section: "explore",
+    //         raw: true
+    //     });
         
-        //     expect(results).toBeTruthy();
-        // });
+    //     expect(results).toBeTruthy();
+    // });
 
-        // test("Friend Updates", async () => {
-        //     const results = await API.getFriendsUpdates({ raw: true });
-        //     expect(results).toBeTruthy();
-        // });
-    });
+    // test("Friend Updates", async () => {
+    //     const results = await API.getFriendsUpdates({ raw: true });
+    //     expect(results).toBeTruthy();
+    // });
 });

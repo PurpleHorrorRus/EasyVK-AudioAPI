@@ -1,5 +1,10 @@
 # [EasyVK-Audio] Changelog
 
+## 1.3.0
+
+* Added artist's collections (releases, singles, etc)
+* Classes for parser is no longer hardcoded
+
 ## 1.2.5
 
 * Added ```feat``` field to song object
