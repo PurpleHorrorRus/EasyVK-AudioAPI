@@ -1,5 +1,9 @@
 # [EasyVK-Audio] Changelog
 
+## 1.3.2
+
+* The request ```search.morePlaylists``` no longer needs params
+
 ## 1.3.1
 
 * Added ```artist.similar``` request

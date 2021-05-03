@@ -403,10 +403,7 @@ describe("Artists", () => {
     // });
  
     // test("Get More Artist Playlists", async () => {
-    //     let result = await API.search.morePlaylists("artist/queen/albums");
-
-    //     result = await API.search.morePlaylists("artist/queen/albums", { start_from: result.start_from });
-
+    //     const result = await API.search.morePlaylists("artist/queen/albums");
     //     expect(result).toBeTruthy();
     // });
 });
