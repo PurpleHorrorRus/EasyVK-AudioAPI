@@ -347,6 +347,11 @@ describe("Search Engine", () => {
     //     expect(results).toBeTruthy();
     // });
 
+    // test("Extended Search", async () => {
+    //     const search = await API.search.queryExtended("Queen", { raw: true });
+    //     expect(search).toBeTruthy();
+    // });
+
     // test("Search Hints", async () => {
     //     const results = await API.search.hints({ q: "Que" });
     //     expect(results[0][1]).toBe("queen");
