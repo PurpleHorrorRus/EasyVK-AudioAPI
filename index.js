@@ -29,8 +29,7 @@ class AudioAPI extends Static {
         this.search = new Search(this.client, this.vk, this.params),
         this.artists = new Artists(this.client, this.vk, this.params),
         this.recoms = new Recoms(this.client, this.vk, this.params);
-
-        setTimeout(() => this.login(params), 60 * 1000 * 60);
+        
         return this;
     }
 
