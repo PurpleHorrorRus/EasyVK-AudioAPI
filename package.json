@@ -24,6 +24,7 @@
         "encoding": "^0.1.13",
         "eslint-plugin-jest": "^24.3.6",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
+        "form-data": "^4.0.0",
         "fs-extra": "^10.0.0",
         "jsdom": "^16.5.3",
         "m3u8-parser": "^4.6.0",
