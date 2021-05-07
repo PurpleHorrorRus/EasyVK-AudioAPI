@@ -21,6 +21,7 @@
         "@types/jest": "^26.0.23",
         "@vk-io/authorization": "^1.1.0",
         "bluebird": "^3.7.2",
+        "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
         "eslint-plugin-jest": "^24.3.6",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
