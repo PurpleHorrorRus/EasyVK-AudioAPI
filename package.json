@@ -19,7 +19,7 @@
     "license": "ISC",
     "dependencies": {
         "@types/jest": "^26.0.23",
-        "@vk-io/authorization": "^1.1.0",
+        "@vk-io/authorization": "^1.2.0",
         "bluebird": "^3.7.2",
         "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
@@ -28,18 +28,18 @@
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "form-data": "^4.0.0",
         "fs-extra": "^10.0.0",
-        "jsdom": "^16.5.3",
-        "m3u8-parser": "^4.6.0",
+        "jsdom": "^16.6.0",
+        "m3u8-parser": "^4.7.0",
         "node-fetch-progress": "^1.0.2",
         "node-fetch-retry": "^1.1.1",
-        "node-html-parser": "^3.3.0",
+        "node-html-parser": "^3.3.4",
         "node-machine-id": "^1.1.12",
         "tough-cookie": "4.0.0",
         "tough-cookie-file-store": "2.0.2",
-        "vk-io": "^4.2.0"
+        "vk-io": "^4.3.0"
     },
     "devDependencies": {
-        "eslint": "^7.26.0",
-        "jest": "^26.6.3"
+        "eslint": "^7.27.0",
+        "jest": "^27.0.4"
     }
 }
