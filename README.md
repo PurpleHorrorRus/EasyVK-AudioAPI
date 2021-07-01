@@ -43,7 +43,7 @@ const credits = {
 };
 
 const AudioAPI = require("easyvk-audio");
-const API = await new AudioHTTP(VKClient, credits).login();
+const API = await new AudioHTTP(VKClient).login(credits);
 ```
 
 **You awesome!!**

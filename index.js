@@ -10,17 +10,21 @@ const Recoms = require("./lib/requests/recoms");
 
 const Promise = require("bluebird");
 class AudioAPI extends Static {
-    constructor (vk, credits, params = {}) {
+    constructor (vk, params = {}) {
         super({}, vk, params);
-        this.vk = { ...vk, user: credits.user };
-        this.credits = credits;
-        this.user = credits.user;
+        this.vk = vk;
         this.params = params;
     }
 
-    async login (params = {}) {
+    async login (credits, params = {}) {
+        if (!credits || !credits.username || !credits.password || !credits.user) {
+            throw new Error("You must to provide valid credits");
+        }
+
+        this.vk.user = this.user = credits.user;
+
         this.client = await new HTTPClient(this.vk).login({
-            ...this.credits,
+            ...credits,
             ...params
         });
 
