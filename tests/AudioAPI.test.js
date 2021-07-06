@@ -52,13 +52,12 @@ beforeAll(async () => {
     }
 
     const VKClient = new VK({ token: credits.token });
-    API = await new AudioAPI(VKClient, credits).login();
+    API = await new AudioAPI(VKClient).login(credits);
 });
 
 describe("AudioAPI", () => {
     // test("Get Audios", async () => {
     //     const audios = await API.audio.get({ raw: true });
-        
     //     expect(audios).toBeTruthy();
 
     //     const next = await API.audio.get({

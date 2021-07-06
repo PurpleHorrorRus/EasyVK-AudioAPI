@@ -17,10 +17,6 @@ class AudioAPI extends Static {
     }
 
     async login (credits, params = {}) {
-        if (!credits || !credits.username || !credits.password || !credits.user) {
-            throw new Error("You must to provide valid credits");
-        }
-
         this.vk.user = this.user = credits.user;
 
         this.client = await new HTTPClient(this.vk).login({
