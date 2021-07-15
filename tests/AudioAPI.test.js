@@ -52,7 +52,7 @@ beforeAll(async () => {
     }
 
     const VKClient = new VK({ token: credits.token });
-    API = await new AudioAPI(VKClient).login(credits);
+    API = await new AudioAPI(VKClient).login(credits, { cookies: "./cookie.json" });
 });
 
 describe("AudioAPI", () => {
