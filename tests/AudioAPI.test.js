@@ -103,6 +103,7 @@ describe("AudioAPI", () => {
     //     const { audios } = await API.audio.get({ count: 1 });
 
     //     const instance = new AudioAPIHLS({ 
+    //         ffmpegPath: path.resolve("ffmpeg.exe"),
     //         name: "Persona 3 OST - Mass Destruction",
     //         chunksFolder: path.resolve("hls"),
     //         delete: false
@@ -113,7 +114,6 @@ describe("AudioAPI", () => {
 
     //     const output = await instance.download(
     //         audios[0].url, 
-    //         path.resolve("ffmpeg.exe"), 
     //         path.resolve("hls", "result")
     //     );
 

@@ -3,8 +3,10 @@
 ## 1.4.0
 
 **BREAKING CHANGES**
+See README and tests for more examples.
 
-* You must to provide credits to ```.login()``` function. See README for examples.
+* You must to provide credits to ```.login()``` function.
+* FFmpeg path is now specified in instance of HLS.
 
 **Changes**
 
