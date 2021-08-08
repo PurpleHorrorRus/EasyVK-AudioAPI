@@ -63,7 +63,7 @@ const AudioAPI = require("easyvk-audio");
 
 const run = async () => {
     const VKClient = new VK({ token: credits.token });
-    const API = await new AudioAPI(VKClient, credits).login();
+    const API = await new AudioAPI(VKClient).login(credits);
 
     const { audios: my_audios, count } = await API.audio.getAll();
     console.log(my_audios);
