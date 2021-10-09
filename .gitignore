@@ -112,3 +112,4 @@ ffmpeg.exe
 test.mp3
 hls
 cookie.json
+tests/inline.js
