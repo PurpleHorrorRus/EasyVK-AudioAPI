@@ -26,7 +26,7 @@
         "bluebird": "^3.7.2",
         "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
-        "eslint-plugin-jest": "^25.0.5",
+        "eslint-plugin-jest": "^25.2.2",
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "form-data": "^4.0.0",
@@ -42,7 +42,7 @@
         "vk-io": "4.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.0.0",
-        "jest": "^27.2.5"
+        "eslint": "^8.1.0",
+        "jest": "^27.3.1"
     }
 }
