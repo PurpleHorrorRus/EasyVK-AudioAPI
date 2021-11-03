@@ -64,7 +64,6 @@ describe("AudioAPI", () => {
     //         more: audios.more,
     //         raw: true
     //     });
-        
     //     expect(next).toBeTruthy();
     // });
 
@@ -206,7 +205,7 @@ describe("AudioAPI", () => {
 
     // test("Upload Audio", async () => {
     //     const path = "PUT PATH HERE";
-    //     const saved = await API.audio.uploadAudio(path);
+    //     const saved = await API.audio.upload(path);
     //     expect(saved).toBeTruthy();
     // });
 });
@@ -284,7 +283,9 @@ describe("Playlists", () => {
 
     // test("Add song to playlist", async () => {
     //     const { audios } = await API.audio.get();
-    //     const { playlists } = await API.playlists.get();
+    //     let { playlists } = await API.playlists.get();
+    //     playlists = playlists.filter(playlist => playlist.owner_id === credits.user);
+
     //     const result = await API.playlists.addSong(audios[0], playlists[0]);
     //     expect(result).toBe(true);
     // });
@@ -392,12 +393,7 @@ describe("Artists", () => {
     
     // test("Get More Artist Top Songs", async () => {
     //     let result = await API.search.more("artist/queen/top_audios", { raw: true });
-
-    //     result = await API.search.more("artist/queen/top_audios", {
-    //         start_from: result.start_from,
-    //         raw: true
-    //     });
-
+    //     result = await API.search.withMore(result.more);
     //     expect(result).toBeTruthy();
     // });
 
