@@ -1,16 +1,13 @@
-# [EasyVK-Audio] Changelog 1.4.x
+# [EasyVK-Audio] Changelog 1.5.x
 
-## 1.4.0
+## 1.5.0
 
 **BREAKING CHANGES**
-See README and tests for more examples.
 
-* You must to provide credits to ```.login()``` function.
-* FFmpeg path is now specified in instance of HLS.
+* Two-factor authentication now provides with hash and without checkCodeUrl link.
+* To solve the captcha, now you only need sid and code.
 
 **Changes**
 
-* New: session has an automatically updates
-* Fix: VK recoms collections
-* Fix: m3u8 downloading
-* Fix: improved code quality
+* Fix: HTTP login. Login with desktop page instead of mobile.
+* If you use ```javascript search.morePlaylists()``` request, this will return withMore object.
