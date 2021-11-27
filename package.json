@@ -21,17 +21,17 @@
         "node-fetch": "2.6.5"
     },
     "dependencies": {
-        "@types/jest": "^27.0.2",
+        "@types/jest": "^27.0.3",
         "@vk-io/authorization": "1.2.1",
         "bluebird": "^3.7.2",
         "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
-        "eslint-plugin-jest": "^25.2.2",
+        "eslint-plugin-jest": "^25.3.0",
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "form-data": "^4.0.0",
         "fs-extra": "^10.0.0",
-        "jsdom": "^18.0.1",
+        "jsdom": "^18.1.1",
         "m3u8-parser": "^4.7.0",
         "node-fetch-progress": "^1.0.2",
         "node-fetch-retry": "1.1.2",
@@ -42,7 +42,7 @@
         "vk-io": "4.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.1.0",
+        "eslint": "^8.3.0",
         "jest": "^27.3.1"
     }
 }
