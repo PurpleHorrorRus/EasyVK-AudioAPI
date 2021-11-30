@@ -6,7 +6,8 @@ const Audio = require("./lib/requests/audio");
 const Playlists = require("./lib/requests/playlists");
 const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
-const Recoms = require("./lib/requests/recoms");
+const General = require("./lib/requests/general");
+const Explore = require("./lib/requests/explore");
 
 const Promise = require("bluebird");
 class AudioAPI extends Static {
@@ -28,7 +29,8 @@ class AudioAPI extends Static {
         this.playlists = new Playlists(this.client, this.vk, this.params),
         this.search = new Search(this.client, this.vk, this.params),
         this.artists = new Artists(this.client, this.vk, this.params),
-        this.recoms = new Recoms(this.client, this.vk, this.params);
+        this.general = new General(this.client, this.vk, this.params);
+        this.explore = new Explore(this.client, this.vk, this.params);
         
         return this;
     }

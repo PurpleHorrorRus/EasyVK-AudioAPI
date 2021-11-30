@@ -1,13 +1,9 @@
-# [EasyVK-Audio] Changelog 1.5.x
+# [EasyVK-Audio] Changelog 1.6.x
 
-## 1.5.0
+## 1.6.0
 
 **BREAKING CHANGES**
 
-* Two-factor authentication now provides with hash and without checkCodeUrl link.
-* To solve the captcha, now you only need sid and code.
-
-**Changes**
-
-* Fix: HTTP login. Login with desktop page instead of mobile.
-* If you use ```javascript search.morePlaylists()``` request, this will return withMore object.
+* With release of VK Music the ```recoms``` module was splitted into two new modules: ```general``` and ```explore```
+* Old ```recoms``` is now ```general```
+* VK removed artists recommendations and added songs of new artists to explore page

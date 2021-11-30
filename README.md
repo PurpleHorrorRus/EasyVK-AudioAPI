@@ -84,7 +84,7 @@ const { playlists } = await API.playlists.get();
 const search = await API.search.query("Queen");
 const artsits = await API.artists.get("Queen");
 const recommendations = await API.recoms.loadRecoms();
-const explore = await API.recoms.loadExplore();
+const explore = await API.recoms.load();
 ```
 
 ## Recommendation for optimizing the requests
@@ -214,7 +214,7 @@ You can see how to get full list of audio or playlists of artist in jest testing
 
 | Function  | Params | Description |
 | :-----    | :--:   | :------     |
-| ```loadExplore```| - | Load full explore page |
+| ```load```| - | Load full explore page |
 | ```loadRecoms``` | - | Load full recoms page |
 | ```collections```| - | Returns the collections offering by VK |
 | ```newAlbums```| - | Returns the new albums |
