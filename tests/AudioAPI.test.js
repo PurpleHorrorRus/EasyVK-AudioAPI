@@ -434,7 +434,7 @@ describe("Explore", () => {
     //     expect(results).toBeTruthy(); 
     // });
 
-    // test("Get New Relaeses", async () => {
+    // test("Get New Releases", async () => {
     //     const releases = await API.explore.newReleases({
     //         count: 6,
     //         raw: true
