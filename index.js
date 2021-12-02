@@ -57,7 +57,7 @@ class AudioAPI extends Static {
         try {
             return await Promise.map(payload[1][1].playlists, async playlist => ({
                 owner_id: playlist.ownerId,
-                audios: params.raw ? this.audio.getRawAudios(playlist.list) : await this.audio.parse(playlist.list, params)
+                audios: await this.audio.parseAudios(playlist.list, params)
             }));
         } catch (e) {
             return [];
