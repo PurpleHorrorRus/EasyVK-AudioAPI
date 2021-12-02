@@ -231,15 +231,6 @@ describe("Playlists", () => {
     //     expect(result).toBeTruthy();
     // });
 
-    // test("Get Playlists By Block", async () => {
-    //     const result = await API.playlists.getByBlock({
-    //         block: "new_albums",
-    //         section: "explore"
-    //     });
-
-    //     expect(result).toBeTruthy();
-    // });
-
     // test("Get Playlist From Wall", async () => {
     //     const playlist = await API.playlists.getFromWall({
     //         owner_id: -9125493,
