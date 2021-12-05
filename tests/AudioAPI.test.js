@@ -102,7 +102,7 @@ describe("AudioAPI", () => {
 
     //     const instance = new AudioAPIHLS({ 
     //         ffmpegPath: path.resolve("ffmpeg.exe"),
-    //         name: "Persona 3 OST - Mass Destruction",
+    //         name: `${audios[0].performer} - ${audios[0].title}`,
     //         chunksFolder: path.resolve("hls"),
     //         delete: false
     //     });
