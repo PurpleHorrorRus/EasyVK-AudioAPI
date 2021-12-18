@@ -1,6 +1,6 @@
 {
     "name": "easyvk-audio",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "description": "An unofficial Audio API for EasyVK",
     "repository": {
         "type": "git",
