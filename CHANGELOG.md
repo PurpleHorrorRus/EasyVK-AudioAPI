@@ -1,5 +1,9 @@
 # [EasyVK-Audio] Changelog 1.6.x
 
+## 1.6.2
+
+* Fixes for the new style of recoms playlists (daily/weekly).
+
 ## 1.6.0
 
 **BREAKING CHANGES**
