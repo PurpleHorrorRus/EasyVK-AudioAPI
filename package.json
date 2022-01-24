@@ -1,6 +1,6 @@
 {
     "name": "easyvk-audio",
-    "version": "1.6.1",
+    "version": "1.6.2",
     "description": "An unofficial Audio API for EasyVK",
     "repository": {
         "type": "git",
@@ -21,12 +21,12 @@
         "node-fetch": "2.6.6"
     },
     "dependencies": {
-        "@types/jest": "^27.0.3",
+        "@types/jest": "^27.4.0",
         "@vk-io/authorization": "1.2.1",
         "bluebird": "^3.7.2",
         "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
-        "eslint-plugin-jest": "^25.3.0",
+        "eslint-plugin-jest": "^25.7.0",
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "form-data": "^4.0.0",
@@ -35,14 +35,14 @@
         "m3u8-parser": "^4.7.0",
         "node-fetch-progress": "^1.0.2",
         "node-fetch-retry": "1.1.2",
-        "node-html-parser": "^5.1.0",
+        "node-html-parser": "^5.2.0",
         "node-machine-id": "^1.1.12",
         "tough-cookie": "^4.0.0",
         "tough-cookie-file-store": "^2.0.3",
         "vk-io": "4.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.5.0",
-        "jest": "^27.4.5"
+        "eslint": "^8.7.0",
+        "jest": "^27.4.7"
     }
 }
