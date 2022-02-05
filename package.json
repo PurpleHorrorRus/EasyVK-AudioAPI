@@ -18,7 +18,7 @@
     "author": "PurpleHorrorRus <purplehorrorrus@gmail.com>",
     "license": "ISC",
     "resolutions": {
-        "node-fetch": "2.6.6"
+        "node-fetch": "2.6.7"
     },
     "dependencies": {
         "@types/jest": "^27.4.0",
@@ -26,7 +26,6 @@
         "bluebird": "^3.7.2",
         "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
-        "eslint-plugin-jest": "^25.7.0",
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "form-data": "^4.0.0",
@@ -42,7 +41,8 @@
         "vk-io": "4.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.7.0",
+        "eslint": "^8.8.0",
+        "eslint-plugin-jest": "^26.0.0",
         "jest": "^27.4.7"
     }
 }
