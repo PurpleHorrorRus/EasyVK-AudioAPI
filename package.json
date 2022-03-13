@@ -21,27 +21,27 @@
         "node-fetch": "2.6.7"
     },
     "dependencies": {
-        "@types/jest": "^27.4.0",
+        "@types/jest": "^27.4.1",
         "@vk-io/authorization": "1.2.1",
         "bluebird": "^3.7.2",
         "encoding": "^0.1.13",
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "form-data": "^4.0.0",
-        "fs-extra": "^10.0.0",
+        "fs-extra": "^10.0.1",
         "jsdom": "^19.0.0",
         "m3u8-parser": "^4.7.0",
         "node-fetch-progress": "^1.0.2",
         "node-fetch-retry": "1.1.2",
-        "node-html-parser": "^5.2.0",
+        "node-html-parser": "^5.3.2",
         "node-machine-id": "^1.1.12",
         "tough-cookie": "^4.0.0",
         "tough-cookie-file-store": "^2.0.3",
         "vk-io": "4.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.8.0",
-        "eslint-plugin-jest": "^26.0.0",
-        "jest": "^27.4.7"
+        "eslint": "^8.11.0",
+        "eslint-plugin-jest": "^26.1.1",
+        "jest": "^27.5.1"
     }
 }
