@@ -24,7 +24,6 @@
         "@types/jest": "^27.4.0",
         "@vk-io/authorization": "1.2.1",
         "bluebird": "^3.7.2",
-        "bluebird-retry": "^0.11.0",
         "encoding": "^0.1.13",
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
