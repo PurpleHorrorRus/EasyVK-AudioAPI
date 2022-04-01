@@ -365,7 +365,10 @@ describe("Artists", () => {
 
 describe("General", () => {
     test.only("Load", async () => {
-        const results = await API.general.load();
+        const results = await API.general.load({
+            raw: true
+        });
+        
         expect(results).toBeTruthy();
     });
 
