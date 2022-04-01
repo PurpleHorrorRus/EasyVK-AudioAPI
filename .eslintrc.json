@@ -1,36 +1,23 @@
 {
     "env": {
-        "commonjs": true,
-        "es6": true,
-        "node": true,
-        "jest/globals": true
+        "browser": true,
+        "es2021": true
     },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "plugins": ["jest"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2020
+        "ecmaVersion": "latest",
+        "sourceType": "module"
     },
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "rules": {
-        "semi": ["error", "always"],
-        "quotes": ["error", "double"],
-        "indent": ["error", 4, {
-            "SwitchCase": 1
-        }],
-        "object-curly-newline": ["error", {
-            "multiline": true
-        }],
-        "no-this-before-super": "off",
-        "constructor-super": "off",
-        "space-before-function-paren": ["error", "always"],
-        "object-curly-spacing": ["error", "always"],
-        "no-constant-condition": 0,
-        "no-async-promise-executor": 0,
-        "no-useless-catch": 0,
-        "no-useless-escape": 0,
-        "prefer-const": 1
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-inferrable-types": "off"
     }
 }
