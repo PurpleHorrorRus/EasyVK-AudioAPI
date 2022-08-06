@@ -1,6 +1,6 @@
 {
     "name": "easyvk-audio",
-    "version": "1.7.3",
+    "version": "1.7.4",
     "description": "An unofficial Audio API for EasyVK",
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
         "node-fetch": "2.6.7"
     },
     "dependencies": {
-        "@types/jest": "^28.1.4",
+        "@types/jest": "^28.1.6",
         "@vk-io/authorization": "1.2.1",
         "bluebird": "^3.7.2",
         "encoding": "^0.1.13",
@@ -40,8 +40,8 @@
         "vk-io": "4.3.2"
     },
     "devDependencies": {
-        "eslint": "^8.19.0",
-        "eslint-plugin-jest": "^26.5.3",
-        "jest": "^28.1.2"
+        "eslint": "^8.21.0",
+        "eslint-plugin-jest": "^26.7.0",
+        "jest": "^28.1.3"
     }
 }
