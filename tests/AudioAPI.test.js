@@ -56,7 +56,7 @@ beforeAll(async () => {
 });
 
 describe("AudioAPI", () => {
-    test("Get Audios", async () => {
+    test.skip("Get Audios", async () => {
         const { audios } = await API.audio.get({ 
             owner_id: 529592613,
             raw: true,
@@ -364,7 +364,7 @@ describe("Artists", () => {
 });
 
 describe("General", () => {
-    test.only("Load", async () => {
+    test.skip("Load", async () => {
         const results = await API.general.load({
             raw: true
         });
