@@ -248,10 +248,10 @@ describe("Playlists", () => {
     });
 
     test.skip("Edit", async () => {
-        const cover_path = "PUT PATH HERE";
+        const cover_path = "IMAGE PATH";
 
         const result = await API.playlists.edit({ 
-            playlist_id: 35,
+            playlist_id: 127,
             title: "test", 
             description: "test123",
             cover: cover_path
