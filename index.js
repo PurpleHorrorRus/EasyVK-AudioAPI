@@ -10,11 +10,11 @@ const General = require("./lib/requests/general");
 const Explore = require("./lib/requests/explore");
 
 const Promise = require("bluebird");
+const { VK }=require("vk-io");
 class AudioAPI extends Static {
-    constructor (vk, params = {}) {
-        super({}, vk, params);
-        this.vk = vk;
-        this.params = params;
+    constructor (token, params = {}) {
+        super({}, new VK({ token }));
+        this.token = token;
     }
 
     async login (credits, params = {}) {
@@ -25,18 +25,18 @@ class AudioAPI extends Static {
             ...params
         });
 
-        this.audio = new Audio(this.client, this.vk, this.params),
-        this.playlists = new Playlists(this.client, this.vk, this.params),
-        this.search = new Search(this.client, this.vk, this.params),
-        this.artists = new Artists(this.client, this.vk, this.params),
-        this.general = new General(this.client, this.vk, this.params);
-        this.explore = new Explore(this.client, this.vk, this.params);
+        this.audio = new Audio(this.client, this.vk);
+        this.playlists = new Playlists(this.client, this.vk);
+        this.search = new Search(this.client, this.vk);
+        this.artists = new Artists(this.client, this.vk);
+        this.general = new General(this.client, this.vk);
+        this.explore = new Explore(this.client, this.vk);
         
         return this;
     }
 
     async getAll (params = {}) {
-        params.owner_id = params.owner_id ? Number(params.owner_id) : this.user;
+        params.owner_id = params.owner_id ? params.owner_id : this.user;
         params.playlist_id = params.playlist_id ? Number(params.playlist_id) : -1;
         
         return ~params.playlist_id 
@@ -89,7 +89,7 @@ class AudioAPI extends Static {
             exp: Number(params.enable),
             hash: this.statusExportHash || await this.getStatusExportHash(),
             id: params.raw_audio_id,
-            oid: params.owner_id ? Number(params.owner_id) : this.user,
+            oid: params.owner_id ? params.owner_id : this.user,
             top: 0
         });
 
