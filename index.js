@@ -1,3 +1,5 @@
+const { VK } = require("vk-io");
+
 const Static = require("./lib/static");
 
 const HTTPClient = require("./lib/http");
@@ -11,26 +13,25 @@ const Explore = require("./lib/requests/explore");
 
 const Promise = require("bluebird");
 class AudioAPI extends Static {
-    constructor (vk, params = {}) {
-        super({}, vk, params);
-        this.vk = vk;
-        this.params = params;
+    constructor (token) {
+        super({}, new VK({ token }));
+        this.token = token;
     }
 
     async login (credits, params = {}) {
-        this.vk.user = this.user = credits.user;
+        this.vk.user = credits.user;
 
         this.client = await new HTTPClient(this.vk).login({
             ...credits,
             ...params
         });
 
-        this.audio = new Audio(this.client, this.vk, this.params),
-        this.playlists = new Playlists(this.client, this.vk, this.params),
-        this.search = new Search(this.client, this.vk, this.params),
-        this.artists = new Artists(this.client, this.vk, this.params),
-        this.general = new General(this.client, this.vk, this.params);
-        this.explore = new Explore(this.client, this.vk, this.params);
+        this.audio = new Audio(this.client, this.vk);
+        this.playlists = new Playlists(this.client, this.vk);
+        this.search = new Search(this.client, this.vk);
+        this.artists = new Artists(this.client, this.vk);
+        this.general = new General(this.client, this.vk);
+        this.explore = new Explore(this.client, this.vk);
         
         return this;
     }

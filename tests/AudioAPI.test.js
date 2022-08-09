@@ -51,27 +51,27 @@ beforeAll(async () => {
         fs.writeFileSync("./vk.json", JSON.stringify(credits, null, 4));
     }
 
-    const VKClient = new VK({ token: credits.token });
-    API = await new AudioAPI(VKClient).login(credits, { cookies: "./cookie.json" });
+    API = await new AudioAPI(credits.token)
+        .login(credits, { cookies: "./cookie.json" });
 });
 
 describe("AudioAPI", () => {
-    test.skip("Get Audios", async () => {
+    test("Get Audios", async () => {
         const { audios } = await API.audio.get({ 
             owner_id: 529592613,
-            raw: true,
+            raw: false,
             count: 2
         });
 
         expect(audios).toBeTruthy();
     });
 
-    test.skip("Get All Audios", async () => {
+    test("Get All Audios", async () => {
         const audios = await API.audio.getAll({ raw: true });
         expect(audios).toBeTruthy();    
     });
 
-    test.skip("Get raw audio and raw link and parse", async () => {
+    test("Get raw audio and raw link and parse", async () => {
         const { audios } = await API.audio.get({
             count: 2,
             raw: true
@@ -118,17 +118,13 @@ describe("AudioAPI", () => {
         expect(output).toBeTruthy();
     });
 
-    test.skip("Get Raw Audios", async () => {
+    test("Get Raw Audios", async () => {
         const raw = await API.audio.get({ raw: true });
         expect(raw.audios).toBeTruthy();
     });
 
     test("Get Lyrics", async () => {
-        const lyrics = await API.audio.getLyrics({
-            full_id: "529592613_456239699",
-            lyrics_id: 446974289
-        });
-
+        const lyrics = await API.audio.getLyrics(446974289);
         expect(lyrics).toBeTruthy();
     });
 
