@@ -142,7 +142,12 @@ describe("AudioAPI", () => {
     let add = null;
 
     test.skip("Add song", async () => {
-        const playlist = await API.audio.getPlaylist({ owner_id: 215185126, playlist_id: 2, list: true });
+        const playlist = await API.audio.getPlaylist({ 
+            owner_id: 215185126, 
+            playlist_id: 2, 
+            list: true 
+        });
+
         add = await API.audio.add(playlist.list[0]);
         expect(add).toBeTruthy();
     });
@@ -154,22 +159,33 @@ describe("AudioAPI", () => {
     });
 
     test.skip("Reorder songs", async () => {
-        const { audios } = await API.audio.get();
+        const response = await API.audio.get({
+            owner_id: credits.user,
+            count: 3
+        });
 
-        const audio_id = audios[1].id;
-        const next_audio_id = audios[2].id;
+        const reordered = await API.audio.reorder({
+            owner_id: credits.user,
+            audio_id: response.audios[0].id,
+            after: response.audios[2].id
+        });
 
-        const reorder = await API.audio.reorder({ audio_id, next_audio_id });
-
-        expect(reorder).toBe(true);
+        expect(reordered).toBe(1);
     });
 
     test.skip("Edit song", async () => {
-        const { audios } = await API.audio.get();
-        const can_edit = audios.filter(a => a.can_edit);
-        const song = can_edit[0];
-        const results = await API.audio.edit(song, { performer: "Meridius", title: "Test" });
-        expect(results).toBeTruthy();
+        const response = await API.audio.get({
+            owner_id: credits.user,
+            count: 1
+        });
+
+        const edited = await API.audio.edit(response.audios[0], {
+            artist: response.audios[0].artist,
+            title: response.audios[0].title,
+            genre: 0
+        });
+
+        expect(edited).toBe(1);
     });
 
     test.skip("Upload Audio", async () => {
@@ -207,9 +223,9 @@ describe("Playlists", () => {
     });
 
     test("Get Playlist By Id", async () => {
-        const result = await API.playlists.getById({ 
-            playlist_id: 5, 
-            list: true,
+        const result = await API.playlists.getPlaylist({
+            owner_id: 265076923,
+            playlist_id: 103,
             raw: true
         });
 
@@ -239,8 +255,8 @@ describe("Playlists", () => {
 
     test.skip("Delete Playlist", async () => {
         const { playlists } = await API.playlists.get();
-        const deleted = await API.playlists.delete(playlists[1]);
-        expect(deleted).toBe(true);
+        const deleted = await API.playlists.delete(playlists[0]);
+        expect(deleted).toBe(1);
     });
 
     test.skip("Edit", async () => {
@@ -276,24 +292,28 @@ describe("Playlists", () => {
     });
 
     test.skip("Reorder Playlists", async () => {
-        const { playlists } = await API.playlists.get();
-        const reorderResult = await API.playlists.reorder({
-            playlist_id: playlists[1].playlist_id,
-            prev_playlist_id: 0
+        const response = await API.playlists.get();
+        const reordered = await API.playlists.reorder({
+            playlist_id: response.playlists[1].playlist_id,
+            before: response.playlists[0].playlist_id // or after
         });
 
-        expect(reorderResult).toBe(true);
+        expect(reordered).toBe(1);
     });
 
     test.skip("Reorder Songs in Playlist", async () => {
-        const { audios } = await API.audio.get({ playlist_id: 35 });
-        const reverse = audios.reverse().map(a => a.full_id).join(",");
-        const result = await API.playlists.reorderSongs({
-            Audios: reverse,
-            playlist_id: 35
+        const playlist = await API.playlists.getPlaylist({
+            playlist_id: 97,
+            list: true
         });
-    
-        expect(result).toBe(true);
+
+        const reordered = await API.audio.reorder({
+            playlist_id: playlist.playlist_id,
+            audio_id: playlist.list[0].id,
+            after: playlist.list[2].id
+        });
+        
+        expect(reordered).toBe(1);
     });
 });
 
@@ -375,7 +395,7 @@ describe("General", () => {
 });
 
 describe("Explore", () => {
-    test("Load", async () => {
+    test.skip("Load", async () => {
         const results = await API.explore.load({ 
             count: 6, 
             raw: true 
