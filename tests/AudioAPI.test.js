@@ -123,10 +123,10 @@ describe("AudioAPI", () => {
         expect(raw.audios).toBeTruthy();
     });
 
-    test("Get Lyrics", async () => {
-        const lyrics = await API.audio.getLyrics(446974289);
-        expect(lyrics).toBeTruthy();
-    });
+    // test.only("Get Lyrics", async () => {
+    //     const lyrics = await API.audio.getLyrics({ lyrics_id: 446974289 });
+    //     expect(lyrics).toBeTruthy();
+    // });
 
     test("Get Audios From Wall", async () => {
         const audios = await API.audio.getFromWall({ 
@@ -224,8 +224,8 @@ describe("Playlists", () => {
 
     test("Get Playlist By Id", async () => {
         const result = await API.playlists.getPlaylist({
-            owner_id: 265076923,
-            playlist_id: 103,
+            owner_id: credits.user,
+            playlist_id: 186,
             raw: true
         });
 
