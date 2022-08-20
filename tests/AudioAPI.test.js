@@ -56,7 +56,7 @@ beforeAll(async () => {
 });
 
 describe("AudioAPI", () => {
-    test("Get Audios", async () => {
+    test.only("Get Audios", async () => {
         const { audios } = await API.audio.get({ 
             owner_id: 529592613,
             raw: false,
@@ -97,7 +97,7 @@ describe("AudioAPI", () => {
         expect(Buffer.isBuffer(buffer)).toBe(true);
     });
 
-    test.skip("Download Audio (Output Path)", async () => {
+    test.only("Download Audio (Output Path)", async () => {
         const { audios } = await API.audio.get({ count: 1 });
 
         const instance = new AudioAPIHLS({ 
