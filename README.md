@@ -63,7 +63,10 @@ const AudioAPI = require("easyvk-audio");
 
 const run = async () => {
     const VKClient = new VK({ token: credits.token });
-    const API = await new AudioAPI(VKClient).login(credits);
+    const API = await new AudioAPI(VKClient).login(credits).catch(e => {
+        // Here you can catch 2fa or captcha
+        console.error(e);
+    });
 
     const { audios: my_audios, count } = await API.audio.getAll();
     console.log(my_audios);
