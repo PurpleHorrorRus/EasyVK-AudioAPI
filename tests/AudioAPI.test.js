@@ -56,14 +56,14 @@ beforeAll(async () => {
 });
 
 describe("AudioAPI", () => {
-    test.only("Get Audios", async () => {
-        const { audios } = await API.audio.get({ 
-            owner_id: 529592613,
-            raw: false,
+    test("Get Audios", async () => {
+        const data = await API.audio.get({ 
+            owner_id: 243263728,
+            raw: true,
             count: 2
         });
 
-        expect(audios).toBeTruthy();
+        expect(data.audios.length).toBeGreaterThan(0);
     });
 
     test("Get All Audios", async () => {
@@ -97,7 +97,7 @@ describe("AudioAPI", () => {
         expect(Buffer.isBuffer(buffer)).toBe(true);
     });
 
-    test.only("Download Audio (Output Path)", async () => {
+    test("Download Audio (Output Path)", async () => {
         const { audios } = await API.audio.get({ count: 1 });
 
         const instance = new AudioAPIHLS({ 
@@ -123,10 +123,10 @@ describe("AudioAPI", () => {
         expect(raw.audios).toBeTruthy();
     });
 
-    // test.only("Get Lyrics", async () => {
-    //     const lyrics = await API.audio.getLyrics({ lyrics_id: 446974289 });
-    //     expect(lyrics).toBeTruthy();
-    // });
+    test("Get Lyrics", async () => {
+        const lyrics = await API.audio.getLyrics({ lyrics_id: 446974289 });
+        expect(lyrics).toBeTruthy();
+    });
 
     test("Get Audios From Wall", async () => {
         const audios = await API.audio.getFromWall({ 
@@ -193,7 +193,7 @@ describe("AudioAPI", () => {
         expect(saved).toBeTruthy();
     });
 
-    test.skip("Audio status", async () => {
+    test.skip("Audio Status", async () => {
         const { audios } = await API.audio.get();
         await API.toggleAudioStatus({
             enable: true,
@@ -207,6 +207,19 @@ describe("AudioAPI", () => {
         const path = "PUT PATH HERE";
         const saved = await API.audio.upload(path);
         expect(saved).toBeTruthy();
+    });
+
+    test("Follow and Unfollow User or Community", async () => {
+        const data = await API.audio.get({ 
+            owner_id: -31672253,
+            count: 0
+        });
+
+        const followed = await API.audio.follow(data.follow);
+        expect(followed).toBe(true);
+
+        const unfollowed = await API.audio.unfollow(data.follow);
+        expect(unfollowed).toBe(true);
     });
 });
 
@@ -376,6 +389,16 @@ describe("Artists", () => {
     test("Get More Artist Playlists", async () => {
         const result = await API.search.morePlaylists("artist/queen/albums");
         expect(result).toBeTruthy();
+    });
+
+    test.only("Follow and Unfollow artist", async () => {
+        const artist = await API.artists.get("queen");
+
+        artist.follow.hash = await API.artists.follow(artist.follow);
+        expect(artist.follow.hash).toBeTruthy();
+
+        artist.follow.hash = await API.artists.follow(artist.follow);
+        expect(artist.follow.hash).toBeTruthy();
     });
 });
 
