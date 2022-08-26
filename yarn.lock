@@ -1777,6 +1777,14 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+formdata-node@4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/formdata-node/-/formdata-node-4.4.0.tgz#7dda5b9c2959c8c312fd69ef2b10a9c7ea40ca29"
+  integrity sha512-Q1LZsZggMqcmiAv1VIf4qSo1jxROFYUtuwNbJxman4UurKp3kdcDhtIK2+rKKqa0Xgqlga0qea3s+qH4I4v5kw==
+  dependencies:
+    node-domexception "1.0.0"
+    web-streams-polyfill "4.0.0-beta.2"
+
 formdata-node@^3.5.4:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/formdata-node/-/formdata-node-3.7.0.tgz#b58942e617639a0ebea57227cfff8332a4020760"
@@ -1785,14 +1793,6 @@ formdata-node@^3.5.4:
     fetch-blob "2.1.2"
     form-data-encoder "1.4.3"
     node-domexception "1.0.0"
-
-formdata-node@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/formdata-node/-/formdata-node-5.0.0.tgz#7b4d23f8d823b88d29130366f33ff9ac58dfa7fe"
-  integrity sha512-zrGsVVS56jJo+htsVv7ffXuzie91a2NrU1cPamvtPaSyRX++SH+4KXlGoOt+ncgDJ4bFA2SAQ+QGA+p4l1vciw==
-  dependencies:
-    node-domexception "1.0.0"
-    web-streams-polyfill "4.0.0-beta.3"
 
 fs-extra@^10.1.0:
   version "10.1.0"
@@ -3506,10 +3506,10 @@ walker@^1.0.8:
   dependencies:
     makeerror "1.0.12"
 
-web-streams-polyfill@4.0.0-beta.3:
-  version "4.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-4.0.0-beta.3.tgz#2898486b74f5156095e473efe989dcf185047a38"
-  integrity sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==
+web-streams-polyfill@4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-4.0.0-beta.2.tgz#a534d1a8a4bbbb8d2bba07eb27722fde8ee8d077"
+  integrity sha512-UHhhnoe2M40uh2r0KVdJTN7qjFytm6o0Yp3VcjwV3bfo6rz8uqvxNoE5yNmGF0y3eFfXaFeb6M09MDSwwLmq4w==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
