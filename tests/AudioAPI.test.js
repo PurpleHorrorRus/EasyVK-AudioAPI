@@ -391,7 +391,7 @@ describe("Artists", () => {
         expect(result).toBeTruthy();
     });
 
-    test.only("Follow and Unfollow artist", async () => {
+    test("Follow and Unfollow artist", async () => {
         const artist = await API.artists.get("queen");
 
         artist.follow.hash = await API.artists.follow(artist.follow);
