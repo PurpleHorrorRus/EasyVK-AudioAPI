@@ -3,8 +3,8 @@ const fs = require("fs");
 const readline = require("readline");
 const path = require("path");
 
-const { VK, CallbackService } = require("vk-io");
-const { DirectAuthorization } = require("@vk-io/authorization");
+const { CallbackService } = require("vk-io");
+const { DirectAuthorization, officialAppCredentials } = require("@vk-io/authorization");
 
 const AudioAPI = require("../index.js");
 const AudioAPIHLS = require("../lib/hls");
@@ -30,13 +30,11 @@ callbackService.onTwoFactor(async (payload, retry) => {
 const direct = new DirectAuthorization({
     callbackService,
 
+    login: credits.username,
+    password: credits.password,
     scope: "all",
 
-    clientId: "2274003",
-    clientSecret: "hHbZxrka2uZ6jB1inYsH",
-
-    login: credits.username,
-    password: credits.password
+    ...officialAppCredentials.android
 });
 
 beforeAll(async () => {
@@ -67,8 +65,8 @@ describe("AudioAPI", () => {
     });
 
     test("Get All Audios", async () => {
-        const audios = await API.audio.getAll({ raw: true });
-        expect(audios).toBeTruthy();    
+        const data = await API.audio.getAll({ raw: true });
+        expect(data.audios.length).toBeGreaterThan(0);    
     });
 
     test("Get raw audio and raw link and parse", async () => {

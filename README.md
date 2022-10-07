@@ -25,17 +25,10 @@ npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/meridius) branch rather than #master
 
 # Getting Started
-
-Do auth with VK-IO
-
-```javascript
-const { VK } = require("vk-io");
-const VKClient = new VK({ token: "xxxxxxxxxxx" });
-```
-
 Create an API
 
 ```javascript
+const token = "xxxxxxxxxxx";
 const credits = {
     username: "xxxxxxxxxxx",
     password: "xxxxxxxxxxx",
@@ -43,7 +36,7 @@ const credits = {
 };
 
 const AudioAPI = require("easyvk-audio");
-const API = await new AudioHTTP(VKClient).login(credits);
+const API = await new AudioHTTP(token).login(credits);
 ```
 
 **You awesome!!**
@@ -51,6 +44,10 @@ const API = await new AudioHTTP(VKClient).login(credits);
 # Full example
 
 ```javascript
+const { VK } = require("vk-io");
+const AudioAPI = require("easyvk-audio");
+
+const token = "xxxxxxxxxxx";
 const credits = {
     username: "xxxxxxxxxxx",
     password: "xxxxxxxxxxx",
@@ -58,19 +55,15 @@ const credits = {
     user:     "xxxxxxxxxxx" // Your user_id
 };
 
-const { VK } = require("vk-io");
-const AudioAPI = require("easyvk-audio");
-
 const run = async () => {
-    const VKClient = new VK({ token: credits.token });
-    const API = await new AudioAPI(VKClient).login(credits).catch(e => {
+    const API = await new AudioAPI(token).login(credits).catch(e => {
         // Here you can catch 2fa or captcha
         console.error(e);
     });
 
-    const { audios: my_audios, count } = await API.audio.getAll();
-    console.log(my_audios);
-    console.log(`Wow, I have ${count} audio!`);
+    const { audios } = await API.audio.getAll();
+    console.log(audios);
+    console.log(`Wow, I have ${audios.length} songs!`);
 };
 
 run();
@@ -84,7 +77,7 @@ To use each of this you must to specify part which you would to use. Example:
 ```javascript
 const { audios } = await API.audio.get();
 const { playlists } = await API.playlists.get();
-const search = await API.search.query("Queen");
+const search = await API.search.query({ q: "Queen" });
 const artsits = await API.artists.get("Queen");
 const recommendations = await API.recoms.loadRecoms();
 const explore = await API.recoms.load();
@@ -199,6 +192,7 @@ Pay your attention to ```more``` object!
 | Function  | Params | Description |
 | :-----    | :--:   | :------     |
 | ```query``` | q | Returns the artists, playlists, audios and ```more``` object by query |
+| ```queryExtended``` | q<br/>params? | Extended search
 | ```withMore``` | ```more``` object | Returns more results by ```more``` object |
 | ```hints```| q | Return search hints |
 | ```inAudios```| q<br/>owner_id<br/>count? | Returns a list of finded audios of user/community |
