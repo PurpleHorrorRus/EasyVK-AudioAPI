@@ -55,7 +55,7 @@ beforeAll(async () => {
 
 describe("AudioAPI", () => {
     test("Get Audios", async () => {
-        const data = await API.audio.get({ 
+        const data = await API.audio.get({
             owner_id: 243263728,
             raw: true,
             count: 2
@@ -66,7 +66,7 @@ describe("AudioAPI", () => {
 
     test("Get All Audios", async () => {
         const data = await API.audio.getAll({ raw: true });
-        expect(data.audios.length).toBeGreaterThan(0);    
+        expect(data.audios.length).toBeGreaterThan(0);
     });
 
     test("Get raw audio and raw link and parse", async () => {
@@ -86,8 +86,8 @@ describe("AudioAPI", () => {
         API.hls.on("progress", answer => console.log(answer));
 
         const buffer = await API.hls.download(
-            audios[0].url, 
-            path.resolve("ffmpeg.exe"), 
+            audios[0].url,
+            path.resolve("ffmpeg.exe"),
             path.resolve("hls", "result"),
             { chunksFolder: path.resolve("hls") }
         );
@@ -98,7 +98,7 @@ describe("AudioAPI", () => {
     test("Download Audio (Output Path)", async () => {
         const { audios } = await API.audio.get({ count: 1 });
 
-        const instance = new AudioAPIHLS({ 
+        const instance = new AudioAPIHLS({
             ffmpegPath: path.resolve("ffmpeg.exe"),
             name: `${audios[0].performer} - ${audios[0].title}`,
             chunksFolder: path.resolve("hls"),
@@ -109,7 +109,7 @@ describe("AudioAPI", () => {
         instance.on("progress", answer => console.log(answer));
 
         const output = await instance.download(
-            audios[0].url, 
+            audios[0].url,
             path.resolve("hls", "result")
         );
 
@@ -127,7 +127,7 @@ describe("AudioAPI", () => {
     });
 
     test("Get Audios From Wall", async () => {
-        const audios = await API.audio.getFromWall({ 
+        const audios = await API.audio.getFromWall({
             owner_id: 529592613,
             post_id: 103,
             raw: true
@@ -140,10 +140,10 @@ describe("AudioAPI", () => {
     let add = null;
 
     test.skip("Add song", async () => {
-        const playlist = await API.audio.getPlaylist({ 
-            owner_id: 215185126, 
-            playlist_id: 2, 
-            list: true 
+        const playlist = await API.audio.getPlaylist({
+            owner_id: 215185126,
+            playlist_id: 2,
+            list: true
         });
 
         add = await API.audio.add(playlist.list[0]);
@@ -208,7 +208,7 @@ describe("AudioAPI", () => {
     });
 
     test("Follow and Unfollow User or Community", async () => {
-        const data = await API.audio.get({ 
+        const data = await API.audio.get({
             owner_id: -31672253,
             count: 0
         });
@@ -273,9 +273,9 @@ describe("Playlists", () => {
     test.skip("Edit", async () => {
         const cover_path = "IMAGE PATH";
 
-        const result = await API.playlists.edit({ 
+        const result = await API.playlists.edit({
             playlist_id: 127,
-            title: "test", 
+            title: "test",
             description: "test123",
             cover: cover_path
         });
@@ -323,7 +323,7 @@ describe("Playlists", () => {
             audio_id: playlist.list[0].id,
             after: playlist.list[2].id
         });
-        
+
         expect(reordered).toBe(1);
     });
 });
@@ -352,7 +352,7 @@ describe("Search Engine", () => {
 
 describe("Artists", () => {
     test("Get Artist", async () => {
-        const result = await API.artists.get("Queen", { raw: true });  
+        const result = await API.artists.get("Queen", { raw: true });
         expect(result).toBeTruthy();
     });
 
@@ -362,7 +362,7 @@ describe("Artists", () => {
     });
 
     test("Get Artist's Collecitons", async () => {
-        const artist = await API.artists.get("multiverse", { raw: true });  
+        const artist = await API.artists.get("multiverse", { raw: true });
         const releases = await API.artists.collections(artist.collections[0].link);
         const singles = await API.search.morePlaylists(releases[1].link);
         expect(singles).toBeTruthy();
@@ -405,7 +405,7 @@ describe("General", () => {
         const results = await API.general.load({
             raw: true
         });
-        
+
         expect(results).toBeTruthy();
     });
 
@@ -417,9 +417,9 @@ describe("General", () => {
 
 describe("Explore", () => {
     test.skip("Load", async () => {
-        const results = await API.explore.load({ 
-            count: 6, 
-            raw: true 
+        const results = await API.explore.load({
+            count: 6,
+            raw: true
         });
 
         expect(results).toBeTruthy();
@@ -427,7 +427,7 @@ describe("Explore", () => {
 
     test("Get New Albums", async () => {
         const results = await API.explore.newAlbums();
-        expect(results).toBeTruthy(); 
+        expect(results).toBeTruthy();
     });
 
     test("Get New Releases", async () => {
@@ -437,10 +437,10 @@ describe("Explore", () => {
         });
 
         expect(releases).toBeTruthy();
-    }); 
+    });
 
     test("Get Chart", async () => {
-        const chart = await API.explore.chart({ 
+        const chart = await API.explore.chart({
             count: 6,
             raw: true
         });
@@ -449,7 +449,7 @@ describe("Explore", () => {
     });
 
     test("Get New Songs", async () => {
-        const results = await API.search.getByBlock({ 
+        const results = await API.search.getByBlock({
             block: "new_songs",
             section: "explore",
             raw: true

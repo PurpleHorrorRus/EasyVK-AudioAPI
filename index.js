@@ -32,16 +32,16 @@ class AudioAPI extends Static {
         this.artists = new Artists(this.client, this.vk);
         this.general = new General(this.client, this.vk);
         this.explore = new Explore(this.client, this.vk);
-        
+
         return this;
     }
 
     async getAll (params = {}) {
         params.owner_id = params.owner_id ? Number(params.owner_id) : this.user;
         params.playlist_id = params.playlist_id ? Number(params.playlist_id) : -1;
-        
-        return ~params.playlist_id 
-            ? this.playlists.getAllSongs(params) 
+
+        return ~params.playlist_id
+            ? this.playlists.getAllSongs(params)
             : this.audio.getAll(params);
     }
 
@@ -96,7 +96,7 @@ class AudioAPI extends Static {
 
         return true;
     }
-    
+
     async changeAudioStatus (params = {}) {
 
         /*
@@ -110,7 +110,7 @@ class AudioAPI extends Static {
             full_id: params.raw_audio_id,
             top: 0
         });
-        
+
         return true;
     }
 }

@@ -21,6 +21,7 @@
         "switch-colon-spacing": ["error", {
             "after": true
         }],
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "no-useless-escape": "off"
     }
 }
