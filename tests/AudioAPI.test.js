@@ -72,7 +72,7 @@ describe("AudioAPI", () => {
         expect(data.audios.length).toBeGreaterThan(0);
     });
 
-    test.only("Call official API", async () => {
+    test("Call official API", async () => {
         if (!allowOfficialAPI) {
             expect(true).toBe(true);
         }
