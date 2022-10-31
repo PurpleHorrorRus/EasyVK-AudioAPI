@@ -1,4 +1,5 @@
 
+const { VK } = require("vk-io");
 const Promise = require("bluebird");
 
 const Static = require("./lib/static");
@@ -12,7 +13,6 @@ const Artists = require("./lib/requests/artists");
 const General = require("./lib/requests/general");
 const Explore = require("./lib/requests/explore");
 const OfficialAPI = require("./lib/requests/official");
-const {VK}=require("vk-io");
 
 const defaultParams = {
     debug: false
