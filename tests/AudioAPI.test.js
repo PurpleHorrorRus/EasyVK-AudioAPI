@@ -50,7 +50,7 @@ beforeAll(async () => {
         fs.writeFileSync("./vk.json", JSON.stringify(credits, null, 4));
     }
 
-    API = await new AudioAPI(credits.token, { debug: true })
+    API = await new AudioAPI(credits.token, { lang: "ru" }, { debug: true })
         .login(credits, { cookies: "./cookie.json" });
 
     allowOfficialAPI = await API.official.check();
@@ -72,7 +72,7 @@ describe("AudioAPI", () => {
         expect(data.audios.length).toBeGreaterThan(0);
     });
 
-    test("Call official API", async () => {
+    test.skip("Call official API", async () => {
         if (!allowOfficialAPI) {
             expect(true).toBe(true);
         }

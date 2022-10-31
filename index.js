@@ -19,7 +19,7 @@ const defaultParams = {
 };
 
 class AudioAPI extends Static {
-    constructor (token, params = defaultParams) {
+    constructor (token, vkParams = {}, params = defaultParams) {
         super(null, params);
 
         this.vk = new VK({
@@ -27,7 +27,9 @@ class AudioAPI extends Static {
 
             apiHeaders: {
                 "User-Agent": this.VKAndroidAppUA
-            }
+            },
+
+            ...vkParams
         });
 
         this.params = params;
@@ -53,7 +55,7 @@ class AudioAPI extends Static {
     }
 
     async getAll (params = {}) {
-        params.owner_id = params.owner_id ? Number(params.owner_id) : this.user;
+        params.owner_id = params.owner_id ? Number(params.owner_id) : this.vk.user;
         params.playlist_id = params.playlist_id ? Number(params.playlist_id) : -1;
 
         return ~params.playlist_id
@@ -67,7 +69,7 @@ class AudioAPI extends Static {
             al: 1,
             claim: 0,
             is_layer: 0,
-            owner_id: this.user,
+            owner_id: this.vk.user,
             section: "updates"
         });
 
@@ -106,7 +108,7 @@ class AudioAPI extends Static {
             exp: Number(params.enable),
             hash: this.statusExportHash || await this.getStatusExportHash(),
             id: params.raw_audio_id,
-            oid: params.owner_id ? Number(params.owner_id) : this.user,
+            oid: params.owner_id ? Number(params.owner_id) : this.vk.user,
             top: 0
         });
 
