@@ -1,4 +1,5 @@
-const { VK } = require("vk-io");
+
+const Promise = require("bluebird");
 
 const Static = require("./lib/static");
 
@@ -10,28 +11,43 @@ const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
 const General = require("./lib/requests/general");
 const Explore = require("./lib/requests/explore");
+const OfficialAPI = require("./lib/requests/official");
+const {VK}=require("vk-io");
 
-const Promise = require("bluebird");
+const defaultParams = {
+    debug: false
+};
+
 class AudioAPI extends Static {
-    constructor (token) {
-        super({}, new VK({ token }));
-        this.token = token;
+    constructor (token, params = defaultParams) {
+        super(null, params);
+
+        this.vk = new VK({
+            token,
+
+            apiHeaders: {
+                "User-Agent": this.VKAndroidAppUA
+            }
+        });
+
+        this.params = params;
     }
 
-    async login (credits, params = {}) {
+    async login (credits, authParams = {}) {
         this.vk.user = credits.user;
 
         this.client = await new HTTPClient(this.vk).login({
             ...credits,
-            ...params
+            ...authParams
         });
 
-        this.audio = new Audio(this.client, this.vk);
-        this.playlists = new Playlists(this.client, this.vk);
-        this.search = new Search(this.client, this.vk);
-        this.artists = new Artists(this.client, this.vk);
-        this.general = new General(this.client, this.vk);
-        this.explore = new Explore(this.client, this.vk);
+        this.audio = new Audio(this.client, this.vk, this.params);
+        this.playlists = new Playlists(this.client, this.vk, this.params);
+        this.search = new Search(this.client, this.vk, this.params);
+        this.artists = new Artists(this.client, this.vk, this.params);
+        this.general = new General(this.client, this.vk, this.params);
+        this.explore = new Explore(this.client, this.vk, this.params);
+        this.official = new OfficialAPI(this.client, this.vk, this.params);
 
         return this;
     }

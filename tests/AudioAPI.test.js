@@ -20,6 +20,7 @@ const rl = readline.createInterface({
 });
 
 let API = null;
+let allowOfficialAPI = false;
 
 const callbackService = new CallbackService();
 callbackService.onTwoFactor(async (payload, retry) => {
@@ -49,8 +50,10 @@ beforeAll(async () => {
         fs.writeFileSync("./vk.json", JSON.stringify(credits, null, 4));
     }
 
-    API = await new AudioAPI(credits.token)
+    API = await new AudioAPI(credits.token, { debug: true })
         .login(credits, { cookies: "./cookie.json" });
+
+    allowOfficialAPI = await API.official.check();
 });
 
 describe("AudioAPI", () => {
@@ -67,6 +70,18 @@ describe("AudioAPI", () => {
     test("Get All Audios", async () => {
         const data = await API.audio.getAll({ raw: true });
         expect(data.audios.length).toBeGreaterThan(0);
+    });
+
+    test.only("Call official API", async () => {
+        if (!allowOfficialAPI) {
+            expect(true).toBe(true);
+        }
+
+        const response = await API.official.call("audio.get", {
+            owner_id: credits.user
+        });
+
+        expect(response.items).toBeGreaterThan(0);
     });
 
     test("Get raw audio and raw link and parse", async () => {
