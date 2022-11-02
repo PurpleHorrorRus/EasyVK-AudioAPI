@@ -416,7 +416,7 @@ describe("Artists", () => {
 });
 
 describe("General", () => {
-    test.skip("Load", async () => {
+    test("Load", async () => {
         const results = await API.general.load({
             raw: true
         });
