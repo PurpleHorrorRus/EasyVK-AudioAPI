@@ -94,20 +94,17 @@ describe("AudioAPI", () => {
         expect(full).toBeTruthy();
     });
 
-    test.skip("Download Audio (Buffer)", async () => {
+    test("Download Audio (Buffer Output)", async () => {
         const { audios } = await API.audio.get({ count: 1 });
 
-        API.hls.once("processing", () => console.log("Start processing file using ffmpeg..."));
-        API.hls.on("progress", answer => console.log(answer));
+        const buffer = await new AudioAPIHLS({
+            ffmpegPath: path.resolve("ffmpeg.exe"),
+            name: `${audios[0].performer} - ${audios[0].title}`,
+            chunksFolder: path.resolve("hls", audios[0].full_id),
+            delete: true
+        }).download(audios[0].url, path.resolve("hls"));
 
-        const buffer = await API.hls.download(
-            audios[0].url,
-            path.resolve("ffmpeg.exe"),
-            path.resolve("hls", "result"),
-            { chunksFolder: path.resolve("hls") }
-        );
-
-        expect(Buffer.isBuffer(buffer)).toBe(true);
+        expect(buffer).toBeTruthy();
     });
 
     test("Download Audio (Output Path)", async () => {
@@ -116,7 +113,7 @@ describe("AudioAPI", () => {
         const instance = new AudioAPIHLS({
             ffmpegPath: path.resolve("ffmpeg.exe"),
             name: `${audios[0].performer} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls"),
+            chunksFolder: path.resolve("hls", audios[0].full_id),
             delete: false
         });
 
@@ -125,7 +122,7 @@ describe("AudioAPI", () => {
 
         const output = await instance.download(
             audios[0].url,
-            path.resolve("hls", "result")
+            path.resolve("hls")
         );
 
         expect(output).toBeTruthy();
