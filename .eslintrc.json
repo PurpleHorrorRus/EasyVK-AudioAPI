@@ -22,6 +22,7 @@
             "after": true
         }],
         "semi": ["error", "always"],
-        "no-useless-escape": "off"
+        "no-useless-escape": "off",
+        "no-async-promise-executor": "off"
     }
 }

@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const fs = require("fs");
+const fs = require("fs-extra");
 const readline = require("readline");
 const path = require("path");
 
@@ -23,7 +23,7 @@ let API = null;
 let allowOfficialAPI = false;
 
 const callbackService = new CallbackService();
-callbackService.onTwoFactor(async (payload, retry) => {
+callbackService.onTwoFactor(async (_payload, retry) => {
     const code = await new Promise(resolve => rl.question("Two factor code", resolve));
     await retry(code);
 });
@@ -95,12 +95,14 @@ describe("AudioAPI", () => {
     });
 
     test("Download Audio (Buffer Output)", async () => {
-        const { audios } = await API.audio.get({ count: 1 });
+        const { items: audios } = await API.official.call("audio.get", {
+            owner_id: credits.user
+        });
 
         const buffer = await new AudioAPIHLS({
             ffmpegPath: path.resolve("ffmpeg.exe"),
-            name: `${audios[0].performer} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", audios[0].full_id),
+            name: `${audios[0].artist} - ${audios[0].title}`,
+            chunksFolder: path.resolve("hls", String(audios[0].id)),
             delete: true
         }).download(audios[0].url, path.resolve("hls"));
 
@@ -108,12 +110,14 @@ describe("AudioAPI", () => {
     });
 
     test("Download Audio (Output Path)", async () => {
-        const { audios } = await API.audio.get({ count: 1 });
+        const { items: audios } = await API.official.call("audio.get", {
+            owner_id: credits.user
+        });
 
         const instance = new AudioAPIHLS({
             ffmpegPath: path.resolve("ffmpeg.exe"),
-            name: `${audios[0].performer} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", audios[0].full_id),
+            name: `${audios[0].artist} - ${audios[0].title}`,
+            chunksFolder: path.resolve("hls", String(audios[0].id)),
             delete: false
         });
 
@@ -121,11 +125,12 @@ describe("AudioAPI", () => {
         instance.on("progress", answer => console.log(answer));
 
         const output = await instance.download(
-            audios[0].url,
+            audios[0],
             path.resolve("hls")
         );
 
         expect(output).toBeTruthy();
+        fs.removeSync(output);
     });
 
     test("Get Raw Audios", async () => {
