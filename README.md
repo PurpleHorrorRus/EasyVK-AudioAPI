@@ -132,7 +132,7 @@ const instance = new AudioAPIHLS(params?);
 instance.once("processing", () => console.log("Start processing..."));
 instance.on("progress", progress => console.log(progress));
 
-const output = await instance.download(audios[0].url, ffmpegPath, outputPath);
+const output = await instance.download(audios[0], ffmpegPath, outputPath);
 ```
 
 Params object:
