@@ -4,6 +4,19 @@ This is an unofficial Audio API for VK. Works as an extension for the library. T
 
 See [CHANGELOG.md](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/blob/meridius/CHANGELOG.md)
 
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Handling TFA and Captcha](#handling-tfa-and-captcha)
+- [Usage](#usage)
+    - [Play .m3u8 files with hls.js](#play-m3u8-files-with-hlsjs)
+    - [Audio](#audio)
+    - [Playlists](#playlists)
+    - [Search](#search)
+    - [Artists](#artists)
+    - [Recommendations](#recommendations)
+- [Contribution](#contribution)
+- [Conclusion](#conclusion)
+
 # Installation
 
 Install [VK-IO](https://www.npmjs.com/package/vk-io) via npm or yarn
@@ -23,6 +36,7 @@ npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 ```
 
 Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/meridius) branch rather than #master
+
 
 # Getting Started
 Create an API
@@ -51,12 +65,14 @@ const token = "xxxxxxxxxxx";
 const credits = {
     username: "xxxxxxxxxxx",
     password: "xxxxxxxxxxx",
-    token:    "xxxxxxxxxxx",
     user:     "xxxxxxxxxxx" // Your user_id
 };
 
 const run = async () => {
-    const API = await new AudioAPI(token).login(credits).catch(e => {
+    const API = await new AudioAPI(token).login({
+        ...creidts,
+        cookies: "./cookies.json"
+    }).catch(e => {
         // Here you can catch 2fa or captcha
         console.error(e);
     });
@@ -64,6 +80,70 @@ const run = async () => {
     const { audios } = await API.audio.getAll();
     console.log(audios);
     console.log(`Wow, I have ${audios.length} songs!`);
+};
+
+run();
+```
+
+# Handling TFA and Captcha
+
+```javascript
+const HTTPClient = require("./index");
+const readline = require("readline");
+require("dotenv").config();
+
+let client = null;
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+const token = "xxxxxxxxxxx";
+const credits = {
+    username: "xxxxxxxxxxx",
+    password: "xxxxxxxxxxx",
+    user: 0123456789
+};
+
+const ask = question => new Promise(resolve => rl.question(question, resolve));
+
+const handleError = async err => {
+    console.log(err);
+    if (err.tfa) {
+        return await handleAuth(err);
+    } else if (err.captcha) {
+        return await handleCaptcha(err);
+    }
+};
+
+const handleAuth = async err => {
+    const code = await ask("Two factor code:");
+
+    if (code === "sms") {
+        // Request code via SMS
+        const sms = await client.sms();
+        return console.log(sms);
+    }
+
+    return await client.auth2FA(code, err.info)
+        .catch(handleError);
+};
+
+const handleCaptcha = async () => {
+    return await client.solveCaptcha(await ask("Solve captcha:")).catch(handleError);
+};
+
+const run = async () => {
+    client = await new AudioAPI(token).login({
+        ...credits,
+        cookies: "./cookie.json"
+    }).catch(handleError);
+    
+    if (client) {
+        const response = await client.audio.get();
+        console.log(response);
+    }
 };
 
 run();
