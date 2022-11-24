@@ -19,23 +19,13 @@ See [CHANGELOG.md](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/blob/merid
 
 # Installation
 
-Install [VK-IO](https://www.npmjs.com/package/vk-io) via npm or yarn
-
-```bash
-yarn add vk-io
-// or
-npm install vk-io
-```
-
-Install AudioAPI package
-
 ```bash
 yarn add https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 // or
 npm install https://github.com/PurpleHorrorRus/EasyVK-AudioAPI
 ```
 
-Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/meridius) branch rather than #master
+Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/tree/meridius) branch rather than master
 
 
 # Getting Started
