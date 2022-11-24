@@ -41,17 +41,15 @@ const direct = new DirectAuthorization({
 beforeAll(async () => {
     if (!credits.token) {
         const data = await direct.run();
-        credits = {
-            ...credits,
-            token: data.token,
-            user: data.user
-        };
-
-        fs.writeFileSync("./vk.json", JSON.stringify(credits, null, 4));
+        credits.token = data.token;
+        fs.writeJSONSync("./vk.json", credits, { spaces: 4 });
     }
 
     API = await new AudioAPI(credits.token, { lang: "ru" }, { debug: true })
-        .login(credits, { cookies: "./cookie.json" });
+        .login({
+            username: credits.username,
+            password: credits.password
+        }, { cookies: "./cookie.json" });
 
     allowOfficialAPI = await API.official.check();
 });

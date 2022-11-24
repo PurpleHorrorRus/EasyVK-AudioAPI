@@ -36,7 +36,10 @@ class AudioAPI extends Static {
     }
 
     async login (credits, authParams = {}) {
-        this.vk.user = credits.user;
+        if (!credits.user) {
+            const response = await this.vk.api.users.get();
+            this.vk.user = response[0].id;
+        } else this.vk.user = credits.user;
 
         this.client = await new HTTPClient(this.vk).login({
             ...credits,
