@@ -488,9 +488,10 @@ describe("Downloading", () => {
             chunks: path.resolve("hls", String(audios[0].id)),
             delete: false,
 
-            metadata: {
-                track: 1
-            }
+            metadata: [
+                ["track", 1],
+                ["encoded_by", "test suite"]
+            ]
         }).download();
 
         expect(output.length).toBeGreaterThan(0);
