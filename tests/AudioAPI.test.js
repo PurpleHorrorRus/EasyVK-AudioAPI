@@ -448,10 +448,10 @@ describe("Downloading", () => {
         });
 
         const buffer = await audios[0].download({
-            ffmpegPath: path.resolve("ffmpeg.exe"),
-            outputFolder: path.resolve("hls"),
+            ffmpeg: path.resolve("ffmpeg.exe"),
+            output: path.resolve("hls"),
             name: `${audios[0].performer} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", String(audios[0].id)),
+            chunks: path.resolve("hls", String(audios[0].id)),
             delete: true
         });
 
@@ -464,10 +464,10 @@ describe("Downloading", () => {
         });
 
         const output = await audios[0].download({
-            ffmpegPath: path.resolve("ffmpeg.exe"),
-            outputFolder: path.resolve("hls"),
+            ffmpeg: path.resolve("ffmpeg.exe"),
+            output: path.resolve("hls"),
             name: `${audios[0].performer} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", String(audios[0].id)),
+            chunks: path.resolve("hls", String(audios[0].id)),
             delete: false
         });
 
@@ -482,11 +482,15 @@ describe("Downloading", () => {
         });
 
         const output = await new API.DownloadInstance(audios[0], {
-            ffmpegPath: path.resolve("ffmpeg.exe"),
-            outputFolder: path.resolve("hls"),
+            ffmpeg: path.resolve("ffmpeg.exe"),
+            output: path.resolve("hls"),
             name: `${audios[0].artist} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", String(audios[0].id)),
-            delete: false
+            chunks: path.resolve("hls", String(audios[0].id)),
+            delete: false,
+
+            metadata: {
+                track: 1
+            }
         }).download();
 
         expect(output.length).toBeGreaterThan(0);
