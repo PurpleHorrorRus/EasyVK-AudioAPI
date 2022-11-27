@@ -1,0 +1,129 @@
+# Usage
+
+The API splitted into 5 parts: audio, playlists, search, artists, recommendations.
+To use each of this you must to specify part which you would to use. Example:
+
+```javascript
+const { audios } = await API.audio.get();
+const { playlists } = await API.playlists.get();
+const search = await API.search.query({ q: "Queen" });
+const artsits = await API.artists.get("Queen");
+const recommendations = await API.recoms.loadRecoms();
+const explore = await API.recoms.load();
+```
+
+## Recommendation for optimizing the requests
+
+Each URL storing separately from audio object and needs to single request (10 audios per request). This is increased time of request and flooding to vk servers. To avoid this, read below.
+
+I highly recomends you to set in parameters of each function fetching raw audio object. This returns audio full audio objects with "raw" array, but without URL's. Then you can use audio.fetch(raw) in any time. This method allows you to reduce the request time (1300ms -> 300ms average, you can check tests manually) and avoid flooding to vk servers. Here is another example:
+
+```javascript
+const { audios } = await API.audio.get({ raw: true });
+const [full] = await API.audio.parse([audio[0].raw]);
+
+/*
+    A certain scientific PlayMusicLogic(full)
+*/
+```
+
+## Play .m3u8 files with hls.js
+
+VK uses .m3u8 file formats for music. So you can use [hls.js](https://github.com/video-dev/hls.js/) package to play it.
+
+Example:
+```javascript
+const Hls = require("hls.js");
+
+const sound = new Audio();
+const hls = new Hls();
+
+const { audios } = await API.audio.get({ raw: true });
+const parsed = await API.audio.parse([audio[0].raw]);
+
+hls.attachMedia(sound);
+hls.on(hlsjs.Events.MEDIA_ATTACHED, hls.loadSource(parsed[0].url));
+
+sound.addEventListener("canplaythrough", () => sound.play());
+```
+
+### Now let's see each part.
+
+## Audio
+
+| Function  | Params | Description |
+| :-----     | :--:   | :------ |
+| ```get```       | owner_id?<br/>playlist_id?<br/>access_hash?<br/>count? | Returns the list of first %count% audios|
+| ```getCount```     | owner_id?<br/>playlist_id?<br/>access_hash? | Returns a count audios of user/community |
+| ```getFromWall```     | owner_id<br/>post_id<br/> | Returns the list of audios from wall post |
+| ```add``` | Audio object | Add audio in "My Audios" |
+| ```delete``` | Audio object | Delete audio from "My Audios" |
+| ```edit``` | Audio object<br/>params | Edit the audio file if it available. In params you can to specify fields: title?: string, performer?: string, privacy?: number |
+| ```reorder``` | audio_id<br/>next_audio_id<br/>owner_id? | Reorder audios in playlist |
+| ```upload```| path | Upload audio file |
+| ```parse```| array of audios | Fetch full audio objects (with URL, etc.) |
+
+<br/>
+
+## Playlists
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```get``` | access_hash?<br/>offset?<br/>owner_id? | Returns the list of first playlists by offset |
+| ```getPlaylist``` | owner_id<br/>playlist_id<br/>list?<br/>access_hash? | Return a single playlist object. Boolean list meaning parsing audios in playlist, but it takes a longer time. access_hash forces list = true automatically if you want to load third-party playlists (general page or search for example) |
+| ```getById``` | owner_id<br/>playlist_id<br/>list?<br/>access_hash?<br/>count? | The same as ```getPlaylist()```, but better for getting of user/community playlists. You can to specify count in params to splice audios in list for faster loading |
+| ```getCount```| owner_id? | Return the count of playlists of user/community |
+| ```getByBlock```| block<br/>section? | Return playlists by block and section |
+| ```getFromWall```| owner_id?<br/>playlist_id | Fetching playlist from wall |
+| ```create```| title<br/>description?<br/>cover? | Create new playlist.<br/>Cover must be a path to cover file |
+| ```edit```| playlist_id<br/>title?<br/>description?<br/>cover? | Edit the existing playlist |
+| ```delete```| Playlist object | Delete playlist |
+| ```follow```| Playlist object | Follow playlist |
+| ```reorder```| playlist_id<br/>prev_playlist_id | Reorder playlists |
+| ```addSong```| Audio object<br/>Playlist object | Add song to playlist |
+| ```removeSong```| Audio object<br/>Playlist object | Remove song from playlist |
+| ```follow```| Playlist object | Follow playlist |
+| ```reorderSongs```| Audios<br/>playlist_id<br/>force? | Reorder songs in playlist.<br/>Audios: string (it must be string of full_ids, you can use join() for example, see example in unit-tests)<br/>force saving you from full cleaning of playlist if you make mistake with Audios string. If you really wish to clean playlist you must to specify force: true |
+
+## Search
+
+Pay your attention to ```more``` object! 
+
+```more``` object is a object that contain information for continuing searching. You can't load more results without this object.
+
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```query``` | q | Returns the artists, playlists, audios and ```more``` object by query |
+| ```queryExtended``` | q<br/>params? | Extended search
+| ```withMore``` | ```more``` object | Returns more results by ```more``` object |
+| ```hints```| q | Return search hints |
+| ```inAudios```| q<br/>owner_id<br/>count? | Returns a list of finded audios of user/community |
+
+## Artists
+
+| Function  | Arguments | Description |
+| :-----    | :--:   | :------     |
+| ```get```| artist<br/>params? | Get artist page. Returns the popular audios, playlists collections, similar artists.<br/>artist param must be an endpoint, not full name. You can get endpoint at ```link``` field of ```search.query``` for example. You can specify ```list: false``` in params to fetch artist information only |
+| ```collections```| link | Parse collections inside collections page |
+| ```similar``` | artist | Get similar artists |
+| ```follow```  | follow | Follow artist       |
+| ```unfollow``` | follow | Unfollow artist    |
+
+You can see how to get full list of audio or playlists of artist in jest testing file.
+
+## General
+
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```load```   | params? | Load full general page |
+| ```usersPlaylists``` | - | Load recommended users plalyist |
+
+## Explore
+
+| Function  | Params | Description |
+| :-----    | :--:   | :------     |
+| ```load```| params? | Load full explore page |
+| ```chart ```| params? | Returns the list of VK Chart |
+| ```newReleases```| params? | Returns the list of audios of new releases |
+| ```artists```| params? | Returns the daily recommendation artists |
+| ```newAlbums```| section? | Returns the new albums |
+| ```officialPlaylists```| section? | Returns the list of official collections of playlists splitted to categories |

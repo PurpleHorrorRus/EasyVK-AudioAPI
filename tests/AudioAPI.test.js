@@ -7,7 +7,6 @@ const { CallbackService } = require("vk-io");
 const { DirectAuthorization, officialAppCredentials } = require("@vk-io/authorization");
 
 const AudioAPI = require("../index.js");
-const AudioAPIHLS = require("../lib/hls");
 
 let credits = require("../vk.json");
 
@@ -70,16 +69,19 @@ describe("AudioAPI", () => {
         expect(data.audios.length).toBeGreaterThan(0);
     });
 
-    test.skip("Call official API", async () => {
+    test("Call official API", async () => {
         if (!allowOfficialAPI) {
             expect(true).toBe(true);
         }
 
-        const response = await API.official.call("audio.get", {
-            owner_id: credits.user
+        const response = await API.official.call("audio.getById", {
+            audios: "2000294643_456244556"
+        }).catch(error => {
+            console.error(error);
+            return [];
         });
 
-        expect(response.items).toBeGreaterThan(0);
+        expect(response).toBeGreaterThan(0);
     });
 
     test("Get raw audio and raw link and parse", async () => {
@@ -90,45 +92,6 @@ describe("AudioAPI", () => {
 
         const [full] = await API.audio.parse([audios[0].raw]);
         expect(full).toBeTruthy();
-    });
-
-    test("Download Audio (Buffer Output)", async () => {
-        const { items: audios } = await API.official.call("audio.get", {
-            owner_id: credits.user
-        });
-
-        const buffer = await new AudioAPIHLS({
-            ffmpegPath: path.resolve("ffmpeg.exe"),
-            name: `${audios[0].artist} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", String(audios[0].id)),
-            delete: true
-        }).download(audios[0].url, path.resolve("hls"));
-
-        expect(buffer).toBeTruthy();
-    });
-
-    test("Download Audio (Output Path)", async () => {
-        const { items: audios } = await API.official.call("audio.get", {
-            owner_id: credits.user
-        });
-
-        const instance = new AudioAPIHLS({
-            ffmpegPath: path.resolve("ffmpeg.exe"),
-            name: `${audios[0].artist} - ${audios[0].title}`,
-            chunksFolder: path.resolve("hls", String(audios[0].id)),
-            delete: false
-        });
-
-        instance.once("processing", () => console.log("Start processing file using ffmpeg..."));
-        instance.on("progress", answer => console.log(answer));
-
-        const output = await instance.download(
-            audios[0],
-            path.resolve("hls")
-        );
-
-        expect(output).toBeTruthy();
-        fs.removeSync(output);
     });
 
     test("Get Raw Audios", async () => {
@@ -144,12 +107,11 @@ describe("AudioAPI", () => {
     test("Get Audios From Wall", async () => {
         const audios = await API.audio.getFromWall({
             owner_id: 529592613,
-            post_id: 103,
+            post_id: 108,
             raw: true
         });
 
-        const result = await API.audio.parse(audios.post.map(a => a.raw));
-        expect(result).toBeTruthy();
+        expect(audios).toBeTruthy();
     });
 
     let add = null;
@@ -431,7 +393,7 @@ describe("General", () => {
 });
 
 describe("Explore", () => {
-    test.skip("Load", async () => {
+    test("Load", async () => {
         const results = await API.explore.load({
             count: 6,
             raw: true
@@ -476,5 +438,58 @@ describe("Explore", () => {
     test("Friend Updates", async () => {
         const results = await API.getFriendsUpdates({ raw: true });
         expect(results).toBeTruthy();
+    });
+});
+
+describe("Downloading", () => {
+    test("Audio (Buffer Output)", async () => {
+        const { audios } = await API.audio.get({
+            count: 1
+        });
+
+        const buffer = await audios[0].download({
+            ffmpegPath: path.resolve("ffmpeg.exe"),
+            outputFolder: path.resolve("hls"),
+            name: `${audios[0].performer} - ${audios[0].title}`,
+            chunksFolder: path.resolve("hls", String(audios[0].id)),
+            delete: true
+        });
+
+        expect(buffer).toBeTruthy();
+    });
+
+    test("Audio (Output Path)", async () => {
+        const { audios } = await API.audio.get({
+            count: 1
+        });
+
+        const output = await audios[0].download({
+            ffmpegPath: path.resolve("ffmpeg.exe"),
+            outputFolder: path.resolve("hls"),
+            name: `${audios[0].performer} - ${audios[0].title}`,
+            chunksFolder: path.resolve("hls", String(audios[0].id)),
+            delete: false
+        });
+
+        expect(output.length).toBeGreaterThan(0);
+        fs.removeSync(output);
+    });
+
+    test("Audio (Output Path / Independent Instance)", async () => {
+        const { items: audios } = await API.official.call("audio.get", {
+            owner_id: credits.user,
+            count: 1
+        });
+
+        const output = await new API.DownloadInstance(audios[0], {
+            ffmpegPath: path.resolve("ffmpeg.exe"),
+            outputFolder: path.resolve("hls"),
+            name: `${audios[0].artist} - ${audios[0].title}`,
+            chunksFolder: path.resolve("hls", String(audios[0].id)),
+            delete: false
+        }).download();
+
+        expect(output.length).toBeGreaterThan(0);
+        fs.removeSync(output);
     });
 });

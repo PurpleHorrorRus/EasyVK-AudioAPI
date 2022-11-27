@@ -5,6 +5,7 @@ const Promise = require("bluebird");
 const Static = require("./lib/static");
 
 const HTTPClient = require("./lib/http");
+const DownloadInstance = require("./lib/hls");
 
 const Audio = require("./lib/requests/audio");
 const Playlists = require("./lib/requests/playlists");
@@ -33,6 +34,9 @@ class AudioAPI extends Static {
         });
 
         this.params = params;
+
+        this.HTTPClient = HTTPClient;
+        this.DownloadInstance = DownloadInstance;
     }
 
     async login (credits, authParams = {}) {
