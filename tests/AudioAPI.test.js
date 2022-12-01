@@ -56,9 +56,7 @@ beforeAll(async () => {
 describe("AudioAPI", () => {
     test("Get Audios", async () => {
         const data = await API.audio.get({
-            owner_id: 243263728,
-            raw: true,
-            count: 2
+            raw: true
         });
 
         expect(data.audios.length).toBeGreaterThan(0);
@@ -374,6 +372,20 @@ describe("Artists", () => {
 
         artist.follow.hash = await API.artists.follow(artist.follow);
         expect(artist.follow.hash).toBeTruthy();
+    });
+
+    test("Search Artist", async () => {
+        const results = await API.artists.search("Queen");
+        expect(results.artists.length).toBeGreaterThan(0);
+
+        const more = await results.next();
+        expect(more.artists.length).toBeGreaterThan(0);
+    });
+
+    test("Related Artists", async () => {
+        const { artists } = await API.artists.search("Queen");
+        const related = await API.artists.related(artists[0].id);
+        expect(related.length).toBeGreaterThan(0);
     });
 });
 
