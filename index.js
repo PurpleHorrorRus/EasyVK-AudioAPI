@@ -12,6 +12,7 @@ const Playlists = require("./lib/requests/playlists");
 const Search = require("./lib/requests/search");
 const Artists = require("./lib/requests/artists");
 const General = require("./lib/requests/general");
+const Recommendations = require("./lib/requests/recommendations");
 const Explore = require("./lib/requests/explore");
 const OfficialAPI = require("./lib/requests/official");
 
@@ -55,6 +56,7 @@ class AudioAPI extends Static {
         this.search = new Search(this.client, this.vk, this.params);
         this.artists = new Artists(this.client, this.vk, this.params);
         this.general = new General(this.client, this.vk, this.params);
+        this.recommendations = new Recommendations(this.client, this.vk, this.params);
         this.explore = new Explore(this.client, this.vk, this.params);
         this.official = new OfficialAPI(this.client, this.vk, this.params);
 

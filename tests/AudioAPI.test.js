@@ -404,6 +404,22 @@ describe("General", () => {
     });
 });
 
+describe("Recommendations", () => {
+    test("Configure", async () => {
+        const onboarding = await API.recommendations.onboarding();
+
+        const response = await API.recommendations.configure([
+            "4543675918102098396",
+            "2062058802296117217",
+            "5351355975484031313",
+            "67550258036106963",
+            "7875926624321522620"
+        ], { hash: onboarding.hash });
+
+        expect(response).toBeTruthy();
+    });
+});
+
 describe("Explore", () => {
     test("Load", async () => {
         const results = await API.explore.load({
