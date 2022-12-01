@@ -30,6 +30,7 @@
         "formdata-node": "4.4.0",
         "fs-extra": "^10.1.0",
         "jsdom": "^20.0.3",
+        "lodash": "^4.17.21",
         "m3u8-parser": "^6.0.0",
         "node-fetch-progress": "^1.0.2",
         "node-fetch-retry": "1.1.2",
