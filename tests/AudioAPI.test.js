@@ -405,6 +405,14 @@ describe("General", () => {
 });
 
 describe("Recommendations", () => {
+    test("Onboarding", async () => {
+        const onboarding = await API.recommendations.onboarding();
+        expect(onboarding.artists.length).toBeGreaterThan(0);
+
+        const more = await onboarding.next();
+        expect(more.artists.length).toBeGreaterThan(0);
+    });
+
     test("Configure", async () => {
         const onboarding = await API.recommendations.onboarding();
 
