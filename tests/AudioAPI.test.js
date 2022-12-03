@@ -146,19 +146,23 @@ describe("AudioAPI", () => {
         expect(reordered).toBe(1);
     });
 
-    test.skip("Edit song", async () => {
+    test.skip("Edit Song", async () => {
         const response = await API.audio.get({
-            owner_id: credits.user,
-            count: 1
+            count: 10
         });
 
-        const edited = await API.audio.edit(response.audios[0], {
-            artist: response.audios[0].artist,
-            title: response.audios[0].title,
-            genre: 0
+        const song = response.audios.find(song => {
+            return song.can_edit;
         });
 
-        expect(edited).toBe(1);
+        const edited = await API.audio.edit(song, {
+            artist: song.artist,
+            title: song.title,
+            text: "test 123",
+            raw: true
+        });
+
+        expect(edited).toBeTruthy();
     });
 
     test.skip("Upload Audio", async () => {
