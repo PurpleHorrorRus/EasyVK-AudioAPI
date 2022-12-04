@@ -62,8 +62,13 @@ describe("AudioAPI", () => {
         expect(data.audios.length).toBeGreaterThan(0);
     });
 
-    test("Get All Audios", async () => {
-        const data = await API.audio.getAll({ raw: true });
+    test.only("Get All Audios", async () => {
+        const data = await API.audio.getAll({ 
+            owner_id: 547874768, 
+            raw: true,
+            count: 1000
+        });
+
         expect(data.audios.length).toBeGreaterThan(0);
     });
 
@@ -231,7 +236,7 @@ describe("Playlists", () => {
         expect(playlist).toBeTruthy();
     });
 
-    test.skip("Create playlist", async () => {
+    test("Create playlist", async () => {
         const cover_path = "./pic.jpg";
 
         const result = await API.playlists.create({
