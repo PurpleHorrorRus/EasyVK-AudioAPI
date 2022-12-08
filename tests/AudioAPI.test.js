@@ -62,7 +62,7 @@ describe("AudioAPI", () => {
         expect(data.audios.length).toBeGreaterThan(0);
     });
 
-    test.only("Get All Audios", async () => {
+    test("Get All Audios", async () => {
         const data = await API.audio.getAll({ 
             owner_id: 547874768, 
             raw: true,
@@ -314,8 +314,14 @@ describe("Playlists", () => {
 
 describe("Search Engine", () => {
     test("Audio Search", async () => {
-        const search = await API.search.queryExtended("Queen", { raw: true });
+        let search = await API.search.queryExtended("Queen", { raw: true });
         expect(search).toBeTruthy();
+
+        search = await search.next();
+        expect(search.list).toBeTruthy();
+
+        search = await search.next();
+        expect(search.list).toBeTruthy();
     });
 
     test("Search Hints", async () => {
