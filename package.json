@@ -28,7 +28,7 @@
         "filenamify": "4.3.0",
         "fluent-ffmpeg": "https://github.com/fluent-ffmpeg/node-fluent-ffmpeg",
         "formdata-node": "4.4.0",
-        "fs-extra": "^10.1.0",
+        "fs-extra": "^11.1.0",
         "jsdom": "^20.0.3",
         "lodash": "^4.17.21",
         "m3u8-parser": "^6.0.0",
