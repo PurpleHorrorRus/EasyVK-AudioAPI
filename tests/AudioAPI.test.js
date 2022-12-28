@@ -486,6 +486,16 @@ describe("Explore", () => {
         expect(results).toBeTruthy();
     });
 
+    test("Follow / Unfollow Radio", async () => {
+        const { radio } = await API.explore.load({
+            count: 0,
+            raw: true
+        });
+
+        const follow = await API.explore.followRadio(radio.list[0]);
+        expect(follow).toBe(true);
+    });
+
     test("Friend Updates", async () => {
         const results = await API.getFriendsUpdates({ raw: true });
         expect(results).toBeTruthy();
