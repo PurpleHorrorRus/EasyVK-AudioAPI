@@ -40,7 +40,7 @@ const credits = {
 };
 
 const AudioAPI = require("easyvk-audio");
-const API = await new AudioHTTP(token, vkioParams?, params?).login(credits);
+const API = await new AudioAPI(token, vkioParams?, params?).login(credits);
 ```
 
 **You awesome!!**
