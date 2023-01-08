@@ -33,16 +33,15 @@ VK uses .m3u8 file formats for music. So you can use [hls.js](https://github.com
 
 Example:
 ```javascript
-const Hls = require("hls.js");
+import Hls from "hls.js";
 
 const sound = new Audio();
 const hls = new Hls();
 
-const { audios } = await API.audio.get({ raw: true });
-const parsed = await API.audio.parse([audio[0].raw]);
+const { audios } = await API.audio.get();
 
 hls.attachMedia(sound);
-hls.on(hlsjs.Events.MEDIA_ATTACHED, hls.loadSource(parsed[0].url));
+hls.on(hlsjs.Events.MEDIA_ATTACHED, () => hls.loadSource(audios[0].url));
 
 sound.addEventListener("canplaythrough", () => sound.play());
 ```

@@ -38,7 +38,7 @@ Recommend to use [#meridius](https://github.com/PurpleHorrorRus/EasyVK-AudioAPI/
 
 ## Usage example
 ```javascript
-const AudioAPI = require("easyvk-audio");
+import AudioAPI from "easyvk-audio";
 
 const token = "xxxxxxxxxxx";
 const credits = {
@@ -66,9 +66,8 @@ run();
 ## Handling TFA and Captcha
 
 ```javascript
-const HTTPClient = require("easyvk-audio");
-
-const readline = require("readline");
+import AudioAPI from "easyvk-audio";
+import readline from "readline";
 
 let client = null;
 
@@ -84,7 +83,9 @@ const credits = {
     user: 0123456789
 };
 
-const ask = question => new Promise(resolve => rl.question(question, resolve));
+const ask = question => new Promise(resolve => {
+    return rl.question(question, resolve);
+});
 
 const handleError = async err => {
     console.log(err);
