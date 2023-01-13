@@ -19,7 +19,7 @@
     "author": "PurpleHorrorRus <purplehorrorrus@gmail.com>",
     "license": "ISC",
     "resolutions": {
-        "node-fetch": "2.6.7",
+        "node-fetch": "2.6.8",
         "json5": "^2.2.3"
     },
     "dependencies": {
